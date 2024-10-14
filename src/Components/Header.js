@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const Header = ({ isAuthenticated }) => (
-  <div className="flex justify-between px-52 items-center h-14 bg-[#2C3E50] sticky top-0">
+  <div className="flex justify-between px-52 items-center h-14 bg-[#2C3E50] sticky top-0 z-50 shadow-lg">
     <div className="flex items-center">
       <h2 className="ml-2 font-rajdhani text-3xl text-white">
         <Link to="/">SCHEDLR</Link>

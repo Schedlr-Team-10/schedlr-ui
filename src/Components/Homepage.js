@@ -6,8 +6,8 @@ export default function Homepage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState(""); // For signup
-  const navigate = useNavigate(); // Hook for navigation
+  const [username, setUsername] = useState(""); 
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
