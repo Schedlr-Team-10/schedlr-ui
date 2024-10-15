@@ -9,6 +9,7 @@ import MyProfile from "./Components/MyProfile";
 import Home from "./Components/Home";
 import Homepage from "./Components/Homepage";
 import "./App.css";
+import Privacy from "./Components/Privacy";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,6 +30,7 @@ function App() {
           <Route path="/marketplace" element={<MarketPlace />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/myprofile" element={<MyProfile />} />
+          <Route path="/privacy" element={<Privacy/>} />
           <Route path="/" element={<Homepage onLogin={handleLogin} />} />
           {/* <Route path="/" element={<Homepage onLogin={handleLogin} />} /> */}
         </Routes>

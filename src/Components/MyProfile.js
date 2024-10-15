@@ -100,6 +100,20 @@ const MyProfile = () => {
         }
     }, []);
 
+    const handleInstagramLogin = () => {
+        const instaclientId = '562749826511410';
+        const redirectUri = 'https://github.com/Ravishankarbhange';
+        const scope = 'user_profile,user_media';
+        const state = '1';
+        const responseType = 'code';
+    
+        // Construct the OAuth URL properly without line breaks
+        const oauthUrl = `https://api.instagram.com/oauth/authorize?client_id=${instaclientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&response_type=${responseType}&state=${state}`;
+    
+        // Redirect to Instagram OAuth page
+        window.location.href = oauthUrl;
+    };
+
     return (
         <div>
             <div id="myprofile" className="flex justify-center bg-[#ECF0F1] py-5">
@@ -136,7 +150,7 @@ const MyProfile = () => {
                             <h1 className="text-center mb-10 font-rajdhani text-2xl font-medium">Checkin your Social Media Accounts</h1>
                             <div className="grid grid-cols-3 gap-4 px-10">
                                 <button className="border border-black bg-[#4267B2] text-white p-1 col-span-3">Facebook</button>
-                                <button className="border border-black bg-[#d62976] text-white p-1 col-span-3">Instagram</button>
+                                <button className="border border-black bg-[#d62976] text-white p-1 col-span-3" onClick={handleInstagramLogin}>Instagram</button>
                                 <button className="border border-black bg-[#0C63BC] text-white p-1 col-span-3" onClick={handleLinkedInLogin}>Linkedin</button>
                                 <button className="border border-black bg-[#1da1f2] text-white p-1 col-span-3 ">Twitter</button>
                             </div>
