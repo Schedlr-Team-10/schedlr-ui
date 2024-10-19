@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { generateDescription } from "./api/gptService"; // Import GPT service
 
 const CreatePost = () => {
   const [uploadImage, setUploadImage] = useState(
     "https://www.lifewire.com/thmb/TRGYpWa4KzxUt1Fkgr3FqjOd6VQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cloud-upload-a30f385a928e44e199a62210d578375a.jpg"
   );
+  const [description, setDescription] = useState(""); // State to hold description
+  const [loading, setLoading] = useState(false); // Loading state for GPT-3
 
   const handleChange = (e) => {
     const file = e.target.files[0];
@@ -20,14 +23,31 @@ const CreatePost = () => {
     document.getElementById("fileInput").click();
   };
 
+  const generatePostDescription = async () => {
+    setLoading(true);
+    try {
+      const generatedText = await generateDescription(description); // Call GPT-3 service
+      setDescription(generatedText); // Update the textarea with generated description
+    } catch (error) {
+      console.error("Error generating description:", error);
+      alert("Failed to generate description. Please try again.");
+    }
+    setLoading(false);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value); // Allow user to edit the generated text
+  };
+
   return (
-    <div className="createPost flex justify-center py-5 ">
-      <div
-        id="uploadPost"
-        className="bg-slate-200 border border-black h-[550px] w-[400px] shadow-2xl"
-      >
-        {console.log(uploadImage)}
-        <img className="h-[510px] w-full" src={uploadImage} />
+    <div className="createPost flex flex-col lg:flex-row items-center justify-center min-h-screen p-8 bg-gray-100 space-y-8 lg:space-y-0 lg:space-x-8">
+      {/* Image Upload Section */}
+      <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-full max-w-sm">
+        <img
+          className="h-72 w-full object-cover rounded-md"
+          src={uploadImage}
+          alt="Uploaded Post"
+        />
         <input
           id="fileInput"
           className="hidden"
@@ -35,58 +55,58 @@ const CreatePost = () => {
           onChange={handleChange}
         />
         <button
-          className="bg-[#395168] w-full h-[40px] font-bold text-white"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 mt-4 w-full rounded-md"
           onClick={triggerFileInput}
         >
           Upload Image
         </button>
       </div>
-      <div className="w-[410px] h-[550px]  shadow-2xl">
-        <div id="inputText" className="h-[355px]">
+
+      {/* Post Description and Platform Section */}
+      <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-full max-w-lg space-y-4">
+        {/* Description Input */}
+        <div>
           <textarea
-            className="w-full  border border-black p-2 h-full"
+            className="w-full border border-gray-300 rounded-md p-3 h-36 resize-none focus:ring-2 focus:ring-blue-400 focus:outline-none"
             rows="8"
             placeholder="Write your post description"
+            value={description} // Controlled input for description
+            onChange={handleDescriptionChange}
           ></textarea>
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 mt-2 w-full rounded-md"
+            onClick={generatePostDescription}
+            disabled={loading}
+          >
+            {loading ? "Generating..." : "Generate Description"}
+          </button>
         </div>
-        <div id="platformSelection" className="flex border border-black h-[195px] bg-[ECF0F1]"
-        >
-          <div className="flex flex-col px-3 border ">
-            <label className="flex items-center justify-start space-x-4 my-2">
-              <input class="custom-checkbox" type="checkbox" name="option1" />
-              <i class="fa-brands fa-twitter fa-xl"></i>
-              <h2 className="font-rajdhani text-xl">Twitter</h2>
-            </label>
-            <label className="flex items-center justify-start space-x-4 my-2">
-              <input class="custom-checkbox" type="checkbox" name="option2" />
-              <i class="fa-brands fa-facebook fa-xl"></i>
-              <h2 className="font-rajdhani text-xl">Facebook</h2>
-            </label>
-            <label className="flex items-center justify-start space-x-4 my-2">
-              <input class="custom-checkbox" type="checkbox" name="option3" />
-              <i class="fa-brands fa-linkedin fa-xl"></i>
-              <h2 className="font-rajdhani text-xl">LinkedIn</h2>
-            </label>
-            <label className="flex items-center justify-start space-x-4 my-2">
-              <input class="custom-checkbox" type="checkbox" name="option4" />
-              <i class="fa-brands fa-instagram fa-xl"></i>
-              <h2 className="font-rajdhani text-xl">Instagram</h2>
-            </label>
-          </div>
 
-          <div id="uploadButtons" className="flex flex-col flex-start">
-            <div className="border h-[60px] w-full">
-              <button className="bg-[#496885] p-2 text-white rounded-sm w-full mt-5">
-                Post Now
-              </button>
-            </div>
-            <div className="w-full pt-2">
-              <p className="my-4 text-left">Schedule your post at </p>
-              <input
-                className="bg-[#496885] p-2 text-white rounded-sm"
-                type="datetime-local"
-              />
-            </div>
+        {/* Platform Selection */}
+        <div className="grid grid-cols-2 gap-4">
+          {["Twitter", "Facebook", "LinkedIn", "Instagram"].map((platform) => (
+            <label
+              key={platform}
+              className="flex items-center space-x-3 border p-2 rounded-md hover:bg-gray-50"
+            >
+              <input type="checkbox" className="custom-checkbox" />
+              <i className={`fa-brands fa-${platform.toLowerCase()} fa-lg`}></i>
+              <span className="font-medium text-gray-700">{platform}</span>
+            </label>
+          ))}
+        </div>
+
+        {/* Post and Schedule Buttons */}
+        <div className="flex flex-col space-y-3">
+          <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-md">
+            Post Now
+          </button>
+          <div>
+            <p className="text-gray-600 mb-2">Schedule your post at:</p>
+            <input
+              className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              type="datetime-local"
+            />
           </div>
         </div>
       </div>
