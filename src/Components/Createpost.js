@@ -98,9 +98,7 @@ const CreatePost = () => {
 
         {/* Post and Schedule Buttons */}
         <div className="flex flex-col space-y-3">
-          <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-md">
-            Post Now
-          </button>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 mt-4 px-5 rounded-md">Post Now</button>
           <div>
             <p className="text-gray-600 mb-2">Schedule your post at:</p>
             <input

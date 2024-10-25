@@ -6,6 +6,14 @@ module.exports = {
   theme: {
     extend: {},
   },
+  theme: {
+    extend: {
+      fontFamily: {
+        'julius': ['"Julius Sans One"', 'sans-serif'],
+        'cinzel-decorative': ['"Cinzel Decorative"', 'serif'],
+      },
+    },
+  },
   plugins: [],
 }
 

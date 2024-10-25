@@ -38,15 +38,9 @@ const Home = () => {
           </div>
 
           {/* Second section */}
-          <div className="flex border p-5 my-2 hidden-right flex-wrap w-[1100px]">
-            <div className="mx-5">
-              <img
-                className="w-full max-w-[270px] h-auto rounded-lg"
-                src="Allinone.jpg"
-                alt="All in one"
-              />
-            </div>
-            <div className="w-full max-w-[700px] my-1">
+          <div className="flex border my-1 hidden-right flex-wrap w-[1120px]">
+            <img className="w-[315px] h-auto rounded-lg" src="Allinone.jpg" alt="All in one"/>
+            <div className="w-[800px] px-[18px] pb-5 my-0">
               <h1 className="text-3xl">Centralized platform</h1>
               <p>
                 A social media collaboration tool designed to streamline team
@@ -63,8 +57,8 @@ const Home = () => {
           </div>
 
           {/* Third section */}
-          <div className="flex border p-5 my-2 hidden-left flex-wrap w-[1100px] ml-80">
-            <div className="w-full max-w-[700px]">
+          <div className="flex border hidden-left flex-wrap w-[1120px] my-5">
+          <div className="w-[800px] px-[18px] pb-5 my-0">
             <h1 className="text-3xl">Colloboration in Marketplace</h1>
               <p>
                 A social media collaboration tool designed to streamline team
@@ -78,25 +72,13 @@ const Home = () => {
                 efficiently.
               </p>
             </div>
-            <div className="mx-5">
-              <img
-                className="w-full max-w-[270px] h-auto rounded-lg"
-                src="Marketplace.jpg"
-                alt="Marketplace"
-              />
-            </div>
+            <img className="w-[315px] h-auto rounded-lg" src="Marketplace.jpg" alt="Marketplace" />
           </div>
 
           {/* Fourth section */}
-          <div className="flex border p-5 my-2 hidden-right flex-wrap w-[1100px]">
-            <div className="mx-5">
-              <img
-                className="w-full max-w-[270px] h-auto rounded-lg"
-                src="Analysis.jpg"
-                alt="Analysis"
-              />
-            </div>
-            <div className="w-full max-w-[700px] my-5">
+          <div className="flex border my-5 hidden-right flex-wrap w-[1120px]">
+            <img className="w-[315px] h-auto rounded-lg" src="Analysis.jpg" alt="Analysis"/>
+            <div className="w-[800px] px-[18px] pb-5 my-0">
             <h1 className="text-3xl">Insights</h1>
               <p>
                 A social media collaboration tool designed to streamline team
@@ -113,8 +95,8 @@ const Home = () => {
           </div>
 
           {/* Fifth section */}
-          <div className="flex border p-5 my-2 hidden-left flex-wrap w-[1100px]">
-            <div className="w-full max-w-[700px]">
+          <div className="flex border my-5 hidden-left flex-wrap w-[1120px]">
+          <div className="w-[800px] px-[18px] pb-5 my-0">
             <h1 className="text-3xl">AI Assitant for Post Descriptions</h1>
               <p>
                 A social media collaboration tool designed to streamline team
@@ -128,13 +110,7 @@ const Home = () => {
                 efficiently.
               </p>
             </div>
-            <div className="mx-5">
-              <img
-                className="w-full max-w-[270px] h-auto rounded-lg"
-                src="ai.jpg"
-                alt="AI"
-              />
-            </div>
+            <img className="w-[315px] h-auto rounded-lg"  src="ai.jpg" alt="AI" />
           </div>
         </div>
       </div>

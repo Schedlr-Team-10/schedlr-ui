@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPageImpressions, getPostEngagement, getVideoViews, getPageFollowers } from './api/analyticsService';
+import { getPageImpressions, getPostEngagement, getVideoViews, getPageFollowers } from './util/analyticsService';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import './Insight.css'; 
 

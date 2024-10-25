@@ -85,12 +85,12 @@ body {
 /* Hide elements initially */
 .hidden-left, .hidden-right {
   opacity: 0;
-  transform: translateX(-100px); /* For left */
+  transform: translateX(-200px); /* For left */
   transition: transform 0.5s ease-out, opacity 0.5s ease-out;
 }
 
 .hidden-right {
-  transform: translateX(100px); /* For right */
+  transform: translateX(200px); /* For right */
 }
 
 /* Show elements with animation */
