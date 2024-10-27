@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Up
 import Dashboard from "./Components/Dashboard";
 import MarketPlace from "./Components/MarketPlace";
 import Insights from "./Components/Insights";
-import { Header } from "./Components/Header";
+import Header from "./Components/Header";
 import CreatePost from "./Components/Createpost";
 import MyProfile from "./Components/MyProfile";
 import Home from "./Components/Home";

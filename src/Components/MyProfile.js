@@ -31,6 +31,8 @@ const MyProfile = () => {
         window.location.href = authUrl; // Redirect to the LinkedIn authorization URL
     };
 
+
+    
     const sendCodeToBackend = async (code, state, userId) => {
         try {
             console.log("Calling SPRING BOOT API");
@@ -50,7 +52,7 @@ const MyProfile = () => {
         const url = `http://localhost:8081/myProfile/userInfo?userId=${id.toString()}`;
 
         try {
-            const response = await fetch(url); // Adjust the URL as needed
+            const response = await fetch(url); 
             const data = await response.json();
             console.log(data);
             setUserName(data.username);
