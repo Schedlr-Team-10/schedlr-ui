@@ -11,9 +11,6 @@ const CreatePost = () => {
   const [keywords, setKeywords] = useState("");
   const [generatedText, setGeneratedText] = useState("");
 
-  // New state for status modal
-  const [statusModal, setStatusModal] = useState({ isOpen: false, message: "", isSuccess: false });
-
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -62,7 +59,7 @@ const CreatePost = () => {
       alert("Please select at least one platform.");
       return;
     }
-
+  
     setLoading(true);
     try {
       const promises = selectedPlatforms.map(async (platform) => {
@@ -70,7 +67,7 @@ const CreatePost = () => {
         formData.append("description", description);
         formData.append("uploadImage", uploadImage);
         formData.append("userId", localStorage.getItem("userId"));
-
+        console.log(platform.toString().toLowerCase());
         const response = await fetch(
           `http://localhost:8081/${platform.toString().toLowerCase()}/postupload`,
           {
@@ -78,26 +75,30 @@ const CreatePost = () => {
             body: formData,
           }
         );
-
+  
         if (!response.ok) throw new Error(`Failed to post on ${platform}`);
-        return await response.json();
+        const contentType = response.headers.get("content-type");
+        let responseData;
+  
+        if (contentType && contentType.includes("application/json")) {
+          responseData = await response.json();
+        } else {
+          responseData = await response.text();
+        }
+  
+        console.log(`Response from ${platform}:`, responseData);
+        return responseData;
       });
-
+  
       await Promise.all(promises);
-
-      // Open success modal
-      setStatusModal({ isOpen: true, message: "Post successfully published!", isSuccess: true });
+      alert("Post successfully published on selected platforms!");
     } catch (error) {
       console.error("Error posting to platforms:", error);
-
-      // Open failure modal
-      setStatusModal({ isOpen: true, message: "Error posting to platforms. Please try again.", isSuccess: false });
+      alert("Error posting to platforms. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
-  const closeStatusModal = () => setStatusModal({ ...statusModal, isOpen: false });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-4">
@@ -177,27 +178,6 @@ const CreatePost = () => {
           </div>
         </div>
       </div>
-
-      {/* Status Modal */}
-      {statusModal.isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md space-y-4">
-            <h2
-              className={`text-lg font-semibold ${
-                statusModal.isSuccess ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {statusModal.message}
-            </h2>
-            <button
-              onClick={closeStatusModal}
-              className="w-full bg-gray-500 hover:bg-gray-600 text-white py-1 rounded-md font-medium transition-all"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Modal for Description Generation */}
       {isModalOpen && (
