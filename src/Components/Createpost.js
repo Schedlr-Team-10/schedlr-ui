@@ -2,23 +2,19 @@ import { useState } from "react";
 import { generateDescription } from "../Components/api/gptService"; // Adjust path if needed
 
 const CreatePost = () => {
-  const [uploadImage, setUploadImage] = useState(null); // Start with null for file input
+  const [uploadImage, setUploadImage] = useState(null);
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [scheduleTime, setScheduleTime] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false); 
-  const [keywords, setKeywords] = useState(""); 
-  const [generatedText, setGeneratedText] = useState(""); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [keywords, setKeywords] = useState("");
+  const [generatedText, setGeneratedText] = useState("");
 
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadImage(file); // Store the file object instead of the image URL
-      };
-      reader.readAsDataURL(file);
+      setUploadImage(file);
     }
   };
 
@@ -69,28 +65,25 @@ const CreatePost = () => {
       const promises = selectedPlatforms.map(async (platform) => {
         const formData = new FormData();
         formData.append("description", description);
-        formData.append("uploadImage", uploadImage); // Ensure this is a File object
+        formData.append("uploadImage", uploadImage);
         formData.append("userId", localStorage.getItem("userId"));
-  
+        console.log(platform.toString().toLowerCase());
         const response = await fetch(
-          `http://localhost:8081/linkedin/postupload`,
+          `http://localhost:8081/${platform.toString().toLowerCase()}/postupload`,
           {
             method: "POST",
             body: formData,
           }
         );
   
-        // Check if the response is OK (status code in the range 200-299)
         if (!response.ok) throw new Error(`Failed to post on ${platform}`);
-  
-        // Attempt to parse the response as JSON
         const contentType = response.headers.get("content-type");
         let responseData;
   
         if (contentType && contentType.includes("application/json")) {
-          responseData = await response.json(); // Parse JSON response
+          responseData = await response.json();
         } else {
-          responseData = await response.text(); // Fallback to text response
+          responseData = await response.text();
         }
   
         console.log(`Response from ${platform}:`, responseData);
@@ -114,7 +107,7 @@ const CreatePost = () => {
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           {uploadImage && (
             <img
-              src={URL.createObjectURL(uploadImage)} // Create a temporary URL for the uploaded image
+              src={URL.createObjectURL(uploadImage)}
               alt="Uploaded Post"
               className="h-56 w-full object-cover"
             />
@@ -145,24 +138,24 @@ const CreatePost = () => {
           ></textarea>
           <button
             onClick={openModal}
-            className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 rounded-md font-medium transition-all"
+            className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md font-medium transition-all"
           >
             Generate Description
           </button>
 
           <div className="grid grid-cols-2 gap-2">
-            {["Twitter", "Facebook", "LinkedIn", "Instagram"].map((platform) => (
-              <label
+            {["LinkedIn", "PInterest", "Twitter", "Facebook"].map((platform) => (
+              <button
                 key={platform}
-                className={`flex items-center space-x-2 border p-2 rounded-md cursor-pointer transition-all text-sm ${
-                  selectedPlatforms.includes(platform) ? "bg-gray-100" : ""
-                }`}
                 onClick={() => togglePlatformSelection(platform)}
+                className={`p-2 rounded-md font-medium transition-all text-sm ${
+                  selectedPlatforms.includes(platform)
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
               >
-                <input type="checkbox" checked={selectedPlatforms.includes(platform)} readOnly />
-                <i className={`fa-brands fa-${platform.toLowerCase()} fa-sm text-gray-500`}></i>
-                <span className="font-medium">{platform}</span>
-              </label>
+                {platform}
+              </button>
             ))}
           </div>
 
