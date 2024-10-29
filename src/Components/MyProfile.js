@@ -46,8 +46,8 @@ const MyProfile = () => {
     };
 
     const fetchUserInfo = async (id) => {
-        console.log("Id : " + id);
-        const url = `http://localhost:8081/myProfile/userInfo?userId=${id.toString()}`;
+        console.log("Id : " + localStorage.getItem("userId"));
+        const url = `http://localhost:8081/myProfile/userInfo?userId=${localStorage.getItem("userId").toString()}`;
 
         try {
             const response = await fetch(url); // Adjust the URL as needed
@@ -89,6 +89,7 @@ const MyProfile = () => {
     useEffect(() => {
         const id = localStorage.getItem("userId");
         setUserid(id);
+        console.log("UserId actually value is: "+userid);
 
         fetchUserInfo(id);
         
@@ -97,7 +98,7 @@ const MyProfile = () => {
         const state = urlParams.get('state');
 
         if (code && state) {
-            sendCodeToBackend(code, state, userid);
+            sendCodeToBackend(code, state, localStorage.getItem("userId"));
         }
     }, []);
 
