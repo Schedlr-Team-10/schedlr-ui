@@ -1,22 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Dashboard = () => {
-  const posts = [
-    {
-      id: 1,
-      image: 'https://images.pexels.com/photos/1563355/pexels-photo-1563355.jpeg',
-      description: 'Loving the new vibes this season!',
-      platforms: ['LinkedIn', 'Pinterest'],
-      date: '2024-10-28T14:30:00',
-    },
-    {
-      id: 2,
-      image: 'https://wallpapers.com/images/hd/hiking-4000-x-6000-background-4ibzqltjjt8eri6g.jpg',
-      description: 'Exploring new horizons.',
-      platforms: ['LinkedIn'],
-      date: '2024-10-27T09:45:00',
-    },
-  ];
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    // Fetch post history when component mounts
+    const fetchPostHistory = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        const response = await axios.get(`http://localhost:8081/schedlr/posthistory?userId=${userId}`);
+        const data = response.data;
+
+        // Map and sort the response data by date in descending order
+        const formattedPosts = data
+          .map(post => ({
+            id: post.postId,
+            image: `data:image/jpeg;base64,${post.image}`, // assuming the image is Base64
+            description: post.description,
+            platforms: [
+              post.linkedinPostId ? 'LinkedIn' : null,
+              post.pinterestPostId ? 'Pinterest' : null,
+              post.twitterPostId ? 'Twitter' : null,
+              post.fbPostId ? 'Facebook' : null,
+            ].filter(Boolean), // filter out null values
+            date: post.postUploadDate,
+          }))
+          .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date descending
+
+        setPosts(formattedPosts);
+      } catch (error) {
+        console.error('Error fetching post history:', error);
+      }
+    };
+
+    fetchPostHistory();
+  }, []);
 
   return (
     <div className="userdash min-h-screen p-6 flex flex-col items-center bg-gray-50">

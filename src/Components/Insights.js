@@ -47,6 +47,8 @@ const Insights = () => {
     { name: "Posts", reactions: 4000, postComments: 2400, views: 2400 },
     { name: "Posts", reactions: 3000, postComments: 2210, views: 2290 },
     { name: "Posts", reactions: 2000, postComments: 2290, views: 2000 },
+    {name: "Posts", reactions: 3100, postComments: 2810, views: 2490 },
+    { name: "Posts", reactions: 2200, postComments: 2990, views: 3000 }
   ];
 
   return (

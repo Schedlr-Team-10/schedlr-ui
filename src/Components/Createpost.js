@@ -6,7 +6,7 @@ const CreatePost = () => {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [scheduleLoading, setScheduleLoading] = useState(false);
-  const [selectedPlatforms, setSelectedPlatforms] = useState(["LinkedIn", "PInterest"]); 
+  const [selectedPlatforms, setSelectedPlatforms] = useState([]); 
   const [scheduleTime, setScheduleTime] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [keywords, setKeywords] = useState("");
@@ -62,37 +62,30 @@ const CreatePost = () => {
       alert("Please select at least one platform.");
       return;
     }
-
+  
     setLoading(true);
     try {
-      const promises = selectedPlatforms.map(async (platform) => {
-        const formData = new FormData();
-        formData.append("description", description);
-        formData.append("uploadImage", uploadImage);
-        formData.append("userId", localStorage.getItem("userId"));
-
-        const response = await fetch(
-          `http://localhost:8081/${platform.toLowerCase()}/postupload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        if (!response.ok) throw new Error(`Failed to post on ${platform}`);
-        const contentType = response.headers.get("content-type");
-        let responseData;
-
-        if (contentType && contentType.includes("application/json")) {
-          responseData = await response.json();
-        } else {
-          responseData = await response.text();
-        }
-
-        return responseData;
+      const formData = new FormData();
+      formData.append("description", description);
+      formData.append("uploadImage", uploadImage);
+      formData.append("userId", localStorage.getItem("userId"));
+      formData.append("platforms", JSON.stringify(selectedPlatforms)); // Add selected platforms
+  
+      const response = await fetch("http://localhost:8081/schedlr/postupload", {
+        method: "POST",
+        body: formData,
       });
-
-      await Promise.all(promises);
+  
+      if (!response.ok) throw new Error("Failed to post on selected platforms");
+  
+      const contentType = response.headers.get("content-type");
+      let responseData;
+      if (contentType && contentType.includes("application/json")) {
+        responseData = await response.json();
+      } else {
+        responseData = await response.text();
+      }
+  
       alert("Post successfully published on selected platforms!");
     } catch (error) {
       console.error("Error posting to platforms:", error);
@@ -101,7 +94,6 @@ const CreatePost = () => {
       setLoading(false);
     }
   };
-
   const schedulePost = async () => {
     if (!scheduleTime) {
       alert("Please select a date and time to schedule your post.");
