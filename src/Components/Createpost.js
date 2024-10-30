@@ -29,9 +29,11 @@ const CreatePost = () => {
   const handleGenerateDescription = async () => {
     setLoading(true);
     try {
+      console.log("Generating description...");
       const generatedDescription = await generateDescription(keywords);
       setGeneratedText(generatedDescription);
     } catch (error) {
+      console.log("We could not fetch from AI");
       console.error("Error generating description:", error);
       alert("Failed to generate description. Please try again.");
     } finally {

@@ -44,5 +44,9 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.13"
-  }
+  },
+  "description": "npm install react-scripts\r npm install react-dom\r npm install react-router-dom\r npm \r npm install axios",
+  "main": "tailwind.config.js",
+  "author": "",
+  "license": "ISC"
 }
