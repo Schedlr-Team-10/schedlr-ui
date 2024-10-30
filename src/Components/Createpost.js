@@ -6,7 +6,7 @@ const CreatePost = () => {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [scheduleLoading, setScheduleLoading] = useState(false);
-  const [selectedPlatforms, setSelectedPlatforms] = useState([]);
+  const [selectedPlatforms, setSelectedPlatforms] = useState(["LinkedIn", "PInterest"]); 
   const [scheduleTime, setScheduleTime] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [keywords, setKeywords] = useState("");
@@ -51,7 +51,9 @@ const CreatePost = () => {
 
   const togglePlatformSelection = (platform) => {
     setSelectedPlatforms((prev) =>
-      prev.includes(platform) ? prev.filter((p) => p !== platform) : [...prev, platform]
+      prev.includes(platform)
+        ? prev.filter((p) => p !== platform)
+        : [...prev, platform]
     );
   };
 
@@ -68,8 +70,9 @@ const CreatePost = () => {
         formData.append("description", description);
         formData.append("uploadImage", uploadImage);
         formData.append("userId", localStorage.getItem("userId"));
+
         const response = await fetch(
-          `http://localhost:8081/${platform.toString().toLowerCase()}/postupload`,
+          `http://localhost:8081/${platform.toLowerCase()}/postupload`,
           {
             method: "POST",
             body: formData,
@@ -107,14 +110,16 @@ const CreatePost = () => {
 
     setScheduleLoading(true);
     try {
+      const formData = new FormData();
+      formData.append("description", description);
+      formData.append("uploadImage", uploadImage);
+      formData.append("platforms", JSON.stringify(selectedPlatforms));
+      formData.append("scheduleTime", scheduleTime);
+      formData.append("userId", localStorage.getItem("userId")); // Include userId if necessary
+
       const response = await fetch("http://localhost:8081/schedlr/schedule", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          date: scheduleTime,
-        }),
+        body: formData,
       });
 
       if (!response.ok) throw new Error("Failed to schedule post");
@@ -217,6 +222,7 @@ const CreatePost = () => {
         </div>
       </div>
 
+      {/* Modal for Description Generation */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md space-y-4">
@@ -242,19 +248,19 @@ const CreatePost = () => {
             ></textarea>
             <button
               onClick={copyToClipboard}
-              className="w-full bg-green-500 hover:bg-green-600 text-white py-1 rounded-md font-medium transition-all text-sm"
+              className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md font-semibold transition-all text-sm"
             >
               Copy to Clipboard
             </button>
             <button
               onClick={pasteDescription}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-1 rounded-md font-medium transition-all text-sm"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md font-semibold transition-all text-sm"
             >
               Paste Description
             </button>
             <button
               onClick={closeModal}
-              className="w-full bg-red-500 hover:bg-red-600 text-white py-1 rounded-md font-medium transition-all text-sm"
+              className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md font-semibold transition-all text-sm"
             >
               Close
             </button>
