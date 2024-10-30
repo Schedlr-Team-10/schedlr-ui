@@ -26,12 +26,12 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="home justify-center">
       <div className="mx-5 flex flex-end">
         <div className="my-2">
           {/* Jumbotron Section */}
           <div className="flex justify-center">
-            <img className="w-[500px] h-[300px]" src="https://whatdreammeans.com/wp-content/uploads/2021/08/social-networks.jpg"/>
+            {/* <img className="w-[500px] h-[300px]" src="https://whatdreammeans.com/wp-content/uploads/2021/08/social-networks.jpg"/> */}
             <div>
               <h4>AI Powered Social Media Scheduler</h4>
             </div>

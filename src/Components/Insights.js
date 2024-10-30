@@ -50,8 +50,9 @@ const Insights = () => {
   ];
 
   return (
+    <div className="insi">
     <div className="insights-container">
-      <h1>Analytics Insights</h1>
+      <h2 >Analytics Insights</h2>
       <div className="platform-selector">
         <label htmlFor="platform">Select Platform: </label>
         <select
@@ -68,7 +69,7 @@ const Insights = () => {
 
       <div className="charts-container">
         <div className="chart">
-          <h2>Post Reactions</h2>
+          <h3>Post Reactions</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={sampleData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -93,7 +94,7 @@ const Insights = () => {
         </div>
 
         <div className="chart">
-          <h2>Post Comments</h2>
+          <h3>Post Comments</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={sampleData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -119,7 +120,7 @@ const Insights = () => {
 
         {platform === "Pinterest" && (
           <div className="chart">
-            <h2>Post Views</h2>
+            <h3>Post Views</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={sampleData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -145,6 +146,7 @@ const Insights = () => {
         )}
       </div>
     </div>
+      </div>
   );
 };
 

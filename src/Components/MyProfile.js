@@ -129,7 +129,7 @@ const MyProfile = () => {
 
     return (
         <div>
-            <div id="myprofile" className="flex justify-start bg-[#ECF0F1] py-5">
+            <div id="myprofile" className="home flex justify-start bg-[#ECF0F1] py-5">
                 <div class="mb-[300px] mt-0 border-t-0">
                     {/* Profile Section */}
                     <div className="w-[250px] bg-white border border-gray-300 rounded-lg p-5 shadow-lg mr-5">
@@ -225,6 +225,7 @@ const MyProfile = () => {
                 </div>
             </div>
         </div>
+
     );
 };
 

@@ -6,9 +6,17 @@ body {
 
 
 .container {
-  max-width: 1200px; 
+  /* max-width: 1200px; 
   margin: 0 auto; 
-  padding: 0 20px; 
+  padding: 0 20px;  */
+  background-image: url('https://wallpapers.com/images/hd/1920x1080-social-background-xpq6lou5leuxv26v.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .con {
@@ -78,23 +86,38 @@ body {
 h1 {
   font-size: 80px;
   color: #0f0f0f; 
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   text-align: center; 
   margin-bottom: 20px; 
 }
 
 h4{
-  font-size: 22px;
+  font-size: 50px;
+  padding:30px;
   text-align: center;
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: Georgia;
+  color: #0f0f0f;
+  
+}
+h2
+{
+  padding-top: 25px;
 }
 
 p {
   line-height: 1.6;
   color: #666; 
   font-size: 1.1rem; 
+  font-family: Georgia, serif;
+  
 }
 
+.header{
+  padding:40px;
+}
+.listlink{
+  font-size: 20px;
+}
 img {
   transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
@@ -130,4 +153,20 @@ img:hover {
   p {
     font-size: 1rem; /* Adjust paragraph size for smaller screens */
   }
+}
+
+.home{
+  /* background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,98,135,1) 100%, rgba(81,247,170,1) 100%); */
+  background-color: #FAEBD7;
+}
+
+.userdash{
+  background-color: #FAEBD7;
+  /* background: rgb(2,0,36);
+background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,98,135,1) 100%, rgba(81,247,170,1) 100%); */
+}
+
+.create{
+  background-color: #FAEBD7;
 }

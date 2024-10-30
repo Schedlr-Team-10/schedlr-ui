@@ -23,8 +23,8 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="bg-gray-100 min-h-screen p-4 flex flex-col">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">User Dashboard</h1>
+    <div className="userdash min-h-screen p-4 flex flex-col">
+      <h1 className="text-2xl text-black font-bold ">User Dashboard</h1>
       <div className="space-y-8 w-full max-w-2xl">
         {posts.map((post) => (
           <div key={post.id} className="bg-white shadow-md rounded-lg overflow-hidden w-full flex">

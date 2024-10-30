@@ -135,8 +135,13 @@ const CreatePost = () => {
   };
 
   return (
+<<<<<<< Updated upstream
     <div className="min-h-screen bg-gradient-to-br from-blue-200 to-blue-400 p-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+=======
+    <div className="create min-h-screen from-gray-100 to-gray-200 p-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center px-[100px] mt-[25px]">
+>>>>>>> Stashed changes
         {/* Image Upload Section */}
         <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105">
           {uploadImage && (
