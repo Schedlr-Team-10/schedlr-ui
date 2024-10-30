@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { generateDescription } from "../Components/api/gptService"; // Adjust path if needed
+import { generateDescription } from "../Components/api/gptService"; 
 
 const CreatePost = () => {
   const [uploadImage, setUploadImage] = useState(null);
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const [scheduleLoading, setScheduleLoading] = useState(false);
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [scheduleTime, setScheduleTime] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +60,7 @@ const CreatePost = () => {
       alert("Please select at least one platform.");
       return;
     }
-  
+
     setLoading(true);
     try {
       const promises = selectedPlatforms.map(async (platform) => {
@@ -67,7 +68,6 @@ const CreatePost = () => {
         formData.append("description", description);
         formData.append("uploadImage", uploadImage);
         formData.append("userId", localStorage.getItem("userId"));
-        console.log(platform.toString().toLowerCase());
         const response = await fetch(
           `http://localhost:8081/${platform.toString().toLowerCase()}/postupload`,
           {
@@ -75,21 +75,20 @@ const CreatePost = () => {
             body: formData,
           }
         );
-  
+
         if (!response.ok) throw new Error(`Failed to post on ${platform}`);
         const contentType = response.headers.get("content-type");
         let responseData;
-  
+
         if (contentType && contentType.includes("application/json")) {
           responseData = await response.json();
         } else {
           responseData = await response.text();
         }
-  
-        console.log(`Response from ${platform}:`, responseData);
+
         return responseData;
       });
-  
+
       await Promise.all(promises);
       alert("Post successfully published on selected platforms!");
     } catch (error) {
@@ -100,11 +99,41 @@ const CreatePost = () => {
     }
   };
 
+  const schedulePost = async () => {
+    if (!scheduleTime) {
+      alert("Please select a date and time to schedule your post.");
+      return;
+    }
+
+    setScheduleLoading(true);
+    try {
+      const response = await fetch("http://localhost:8081/schedlr/schedule", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          date: scheduleTime,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to schedule post");
+
+      const responseData = await response.json();
+      alert("Post scheduled successfully!");
+    } catch (error) {
+      console.error("Error scheduling post:", error);
+      alert("Error scheduling post. Please try again.");
+    } finally {
+      setScheduleLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center px-[100px] mt-[25px]">
+    <div className="min-h-screen bg-gradient-to-br from-blue-200 to-blue-400 p-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         {/* Image Upload Section */}
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105">
           {uploadImage && (
             <img
               src={URL.createObjectURL(uploadImage)}
@@ -112,7 +141,7 @@ const CreatePost = () => {
               className="h-56 w-full object-cover"
             />
           )}
-          <div className="p-4">
+          <div className="p-6">
             <input
               id="fileInput"
               type="file"
@@ -121,7 +150,7 @@ const CreatePost = () => {
             />
             <button
               onClick={triggerFileInput}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md font-medium transition-all"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-semibold transition-all shadow-md"
             >
               Upload Image
             </button>
@@ -129,29 +158,30 @@ const CreatePost = () => {
         </div>
 
         {/* Post Description and Platform Section */}
-        <div className="bg-white shadow-md rounded-lg p-4 space-y-4">
+        <div className="bg-white shadow-lg rounded-lg p-6 space-y-6">
+          <h2 className="text-2xl font-semibold text-gray-800">Create Your Post</h2>
           <textarea
-            className="w-full border border-gray-300 rounded-lg p-2 h-28 resize-none focus:ring-2 focus:ring-blue-400 text-sm"
+            className="w-full border border-gray-300 rounded-lg p-3 h-28 resize-none focus:ring-2 focus:ring-blue-500 text-sm"
             placeholder="Write your post description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           <button
             onClick={openModal}
-            className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md font-medium transition-all"
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md font-semibold transition-all"
           >
             Generate Description
           </button>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-4">
             {["LinkedIn", "PInterest", "Twitter", "Facebook"].map((platform) => (
               <button
                 key={platform}
                 onClick={() => togglePlatformSelection(platform)}
-                className={`p-2 rounded-md font-medium transition-all text-sm ${
+                className={`p-2 rounded-md font-semibold transition-all text-sm ${
                   selectedPlatforms.includes(platform)
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-700"
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-gray-300 text-gray-700 hover:bg-gray-400"
                 }`}
               >
                 {platform}
@@ -161,8 +191,8 @@ const CreatePost = () => {
 
           <button
             onClick={postToSelectedPlatforms}
-            className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md font-medium transition-all"
-            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md font-semibold transition-all"
+            disabled={loading || scheduleLoading}
           >
             {loading ? "Posting..." : "Post Now"}
           </button>
@@ -171,49 +201,56 @@ const CreatePost = () => {
             <p className="text-gray-600 mb-1 text-sm">Schedule your post at:</p>
             <input
               type="datetime-local"
-              className="w-full border border-gray-300 rounded-lg p-1 focus:ring-2 focus:ring-blue-400 text-sm"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 text-sm"
               value={scheduleTime}
               onChange={(e) => setScheduleTime(e.target.value)}
             />
           </div>
+
+          <button
+            onClick={schedulePost}
+            className="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md font-semibold transition-all"
+            disabled={loading || scheduleLoading}
+          >
+            {scheduleLoading ? "Scheduling..." : "Schedule Now"}
+          </button>
         </div>
       </div>
 
-      {/* Modal for Description Generation */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md space-y-4">
             <h2 className="text-lg font-semibold text-gray-800">Generate Description</h2>
             <input
               type="text"
-              className="w-full border border-gray-300 rounded-lg p-2 text-sm"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter keywords or hashtags"
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
             />
             <button
               onClick={handleGenerateDescription}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-1 rounded-md font-medium transition-all text-sm"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-semibold transition-all"
               disabled={loading}
             >
               {loading ? "Generating..." : "Generate"}
             </button>
             <textarea
               readOnly
-              className="w-full border border-gray-300 rounded-lg p-2 h-24 text-sm"
+              className="w-full border border-gray-300 rounded-lg p-3 h-24 text-sm"
               value={generatedText}
             ></textarea>
             <button
               onClick={copyToClipboard}
-              className="w-full bg-gray-500 hover:bg-gray-600 text-white py-1 rounded-md font-medium transition-all text-sm"
+              className="w-full bg-green-500 hover:bg-green-600 text-white py-1 rounded-md font-medium transition-all text-sm"
             >
               Copy to Clipboard
             </button>
             <button
               onClick={pasteDescription}
-              className="w-full bg-green-500 hover:bg-green-600 text-white py-1 rounded-md font-medium transition-all text-sm"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-1 rounded-md font-medium transition-all text-sm"
             >
-              Use This Description
+              Paste Description
             </button>
             <button
               onClick={closeModal}
