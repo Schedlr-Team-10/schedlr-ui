@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export default function Homepage() {
+export default function Homepage({ onLogin }) { // Accept onLogin as a prop
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +23,9 @@ export default function Homepage() {
           alert("Login successful! Redirecting to homepage...");
           // Store the userId in localStorage
           localStorage.setItem("userId", response.data.userid);
+          
+          // Trigger authentication state change
+          onLogin(); // Call onLogin to update isAuthenticated in App.js
 
           // Navigate to homepage
           navigate("/home");

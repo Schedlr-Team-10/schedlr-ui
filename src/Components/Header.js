@@ -1,16 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export const Header = ({ isAuthenticated }) => (
-  <div className="header flex justify-between px-52 items-center h-14 bg-[#000000] sticky top-0 z-50 shadow-lg">
-    <div className="flex items-center">
-      <h2 className="mr-[250px] font-Lucida Grande text-3xl text-white">
-        <Link to="/">SCHEDLR</Link>
-      </h2>
-    </div>
+export const Header = ({ isAuthenticated, handleLogout }) => {
+  const navigate = useNavigate();
 
-    <div className="flex justify-center no-underline">
-      <ul className="listlink flex justify-center no-underline">
+  const handleLogoutAndRedirect = () => {
+    handleLogout(); // Reset authentication state
+    navigate("/"); // Redirect to login page
+  };
+
+  return (
+    <div className="header bg-[#000000] flex justify-between items-center h-14 px-10 sticky top-0 z-50 shadow-lg">
+      <h2 className="header5 justify-start text-white text-center font-bold">SCHEDLR</h2>
+      <div className="flex space-x-4">
+        {isAuthenticated ? (
+          <>
+            <ul className="listlink flex justify-center no-underline">
         
         <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white font-serif">
           <Link to="/dashboard">Dashboard</Link>
@@ -30,17 +35,16 @@ export const Header = ({ isAuthenticated }) => (
         <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white font-serif">
           <Link to="/myprofile">MyProfile</Link>
         </li>
-        {/* Conditionally render Login and Sign Up links */}
-        {/* {!isAuthenticated && (
-          <>
-            <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white">
-              <Link to="/login">Login / SignUp</Link>
-            </li>
+        <button onClick={handleLogoutAndRedirect} className="text-white hover:bg-slate-500 px-3 py-1 rounded-lg">Logout</button>
+        </ul>
           </>
-        )} */}
-      </ul>
+        ) : (
+          <></>
+          // <Link className="text-white hover:bg-slate-500 px-3 py-1 rounded-lg" to="/login">Login</Link>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Header;
