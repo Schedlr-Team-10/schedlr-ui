@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
-import MarketPlace from "./Components/MarketPlace";
+import MarketPlace from "./Components/marketplace/MarketPlace";
 import Insights from "./Components/Insights";
 import { Header } from "./Components/Header";
 import CreatePost from "./Components/Createpost";
