@@ -1,29 +1,28 @@
 .marketplace-container {
   display: flex;
   height: 100vh;
-  overflow: hidden;
-  background-color: #e9ecf3;
+  background-color: #f8fafc;
 }
 
-.influencer-name{
-font-weight: bold;
-color: #334155;
+.influencer-name {
+  font-weight: bold;
+  color: #1f2937;
 }
 
 .influencer-list {
   width: 30%;
-  background-color: #f8faff;
+  background-color: #ffffff;
   padding: 20px;
-  border-right: 1px solid #d0d7e6;
+  border-right: 1px solid #e5e7eb;
   overflow-y: auto;
-  box-shadow: 3px 0 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   margin-bottom: 20px;
-  font-weight: bold;
-  color: #334155;
+  color: #3b82f6;
+  text-align: center;
 }
 
 .influencer-item {
@@ -31,16 +30,15 @@ color: #334155;
   align-items: center;
   padding: 12px;
   margin-bottom: 12px;
-  background-color: #ffffff;
+  background-color: #f0f4f8;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .influencer-item:hover {
-  background-color: #f0f4ff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .influencer-pic {
@@ -48,34 +46,33 @@ color: #334155;
   height: 50px;
   border-radius: 50%;
   margin-right: 15px;
-  border: 2px solid #6c63ff;
+  border: 3px solid #60a5fa;
   object-fit: cover;
 }
 
 .influencer-details {
   width: 70%;
-  padding: 25px;
+  padding: 30px;
   background-color: #ffffff;
+  color: #1f2937;
   overflow-y: auto;
   box-shadow: -3px 0 8px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
-  position: relative;
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: #888;
-  font-size: 1.2rem;
+  color: #ef4444;
+  font-size: 1.5rem;
   cursor: pointer;
   position: absolute;
   right: 20px;
   top: 20px;
-  transition: color 0.3s;
 }
 
 .close-btn:hover {
-  color: #6c63ff;
+  color: #dc2626;
 }
 
 .profile-pic-large {
@@ -83,9 +80,8 @@ color: #334155;
   height: 120px;
   border-radius: 50%;
   margin-bottom: 20px;
-  border: 3px solid #6c63ff;
-  object-fit: cover; 
-  object-position: center;
+  border: 4px solid #60a5fa;
+  object-fit: cover;
 }
 
 .social-followers {
@@ -95,78 +91,77 @@ color: #334155;
   justify-content: center;
 }
 
-.social-followers .follower-item {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  font-size: 0.95rem;
-  color: #4b5563;
-}
-
 .social-followers .follower-item i {
-  font-size: 2rem;
-  margin-bottom: 5px;
+  font-size: 2.2rem;
+  margin-bottom: 8px;
 }
 
 .social-followers .follower-item.linkedin i {
-  color: #0A66C2;
+  color: #0a66c2;
 }
 
 .social-followers .follower-item.pinterest i {
-  color: #E60023;
+  color: #e60023;
 }
 
 .social-followers .follower-item.twitter i {
-  color: #1DA1F2;
+  color: #1da1f2;
 }
 
 .social-followers .follower-item h5 {
   font-size: 1.2rem;
-  color: #334155;
-  font-weight: 600;
+  color: #3b82f6;
+  font-weight: 700;
 }
 
 .pricing {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-top: 20px;
 }
 
 .price-item {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 5px;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .price-item.photo {
-  background-color: #4caf50;
+  background-color: #22c55e;
 }
 
 .price-item.video {
-  background-color: #ff9800;
+  background-color: #f59e0b;
 }
 
 .price-item.tweet {
-  background-color: #03a9f4;
+  background-color: #3b82f6;
+}
+
+.price-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.03);
 }
 
 .collaboration-btn {
-  padding: 12px 25px;
-  background-color: #6c63ff;
+  padding: 14px 30px;
+  background-color: #3b82f6;
   color: #ffffff;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  transition: background-color 0.3s, box-shadow 0.3s;
+  margin-top: 20px;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .collaboration-btn:hover {
-  background-color: #5a52d4;
-  box-shadow: 0 4px 12px rgba(90, 82, 212, 0.3);
+  background-color: #1e40af;
+  transform: scale(1.05);
 }
