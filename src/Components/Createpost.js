@@ -96,12 +96,12 @@ const CreatePost = () => {
       setLoading(false);
     }
   };
+  
   const schedulePost = async () => {
     if (!scheduleTime) {
       alert("Please select a date and time to schedule your post.");
       return;
     }
-
     setScheduleLoading(true);
     try {
       const formData = new FormData();
@@ -109,17 +109,21 @@ const CreatePost = () => {
       formData.append("uploadImage", uploadImage);
       formData.append("platforms", JSON.stringify(selectedPlatforms));
       formData.append("scheduleTime", scheduleTime);
-      formData.append("userId", localStorage.getItem("userId")); // Include userId if necessary
-
+      formData.append("userId", localStorage.getItem("userId"));
+  
       const response = await fetch("http://localhost:8081/schedlr/schedule", {
         method: "POST",
         body: formData,
       });
-
-      if (!response.ok) throw new Error("Failed to schedule post");
-
-      const responseData = await response.json();
-      alert("Post scheduled successfully!");
+  
+      console.log("Response is: ", response);
+  
+      if (response.ok) {
+        console.log("adfasdf");
+        alert("Scheduled Successfully");
+      } else {
+        throw new Error("Failed to schedule post");
+      }
     } catch (error) {
       console.error("Error scheduling post:", error);
       alert("Error scheduling post. Please try again.");
@@ -127,7 +131,7 @@ const CreatePost = () => {
       setScheduleLoading(false);
     }
   };
-
+  
   return (
     <div className="create min-h-screen from-gray-100 to-gray-200 p-4">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center px-[100px] mt-[25px]">
