@@ -113,13 +113,21 @@ const MarketPlace = () => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(Infinity);
   const [selectedInfluencer, setSelectedInfluencer] = useState(null);
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedServices, setSelectedServices] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
 
   const handleViewProfile = useCallback((influencer) => {
     setSelectedInfluencer(influencer);
-    setSelectedService(null);
+    setSelectedServices([]);
+  }, []);
+
+  const toggleService = useCallback((service) => {
+    setSelectedServices((prevServices) =>
+      prevServices.includes(service)
+        ? prevServices.filter((s) => s !== service)
+        : [...prevServices, service]
+    );
   }, []);
 
   const openModal = useCallback((imageSrc) => {
@@ -193,7 +201,7 @@ const MarketPlace = () => {
         </div>
 
         <div className="range-filters">
-          <label>Follower Count:</label>
+          {/* <label>Follower Count:</label>
           <input
             type="number"
             placeholder="Min Followers"
@@ -203,7 +211,7 @@ const MarketPlace = () => {
             type="number"
             placeholder="Max Followers"
             onChange={(e) => setMaxFollowers(Number(e.target.value))}
-          />
+          /> */}
 
           <label>Price Range:</label>
           <input
@@ -241,7 +249,6 @@ const MarketPlace = () => {
 
       {selectedInfluencer && (
         <div className="influencer-details">
-          {/* Close button at the top-right */}
           <button
             className="close-profile-btn"
             onClick={() => setSelectedInfluencer(null)}
@@ -272,30 +279,40 @@ const MarketPlace = () => {
           </div>
           <div className="pricing">
             <p
-              className="price-item photo"
-              onClick={() => setSelectedService("Photo")}
+              className={`price-item photo ${
+                selectedServices.includes("Photo") ? "active" : ""
+              }`}
+              onClick={() => toggleService("Photo")}
             >
               Price per Photo: {selectedInfluencer.pricePerPhoto}
             </p>
             <p
-              className="price-item video"
-              onClick={() => setSelectedService("Video")}
+              className={`price-item video ${
+                selectedServices.includes("Video") ? "active" : ""
+              }`}
+              onClick={() => toggleService("Video")}
             >
               Price per Video: {selectedInfluencer.pricePerVideo}
             </p>
             <p
-              className="price-item tweet"
-              onClick={() => setSelectedService("Tweet")}
+              className={`price-item tweet ${
+                selectedServices.includes("Tweet") ? "active" : ""
+              }`}
+              onClick={() => toggleService("Tweet")}
             >
               Price per Tweet: {selectedInfluencer.pricePerTweet}
             </p>
           </div>
-          {selectedService && (
+          {selectedServices.length > 0 && (
             <button
               className="collaboration-btn"
-              onClick={() => alert("Request Collaboration")}
+              onClick={() =>
+                alert(
+                  `Request Collaboration for: ${selectedServices.join(", ")}`
+                )
+              }
             >
-              Request Collaboration for {selectedService}
+              Request Collaboration for {selectedServices.join(", ")}
             </button>
           )}
         </div>
