@@ -51,6 +51,7 @@
 }
 
 .influencer-details {
+  position: relative;
   width: 70%;
   padding: 30px;
   background-color: #ffffff;
@@ -59,6 +60,7 @@
   box-shadow: -3px 0 8px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
 }
+
 
 .close-btn {
   background: none;
@@ -164,4 +166,123 @@
 .collaboration-btn:hover {
   background-color: #1e40af;
   transform: scale(1.05);
+}
+.close-profile-btn {
+  position: absolute; 
+  top: 10px; 
+  right: 10px; 
+  background: #ef4444;
+  border: none;
+  color: #ffffff;
+  font-size: 1.2rem;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 10; 
+}
+
+.close-profile-btn:hover {
+  background-color: #dc2626;
+}
+
+
+
+.filters-container {
+  width: 25%;
+  padding: 15px;
+  background-color: #f0f4f8;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+.search-bar {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1f2937;
+  transition: border-color 0.3s;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.4);
+}
+
+.tags-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.tags-filter label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.tag {
+  padding: 8px 12px;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.tag.active {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.tag:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.range-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.range-filters label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.range-filters input {
+  width: calc(50% - 5px);
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.range-filters input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.4);
+}
+
+.range-filters input[type="number"] {
+  width: calc(100% - 10px);
+}
+
+.range-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
 }

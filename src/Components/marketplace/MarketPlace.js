@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import "./MarketPlace.css";
 import axios from "axios";
 import ImageModal from "./ImageModal";
@@ -15,6 +15,7 @@ const influencers = [
     pricePerPhoto: "$300",
     pricePerVideo: "$500",
     pricePerTweet: "$150",
+    tags: ["Tech Enthusiast", "Social Media"],
   },
   {
     name: "Deadpool",
@@ -27,6 +28,7 @@ const influencers = [
     pricePerPhoto: "$400",
     pricePerVideo: "$600",
     pricePerTweet: "$200",
+    tags: ["Fashion", "Lifestyle"],
   },
   {
     name: "Iron Man",
@@ -39,6 +41,7 @@ const influencers = [
     pricePerPhoto: "$700",
     pricePerVideo: "$1200",
     pricePerTweet: "$350",
+    tags: ["Billionaire", "Inventor", "Social Media Influencer"],
   },
   {
     name: "Peter Parker",
@@ -50,6 +53,7 @@ const influencers = [
     pricePerPhoto: "$250",
     pricePerVideo: "$450",
     pricePerTweet: "$120",
+    tags: ["Web Developer", "Photographer", "Social Media Star"],
   },
   {
     name: "Captain America",
@@ -62,6 +66,7 @@ const influencers = [
     pricePerPhoto: "$350",
     pricePerVideo: "$550",
     pricePerTweet: "$180",
+    tags: ["Activist", "Author", "Knowledge Sharer"],
   },
   {
     name: "Gojo Satoru",
@@ -74,6 +79,7 @@ const influencers = [
     pricePerPhoto: "$500",
     pricePerVideo: "$800",
     pricePerTweet: "$250",
+    tags: ["Social Media Influencer", "Fitness Enthusiast"],
   },
   {
     name: "Zenitsu",
@@ -86,6 +92,7 @@ const influencers = [
     pricePerPhoto: "$350",
     pricePerVideo: "$550",
     pricePerTweet: "$180",
+    tags: ["Anime Influencer", "Motivational Speaker"],
   },
 ];
 
@@ -99,64 +106,122 @@ const formatFollowers = (count) => {
 };
 
 const MarketPlace = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [minFollowers, setMinFollowers] = useState(0);
+  const [maxFollowers, setMaxFollowers] = useState(Infinity);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(Infinity);
   const [selectedInfluencer, setSelectedInfluencer] = useState(null);
-  const [selectedService, setSelectedService] = useState(null); // New state for service type
+  const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
 
-  const handleViewProfile = (influencer) => {
+  const handleViewProfile = useCallback((influencer) => {
     setSelectedInfluencer(influencer);
     setSelectedService(null);
-  };
+  }, []);
 
-  // Function to open modal with image
-  const openModal = (imageSrc) => {
+  const openModal = useCallback((imageSrc) => {
     setModalImage(imageSrc);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
     setModalImage(null);
-  };
+  }, []);
 
-  // Function to handle collaboration request
-  const handleRequestCollaboration = async () => {
-    if (!selectedInfluencer || !selectedService) return;
-
-    try {
-      const userId = "currentUserId"; // Replace with actual user ID from auth system
-
-      const response = await axios.post(
-        "http://localhost:8080/api/collaboration/request",
-        {
-          influencerId: selectedInfluencer.id,
-          userId,
-          serviceType: selectedService, // Include selected service type in the request
-        }
+  const filteredInfluencers = useMemo(() => {
+    return influencers.filter((influencer) => {
+      const matchesSearch = influencer.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesTags = selectedTags.every((tag) =>
+        influencer.tags.includes(tag)
       );
-
-      if (response.status === 200) {
-        alert(
-          `Collaboration request for ${selectedService} sent successfully!`
-        );
-      }
-    } catch (error) {
-      console.error("Error sending collaboration request:", error);
-      alert("Failed to send collaboration request. Please try again.");
-    }
-  };
-
-  // Function to handle click on a price item
-  const handleServiceSelect = (serviceType) => {
-    setSelectedService(serviceType); // Set the selected service type
-  };
+      const totalFollowers =
+        influencer.linkedinFollowers +
+        influencer.pinterestFollowers +
+        influencer.twitterFollowers;
+      const matchesFollowers =
+        totalFollowers >= minFollowers && totalFollowers <= maxFollowers;
+      const matchesPrice =
+        parseInt(influencer.pricePerPhoto.replace("$", "")) >= minPrice &&
+        parseInt(influencer.pricePerPhoto.replace("$", "")) <= maxPrice;
+      return matchesSearch && matchesTags && matchesFollowers && matchesPrice;
+    });
+  }, [
+    searchQuery,
+    selectedTags,
+    minFollowers,
+    maxFollowers,
+    minPrice,
+    maxPrice,
+  ]);
 
   return (
     <div className="marketplace-container">
+      <div className="filters-container">
+        <input
+          type="text"
+          placeholder="Search influencers..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
+
+        <div className="tags-filter">
+          <label>Filter by Category:</label>
+          {["Tech Enthusiast", "Fashion", "Lifestyle", "Social Media"].map(
+            (tag) => (
+              <button
+                key={tag}
+                className={`tag ${selectedTags.includes(tag) ? "active" : ""}`}
+                onClick={() =>
+                  setSelectedTags((prev) =>
+                    prev.includes(tag)
+                      ? prev.filter((t) => t !== tag)
+                      : [...prev, tag]
+                  )
+                }
+              >
+                {tag}
+              </button>
+            )
+          )}
+        </div>
+
+        <div className="range-filters">
+          <label>Follower Count:</label>
+          <input
+            type="number"
+            placeholder="Min Followers"
+            onChange={(e) => setMinFollowers(Number(e.target.value))}
+          />
+          <input
+            type="number"
+            placeholder="Max Followers"
+            onChange={(e) => setMaxFollowers(Number(e.target.value))}
+          />
+
+          <label>Price Range:</label>
+          <input
+            type="number"
+            placeholder="Min Price"
+            onChange={(e) => setMinPrice(Number(e.target.value))}
+          />
+          <input
+            type="number"
+            placeholder="Max Price"
+            onChange={(e) => setMaxPrice(Number(e.target.value))}
+          />
+        </div>
+      </div>
+
       <div className="influencer-list">
         <h2 className="section-title">Browse Influencers</h2>
-        {influencers.map((influencer, index) => (
+        {filteredInfluencers.map((influencer, index) => (
           <div
             key={index}
             className="influencer-item"
@@ -176,14 +241,14 @@ const MarketPlace = () => {
 
       {selectedInfluencer && (
         <div className="influencer-details">
+          {/* Close button at the top-right */}
           <button
-            className="close-btn"
+            className="close-profile-btn"
             onClick={() => setSelectedInfluencer(null)}
           >
-            Close
+            ✕
           </button>
           <h3 className="influencer-name">{selectedInfluencer.name}</h3>
-          {/* Open modal when profile picture is clicked */}
           <img
             src={selectedInfluencer.profilePic}
             alt={selectedInfluencer.name}
@@ -191,7 +256,6 @@ const MarketPlace = () => {
             onClick={() => openModal(selectedInfluencer.profilePic)}
           />
           <p>{selectedInfluencer.bio}</p>
-
           <div className="social-followers">
             <div className="follower-item linkedin">
               <i className="fab fa-linkedin"></i>
@@ -206,40 +270,37 @@ const MarketPlace = () => {
               <h5>{formatFollowers(selectedInfluencer.twitterFollowers)}</h5>
             </div>
           </div>
-
-          {/* Pricing Section with Clickable Options */}
           <div className="pricing">
             <p
               className="price-item photo"
-              onClick={() => handleServiceSelect("Photo")}
+              onClick={() => setSelectedService("Photo")}
             >
               Price per Photo: {selectedInfluencer.pricePerPhoto}
             </p>
             <p
               className="price-item video"
-              onClick={() => handleServiceSelect("Video")}
+              onClick={() => setSelectedService("Video")}
             >
               Price per Video: {selectedInfluencer.pricePerVideo}
             </p>
             <p
               className="price-item tweet"
-              onClick={() => handleServiceSelect("Tweet")}
+              onClick={() => setSelectedService("Tweet")}
             >
               Price per Tweet: {selectedInfluencer.pricePerTweet}
             </p>
           </div>
-
-          {/* Conditionally Render Request Collaboration Button */}
           {selectedService && (
             <button
               className="collaboration-btn"
-              onClick={handleRequestCollaboration}
+              onClick={() => alert("Request Collaboration")}
             >
               Request Collaboration for {selectedService}
             </button>
           )}
         </div>
       )}
+
       {isModalOpen && <ImageModal imageSrc={modalImage} onClose={closeModal} />}
     </div>
   );
