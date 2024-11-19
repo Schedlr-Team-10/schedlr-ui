@@ -116,10 +116,12 @@ const MarketPlace = () => {
   const [selectedServices, setSelectedServices] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
+  const [message, setMessage] = useState("");
 
   const handleViewProfile = useCallback((influencer) => {
     setSelectedInfluencer(influencer);
     setSelectedServices([]);
+    setMessage("");
   }, []);
 
   const toggleService = useCallback((service) => {
@@ -167,6 +169,31 @@ const MarketPlace = () => {
     minPrice,
     maxPrice,
   ]);
+
+  const handleCollaborationRequest = () => {
+    if (selectedServices.length === 0) {
+      alert("Please select at least one service.");
+      return;
+    }
+
+    if (message.trim() === "") {
+      alert("Please enter a message for the influencer.");
+      return;
+    }
+
+    alert(
+      `Request Collaboration for: ${selectedServices.join(
+        ", "
+      )}\nMessage: ${message}`
+    );
+
+    // Optionally send this data to a backend API
+    axios.post("/api/request-collaboration", {
+      influencer: selectedInfluencer.name,
+      services: selectedServices,
+      message,
+    });
+  };
 
   return (
     <div className="marketplace-container">
@@ -303,14 +330,28 @@ const MarketPlace = () => {
               Price per Tweet: {selectedInfluencer.pricePerTweet}
             </p>
           </div>
+
+          <textarea
+            className="message-input"
+            placeholder="Enter your message here..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          ></textarea>
+
           {selectedServices.length > 0 && (
             <button
               className="collaboration-btn"
-              onClick={() =>
+              onClick={() => {
+                if (!message.trim()) {
+                  alert("Please enter a message for the influencer.");
+                  return;
+                }
                 alert(
-                  `Request Collaboration for: ${selectedServices.join(", ")}`
-                )
-              }
+                  `Request Collaboration for: ${selectedServices.join(
+                    ", "
+                  )}\nMessage: ${message}`
+                );
+              }}
             >
               Request Collaboration for {selectedServices.join(", ")}
             </button>
