@@ -1,90 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
+import "./StripeCheckout.css";
 
-// Load the Stripe publishable key
-const stripePromise = loadStripe('your_publishable_key_here'); // Replace with your Stripe publishable key
+const stripePromise = loadStripe("pk_test_51QMdkjDPmFCVYWzf3FxnEfsfq7mMm2uIrCHqIruPx1US3q74Lt3DZXyvMqRyZE6OF3DZZsQB8zVsfxMHJHiqhYw400yCubQU8r");
+
 
 const StripeCheckout = () => {
-    const [clientSecret, setClientSecret] = useState('');
-    const [amount, setAmount] = useState(0);  // Amount in dollars
-    const [paymentError, setPaymentError] = useState('');
+  const [clientSecret, setClientSecret] = useState("");
+  const [paymentError, setPaymentError] = useState("");
+  const [searchParams] = useSearchParams(); // Get query params
+  const stripe = useStripe();
+  const elements = useElements();
 
-    const stripe = useStripe();
-    const elements = useElements();
+  const amount = searchParams.get("amount"); // Get amount from query params
+  const message = searchParams.get("message"); // Get message from query params
 
-    // Create Payment Intent when the component mounts
-    useEffect(() => {
-        const createPaymentIntent = async () => {
-            try {
-                // Send amount to backend to create PaymentIntent
-                const response = await axios.post('/payment/create-payment-intent', { amount });
-                setClientSecret(response.data);
-            } catch (error) {
-                console.error('Error creating payment intent:', error);
-                setPaymentError('Failed to create payment intent');
-            }
-        };
-
-        if (amount > 0) {
-            createPaymentIntent();
-        }
-    }, [amount]);
-
-    // Handle form submission to confirm the payment
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        if (!stripe || !elements) {
-            return;
-        }
-
-        const cardElement = elements.getElement(CardElement);
-
-        // Confirm the Payment Intent with the card element
-        const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: cardElement,
-            },
-        });
-
-        if (error) {
-            setPaymentError(error.message);
-        } else if (paymentIntent.status === 'succeeded') {
-            alert('Payment successful!');
-        }
+  useEffect(() => {
+    const createPaymentIntent = async () => {
+      try {
+        const response = await axios.post("/payment/create-payment-intent", { amount });
+        setClientSecret(response.data);
+      } catch (error) {
+        console.error("Error creating payment intent:", error);
+        setPaymentError("Failed to create payment intent");
+      }
     };
 
-    return (
-        <div>
-            <h2>Stripe Checkout</h2>
-            {paymentError && <p style={{ color: 'red' }}>{paymentError}</p>}
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="amount">Amount (in dollars):</label>
-                <input
-                    type="number"
-                    id="amount"
-                    value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
-                    min="1"
-                    placeholder="Enter amount"
-                />
-                <div>
-                    <CardElement />
-                </div>
-                <button type="submit" disabled={!stripe}>
-                    Pay Now
-                </button>
-            </form>
-        </div>
-    );
+    if (amount) {
+      createPaymentIntent();
+    }
+  }, [amount]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardElement,
+      },
+    });
+
+    if (error) {
+      setPaymentError(error.message);
+    } else if (paymentIntent.status === "succeeded") {
+      alert(`Payment successful!\nMessage: ${message}`); // Show the message after successful payment
+    }
+  };
+
+  return (
+    <div className="stripe-checkout-container">
+      <h2>Stripe Checkout</h2>
+      <p className="checkout-message">Message: {message}</p>
+      <p className="checkout-message">Amount: ${amount}</p>
+      {paymentError && <p className="payment-error">{paymentError}</p>}
+      <form onSubmit={handleSubmit} className="checkout-form">
+        <CardElement className="stripe-card-element" />
+        <button type="submit" className="submit-button" disabled={!stripe}>
+          Pay ${amount}
+        </button>
+      </form>
+    </div>
+  );
 };
 
 const CheckoutForm = () => (
-    <Elements stripe={stripePromise}>
-        <StripeCheckout />
-    </Elements>
+  <Elements stripe={stripePromise}>
+    <StripeCheckout />
+  </Elements>
 );
 
 export default CheckoutForm;

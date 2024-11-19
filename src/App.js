@@ -10,6 +10,7 @@ import Home from "./Components/Home";
 import Homepage from "./Components/Homepage";
 import Privacy from "./Components/Privacy";
 import PinterestAccessStatus from "./Components/PinterestAccessStatus";
+import StripeCheckout from "./Components/marketplace/StripeCheckout";
 import "./App.css";
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
               <Route path="/myprofile" element={<MyProfile />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/pinterestStatus" element={<PinterestAccessStatus />} />
+              <Route path="/checkout" element={<StripeCheckout />} />
             </>
           )}
         </Routes>

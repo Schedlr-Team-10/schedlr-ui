@@ -1,0 +1,83 @@
+/* Main container for the checkout page */
+.stripe-checkout-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    padding: 20px;
+  }
+  
+  /* Checkout title */
+  .stripe-checkout-container h2 {
+    font-size: 2rem;
+    color: #1f2937;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  /* Checkout message */
+  .checkout-message {
+    font-size: 1.1rem;
+    color: #374151;
+    margin-bottom: 10px;
+  }
+  
+  /* Payment error message */
+  .payment-error {
+    font-size: 1rem;
+    color: #ef4444;
+    margin-bottom: 15px;
+  }
+  
+  /* Form container */
+  .checkout-form {
+    width: 100%;
+    max-width: 400px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Stripe card input field */
+  .stripe-card-element {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    font-size: 1rem;
+    color: #1f2937;
+  }
+  
+  /* Submit button */
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    text-align: center;
+  }
+  
+  .submit-button:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+  }
+  
+  .submit-button:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+  }
+  
+  .submit-button:disabled:hover {
+    transform: none;
+  }
+  

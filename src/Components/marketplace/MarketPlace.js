@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import "./MarketPlace.css";
 import axios from "axios";
 import ImageModal from "./ImageModal";
@@ -170,6 +171,8 @@ const MarketPlace = () => {
     maxPrice,
   ]);
 
+  const navigate = useNavigate();
+
   const handleCollaborationRequest = () => {
     if (selectedServices.length === 0) {
       alert("Please select at least one service.");
@@ -340,21 +343,18 @@ const MarketPlace = () => {
 
           {selectedServices.length > 0 && (
             <button
-              className="collaboration-btn"
-              onClick={() => {
-                if (!message.trim()) {
-                  alert("Please enter a message for the influencer.");
-                  return;
-                }
-                alert(
-                  `Request Collaboration for: ${selectedServices.join(
-                    ", "
-                  )}\nMessage: ${message}`
-                );
-              }}
-            >
-              Request Collaboration for {selectedServices.join(", ")}
-            </button>
+            className="collaboration-btn"
+            onClick={() => {
+              if (!message.trim()) {
+                alert("Please enter a message for the influencer.");
+                return;
+              }
+              const amount = selectedServices.length * 100; // Example amount calculation
+              navigate(`/checkout?amount=${amount}&message=${encodeURIComponent(message)}`); // Redirect to payment page
+            }}
+          >
+            Request Collaboration for {selectedServices.join(", ")}
+          </button>
           )}
         </div>
       )}
