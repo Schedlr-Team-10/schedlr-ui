@@ -71,7 +71,7 @@ const CreatePost = () => {
       formData.append("description", description);
       formData.append("uploadImage", uploadImage);
       formData.append("userId", localStorage.getItem("userId"));
-      formData.append("platforms", JSON.stringify(selectedPlatforms)); // Add selected platforms
+      formData.append("platforms", JSON.stringify(selectedPlatforms));
   
       const response = await fetch("http://localhost:8081/schedlr/postupload", {
         method: "POST",
