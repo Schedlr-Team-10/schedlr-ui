@@ -3,8 +3,8 @@
     max-width: 1200px;
     margin: auto;
     font-family: 'Poppins', sans-serif; 
-    
-    background-color: #ffffff;
+    /* background: linear-gradient(to left, rgb(141, 0, 191), rgb(94, 0, 138)); */
+    /* background-color: #ffffff; */
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
    
@@ -14,7 +14,8 @@
     /* background: rgb(2,0,36);
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,98,135,1) 100%, rgba(81,247,170,1) 100%);
  */
- background-color: #FAEBD7;
+ /* background-color: #FAEBD7; */
+ background: linear-gradient(to left, rgb(170, 153, 244), rgb(167, 246, 220));
 }
 h2 {
     text-align: center;
@@ -29,6 +30,7 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    /* background: linear-gradient(to left, rgb(170, 153, 244), rgb(167, 246, 220)); */
     gap: 25px; 
 }
 
@@ -42,6 +44,7 @@ h2 {
     border: none; 
     border-radius: 12px; 
     background: linear-gradient(145deg, #f8f9fa, #e9ecef); 
+    /* background: linear-gradient(to left, rgb(220, 145, 247), rgb(240, 222, 248)); */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -81,18 +84,20 @@ h2 {
     font-size: 1.3rem; 
     color: #2c3e50; 
     font-weight: 500; 
+    
 }
 
 
 .platform-selector select {
     padding: 10px 15px; 
     font-size: 1.1rem;
-    border: 2px solid #007bff; 
+    border: 2px solid #5ec2e9; 
     border-radius: 5px;
     outline: none;
     cursor: pointer;
     transition: border-color 0.3s, box-shadow 0.3s; 
 }
+
 
 
 .platform-selector select:focus {
