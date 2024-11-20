@@ -154,6 +154,7 @@ export default function Homepage({ onLogin }) {
 
     if (isLogin) {
       try {
+        console.log("Attempting to forward the credentials to the server...");
         const response = await axios.post("http://localhost:8082/schedlr/login", {
           email: email,
           password: password,
@@ -163,8 +164,6 @@ export default function Homepage({ onLogin }) {
           alert("Login successful! Redirecting to homepage...");
 
           localStorage.setItem("userId", response.data.userid);
-          localStorage.setItem("accountType", response.data.accountType);
-
           // Trigger authentication state change
           onLogin(); // Call onLogin to update isAuthenticated in App.js
 
