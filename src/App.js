@@ -45,13 +45,18 @@ function App() {
             <>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/createpost" element={<CreatePost />} />
-              <Route path="/marketplace" element={<MarketPlace />} />
+              {/* <Route path="/marketplace" element={<MarketPlace />} /> */}
               <Route path="/insights" element={<Insights />} />
               <Route path="/myprofile" element={<MyProfile />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/pinterestStatus" element={<PinterestAccessStatus />} />
               <Route path="/checkout" element={<StripeCheckout />} />
-              <Route path="/collaborate" element={<CollaborationRequests />} />
+              {/* <Route path="/collaborate" element={<CollaborationRequests />} /> */}
+              <Route path="/marketplace" element={localStorage.getItem("accountType") === "INFLUENCER" ? (<CollaborationRequests />
+    ) : (
+      <MarketPlace />
+    )
+  }/>
             </>
           )}
         </Routes>
