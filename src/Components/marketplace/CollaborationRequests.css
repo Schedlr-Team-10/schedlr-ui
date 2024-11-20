@@ -1,0 +1,127 @@
+/* Container for the whole collaboration request section */
+.collaboration-requests-container {
+    /* background: linear-gradient(to left, rgb(240, 150, 130), rgb(251, 198, 106)); */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Title of the page */
+  .collaboration-requests-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 32px;
+    color: #333;
+  }
+  
+  /* Message when no requests are available */
+  .no-requests {
+    text-align: center;
+    font-size: 1.25rem;
+    color: #888;
+  }
+  
+  /* Grid layout for request cards */
+  .request-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
+  }
+  
+  /* Individual request card styles */
+  .request-card {
+    padding: 24px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    /* background-color: white; */
+    /* background-color: lightblue; */
+    background: linear-gradient(to left, rgb(133, 206, 252), rgb(45, 167, 233));
+    box-shadow: rgba(0,0,0, 0.24)0px 3px 8px;
+    transition: box-shadow 0.2s ease;
+  }
+  
+  /* Hover effect on card */
+  .request-card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Customer name styling */
+  .request-customer-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Proposal text styling */
+  .request-proposal {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 8px;
+  }
+  
+  /* Date styling */
+  .request-date {
+    font-size: 0.875rem;
+    color: #999;
+    margin-top: 8px;
+  }
+  
+  /* Button group styling */
+  .action-buttons {
+    margin-top: 16px;
+  }
+  
+  /* Action buttons styling */
+  .action-button-group {
+    display: flex;
+    gap: 16px;
+  }
+  
+  /* Common action button styling */
+  .action-button {
+    padding: 10px 16px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Accept button specific styles */
+  .accept-button {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .accept-button:hover {
+    background-color: #218838;
+  }
+  
+  /* Reject button specific styles */
+  .reject-button {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .reject-button:hover {
+    background-color: #c82333;
+  }
+  
+  /* Status text styling */
+  .request-status {
+    font-weight: bold;
+    margin-top: 8px;
+  }
+  
+  .accepted-status {
+    color: #28a745;
+  }
+  
+  .rejected-status {
+    color: #dc3545;
+  }
+  
+  .pending-status {
+    color: #ffc107;
+  }
+  
