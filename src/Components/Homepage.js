@@ -36,12 +36,23 @@ export default function Homepage({ onLogin }) {
         alert("Login failed: " + (error.response?.data || "Unknown error"));
       }
     } else {
+
       try {
+        console.log("Username: " + username)
+        console.log("Password: " + password)
+        console.log("Email: " + email)
         const response = await axios.post("http://localhost:8082/schedlr/register", {
           username: username,
           email: email,
           password: password,
         });
+
+
+        if (response.status !== 200) {
+          alert("Failed to register. Please try again.");
+          return;
+        }
+
         alert("Registration successful! Please login.");
         setIsLogin(true); // Switch to login form after successful registration
       } catch (error) {
