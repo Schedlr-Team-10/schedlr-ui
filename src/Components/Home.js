@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedin,
-  FaGithub,
-  FaArrowUp,
-} from "react-icons/fa";
-
+import { FaArrowUp } from "react-icons/fa";
 import "./Entrystyle.css";
-import "./Styles.css";
+import CollaborationMarketplaceImg from '../assets/images/collaboration_marketplace.webp';
+import AIAssistanceImg from '../assets/images/ai_assistance.webp';
+import SchedulingImg from '../assets/images/scheduling.webp';
+import PerformanceAnalyticsImg from '../assets/images/performance_analytics.webp';
+
 
 const Home = () => {
   const [showScroll, setShowScroll] = useState(false);
@@ -33,71 +28,68 @@ const Home = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const elementsLeft = document.querySelectorAll(".hidden-left");
-    const elementsRight = document.querySelectorAll(".hidden-right");
-
-    const observer = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    elementsLeft.forEach((el) => observer.observe(el));
-    elementsRight.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect(); // Cleanup on component unmount
-  }, []);
-
   return (
-    <div className="home justify-center">
-      {/* Sections */}
-      <div className="mx-5 flex flex-col">
-        <Section
-          title="Centralized Platform"
-          description="A social media collaboration tool designed to streamline team efforts in content creation, scheduling, and performance analytics across multiple platforms."
-          imageSrc="Allinone.jpg"
-          imageAlt="All in one"
-          reverse={false}
-        />
+    <div className="home">
+      {/* Header Section */}
+      <header className="bg-gradient-to-br from-blue-600 to-purple-600 text-white py-12 text-center">
+        <h1 className="text-5xl font-extrabold tracking-tight mb-4">
+          Schedlr: Centralized Social Media Management
+        </h1>
+        <p className="text-lg font-light mb-6">
+          Streamline your social media collaboration, scheduling, and analytics across all platforms in one place.
+        </p>
+        <button className="bg-white text-blue-600 py-2 px-6 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
+          Start Scheduling Now
+        </button>
+      </header>
 
-        <Section
-          title="Collaboration in Marketplace"
-          description="Streamline team efforts with a built-in marketplace for post exchanges and real-time collaboration, enabling teams to optimize their social media strategy."
-          imageSrc="Marketplace.jpg"
-          imageAlt="Marketplace"
-          reverse={true}
-        />
+      {/* Features Section */}
+      <section className="features bg-white py-12 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <FeatureCard
+            title="Collaboration in Marketplace"
+            description="Collaborate with your team and exchange ideas with ease."
+            image={CollaborationMarketplaceImg}
+          />
+          <FeatureCard
+            title="AI Assistance"
+            description="Generate compelling and engaging content with AI tools."
+            image={AIAssistanceImg}
+          />
+          <FeatureCard
+            title="Scheduling"
+            description="Plan your content calendar and post on time, every time."
+            image={SchedulingImg}
+          />
+          <FeatureCard
+            title="Performance Analytics"
+            description="Gain detailed insights to drive better results."
+            image={PerformanceAnalyticsImg}
+          />
+        </div>
+      </section>
 
-        <Section
-          title="Insights"
-          description="Detailed analytics and performance insights across multiple platforms to improve your social media strategy effectively."
-          imageSrc="Analysis.jpg"
-          imageAlt="Analysis"
-          reverse={false}
-        />
+      {/* Call-to-Action Section */}
+      <section className="cta bg-gradient-to-br from-purple-500 to-blue-500 text-white py-12 text-center">
+        <h2 className="text-3xl font-bold mb-4">Ready to Take Your Social Media to the Next Level?</h2>
+        <button className="bg-white text-purple-600 py-2 px-6 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
+          Get Started Now
+        </button>
+      </section>
 
-        <Section
-          title="AI Assistant for Post Descriptions"
-          description="AI-powered tools for generating compelling and engaging content, enhancing productivity and streamlining the content creation process."
-          imageSrc="ai.jpg"
-          imageAlt="AI Assistant"
-          reverse={true}
-        />
-      </div>
-
-      {/* Footer */}
-      <Footer />
+      {/* Footer Section */}
+      <footer className="bg-gray-800 text-gray-300 py-8">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <p>© 2024 Schedlr. All rights reserved.</p>
+        </div>
+      </footer>
 
       {/* Scroll-to-Top Button */}
       {showScroll && (
-        <button className="scroll-to-top" onClick={scrollToTop}>
+        <button
+          className="scroll-to-top fixed bottom-8 right-8 bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 transition"
+          onClick={scrollToTop}
+        >
           <FaArrowUp />
         </button>
       )}
@@ -105,48 +97,16 @@ const Home = () => {
   );
 };
 
-const Section = ({ title, description, imageSrc, imageAlt, reverse }) => (
-  <div
-    className={`flex border my-5 flex-wrap w-[1120px] ${
-      reverse ? "hidden-left" : "hidden-right"
-    }`}
-  >
-    {!reverse && <img className="w-[315px] h-auto rounded-lg" src={imageSrc} alt={imageAlt} />}
-    <div className="w-[800px] px-[18px] pb-5">
-      <h1 className="text-3xl">{title}</h1>
-      <p>{description}</p>
-    </div>
-    {reverse && <img className="w-[315px] h-auto rounded-lg" src={imageSrc} alt={imageAlt} />}
+const FeatureCard = ({ title, description, image }) => (
+  <div className="feature-card bg-gray-100 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+    <img
+      src={image}
+      alt={title}
+      className="w-full h-48 object-cover rounded-md mb-4"
+    />
+    <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+    <p className="text-gray-600">{description}</p>
   </div>
-);
-
-const Footer = () => (
-  <div className="footer">
-    <div className="footer-content">
-      <p>© 2024 Schedlr. All rights reserved.</p>
-      <SocialIcons />
-    </div>
-  </div>
-);
-
-const SocialIcons = () => (
-  <ul className="flex justify-center gap-4">
-    <li>
-      <FaFacebook className="w-6 h-6 text-blue-600" />
-    </li>
-    <li>
-      <FaTwitter className="w-6 h-6 text-blue-400" />
-    </li>
-    <li>
-      <FaInstagram className="w-6 h-6 text-pink-500" />
-    </li>
-    <li>
-      <FaLinkedin className="w-6 h-6 text-blue-800" />
-    </li>
-    <li>
-      <FaGithub className="w-6 h-6 text-gray-900" />
-    </li>
-  </ul>
 );
 
 export default Home;
