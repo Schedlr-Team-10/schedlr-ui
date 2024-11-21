@@ -105,26 +105,6 @@ const Home = () => {
   );
 };
 
-const Navbar = () => (
-  <nav className="navbar">
-    <h3>Schedlr</h3>
-    <ul className="nav-links">
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-      <li>
-        <Link to="/features">Features</Link>
-      </li>
-      <li>
-        <Link to="/pricing">Pricing</Link>
-      </li>
-      <li>
-        <Link to="/contact">Contact</Link>
-      </li>
-    </ul>
-  </nav>
-);
-
 const Section = ({ title, description, imageSrc, imageAlt, reverse }) => (
   <div
     className={`flex border my-5 flex-wrap w-[1120px] ${

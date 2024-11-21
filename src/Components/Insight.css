@@ -1,21 +1,15 @@
 .insights-container {
-    padding: 70px;
     max-width: 1200px;
     margin: auto;
     font-family: 'Poppins', sans-serif; 
-    /* background: linear-gradient(to left, rgb(141, 0, 191), rgb(94, 0, 138)); */
-    /* background-color: #ffffff; */
+    background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
    
 }
 
 .insi{
-    /* background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,98,135,1) 100%, rgba(81,247,170,1) 100%);
- */
- /* background-color: #FAEBD7; */
- background: linear-gradient(to left, rgb(170, 153, 244), rgb(167, 246, 220));
+    background-color: burlywood;
 }
 h2 {
     text-align: center;
@@ -45,7 +39,7 @@ h2 {
     border-radius: 12px; 
     background: linear-gradient(145deg, #f8f9fa, #e9ecef); 
     /* background: linear-gradient(to left, rgb(220, 145, 247), rgb(240, 222, 248)); */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -102,7 +96,7 @@ h2 {
 
 .platform-selector select:focus {
     border-color: #0056b3; 
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+    /* box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);  */
 }
 
 

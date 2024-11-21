@@ -149,26 +149,22 @@ img:hover {
   }
 
   .w-full {
-    max-width: 100%; /* Ensure full width on smaller screens */
+    max-width: 100%; 
   }
 
   p {
-    font-size: 1rem; /* Adjust paragraph size for smaller screens */
+    font-size: 1rem; 
   }
 }
 
 .home{
-  /* background: rgb(2,0,36);
-  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,98,135,1) 100%, rgba(81,247,170,1) 100%); */
-  background-color: #FAEBD7;
+  background-color: burlywood;
 }
 
 .userdash{
-  background-color: #FAEBD7;
-  /* background: rgb(2,0,36);
-background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,98,135,1) 100%, rgba(81,247,170,1) 100%); */
+  background-color: burlywood;
 }
 
 .create{
-  background-color: #FAEBD7;
+  background-color: burlywood;
 }
