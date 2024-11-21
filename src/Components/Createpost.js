@@ -170,7 +170,7 @@ const CreatePost = () => {
             </button>
 
             <div className="grid grid-cols-2 gap-4">
-              {["LinkedIn", "Pinterest", "Twitter", "Facebook"].map(
+              {["LinkedIn", "PInterest", "Twitter", "Facebook"].map(
                 (platform) => (
                   <button
                     key={platform}
