@@ -11,6 +11,7 @@ module.exports = {
       fontFamily: {
         'julius': ['"Julius Sans One"', 'sans-serif'],
         'cinzel-decorative': ['"Cinzel Decorative"', 'serif'],
+        'sans': ["Poppins", "sans-serif"]
       },
     },
   },
