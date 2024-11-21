@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowUp } from "react-icons/fa";
+// import { FaArrowUp } from "react-icons/fa";
 import "./Entrystyle.css";
 import CollaborationMarketplaceImg from '../assets/images/collaboration_marketplace.webp';
 import AIAssistanceImg from '../assets/images/ai_assistance.webp';
 import SchedulingImg from '../assets/images/scheduling.webp';
 import PerformanceAnalyticsImg from '../assets/images/performance_analytics.webp';
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaGithub,
+  FaArrowUp,
+} from "react-icons/fa";
 import image from  './image.png'
 
 
@@ -84,19 +92,19 @@ const Home = () => {
       title="AI Assistance"
       description="Generate compelling and engaging content with AI tools."
       image={AIAssistanceImg}
-      buttonText="Explore MarketPlace"
+      buttonText="Explore AI Assistant"
     />
     <FeatureCard
       title="Scheduling"
       description="Plan your content calendar and post on time, every time."
       image={SchedulingImg}
-      buttonText="Explore MarketPlace"
+      buttonText="Explore Scheduling"
     />
     <FeatureCard
       title="Performance Analytics"
       description="Gain detailed insights to drive better results."
       image={PerformanceAnalyticsImg}
-      buttonText="Explore MarketPlace"
+      buttonText="Explore Analytics"
     />
   </div>
 </section>
@@ -105,30 +113,40 @@ const Home = () => {
       {/* Call-to-Action Section */}
       <section className="cta bg-gradient-to-br from-purple-500 to-blue-500 text-white py-12 text-center">
         <h2 className="text-3xl font-bold mb-4">Ready to Take Your Social Media to the Next Level?</h2>
-        <button className="bg-white text-purple-600 py-2 px-6 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
-          Get Started Now
-        </button>
+        <button className="scroll-to-top" onClick={scrollToTop} Get Started Now>Get Started Now</button>
       </section>
 
       {/* Footer Section */}
       <footer className="bg-gray-800 text-gray-300 py-8">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <p>© 2024 Schedlr. All rights reserved.</p>
+          <SocialIcons />
         </div>
       </footer>
-
-      {/* Scroll-to-Top Button */}
-      {showScroll && (
-        <button
-          className="scroll-to-top fixed bottom-8 right-8 bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 transition"
-          onClick={scrollToTop}
-        >
-          <FaArrowUp />
-        </button>
-      )}
     </div>
   );
 };
+
+const SocialIcons = () => (
+  <ul className="flex justify-center gap-4">
+    <li>
+      <FaFacebook className="w-6 h-6 text-blue-600" />
+    </li>
+    <li>
+      <FaTwitter className="w-6 h-6 text-blue-400" />
+    </li>
+    <li>
+      <FaInstagram className="w-6 h-6 text-pink-500" />
+    </li>
+    <li>
+      <FaLinkedin className="w-6 h-6 text-blue-800" />
+    </li>
+    <li>
+      <FaGithub className="w-6 h-6 text-gray-900" />
+    </li>
+  </ul>
+);
+
 
 const FeatureCard = ({ title, description, image, buttonText }) => (
   <div className="h-72 relative feature-card bg-gray-100 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">

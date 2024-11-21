@@ -14,7 +14,6 @@ const influencers = [
     pinterestFollowers: 20000,
     twitterFollowers: 50000,
     pricePerPhoto: "$300",
-    pricePerVideo: "$500",
     pricePerTweet: "$150",
     tags: ["Tech Enthusiast", "Social Media"],
   },
@@ -27,7 +26,6 @@ const influencers = [
     pinterestFollowers: 50000,
     twitterFollowers: 120000,
     pricePerPhoto: "$400",
-    pricePerVideo: "$600",
     pricePerTweet: "$200",
     tags: ["Fashion", "Lifestyle"],
   },
@@ -40,7 +38,6 @@ const influencers = [
     pinterestFollowers: 45000,
     twitterFollowers: 200000,
     pricePerPhoto: "$700",
-    pricePerVideo: "$1200",
     pricePerTweet: "$350",
     tags: ["Billionaire", "Inventor", "Social Media Influencer"],
   },
@@ -52,7 +49,6 @@ const influencers = [
     pinterestFollowers: 30000,
     twitterFollowers: 80000,
     pricePerPhoto: "$250",
-    pricePerVideo: "$450",
     pricePerTweet: "$120",
     tags: ["Web Developer", "Photographer", "Social Media Star"],
   },
@@ -65,7 +61,6 @@ const influencers = [
     pinterestFollowers: 60000,
     twitterFollowers: 150000,
     pricePerPhoto: "$350",
-    pricePerVideo: "$550",
     pricePerTweet: "$180",
     tags: ["Activist", "Author", "Knowledge Sharer"],
   },
@@ -78,7 +73,6 @@ const influencers = [
     pinterestFollowers: 70000,
     twitterFollowers: 200000,
     pricePerPhoto: "$500",
-    pricePerVideo: "$800",
     pricePerTweet: "$250",
     tags: ["Social Media Influencer", "Fitness Enthusiast"],
   },
@@ -91,7 +85,6 @@ const influencers = [
     pinterestFollowers: 25000,
     twitterFollowers: 70000,
     pricePerPhoto: "$350",
-    pricePerVideo: "$550",
     pricePerTweet: "$180",
     tags: ["Anime Influencer", "Motivational Speaker"],
   },
@@ -292,14 +285,6 @@ const MarketPlace = () => {
               onClick={() => toggleService("Photo")}
             >
               Price per Photo: {selectedInfluencer.pricePerPhoto}
-            </p>
-            <p
-              className={`price-item video ${
-                selectedServices.includes("Video") ? "active" : ""
-              }`}
-              onClick={() => toggleService("Video")}
-            >
-              Price per Video: {selectedInfluencer.pricePerVideo}
             </p>
             <p
               className={`price-item tweet ${
