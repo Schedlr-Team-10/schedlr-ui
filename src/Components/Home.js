@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Entrystyle.css";
 import { Link } from "react-router-dom";
 import CollaborationMarketplaceImg from '../assets/images/collaboration_marketplace.webp';
@@ -15,6 +15,7 @@ import {
 
 const Home = () => {
   const [showScroll, setShowScroll] = useState(false);
+  const featuresRef = useRef(null); // Reference for scrolling to the features section
 
   // Scroll-to-Top functionality
   const handleScroll = () => {
@@ -22,6 +23,12 @@ const Home = () => {
       setShowScroll(true);
     } else {
       setShowScroll(false);
+    }
+  };
+
+  const scrollToMiddle = () => {
+    if (featuresRef.current) {
+      featuresRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
 
@@ -55,18 +62,21 @@ const Home = () => {
               dashboard. Schedule and report your content in seconds.
             </p>
             <div className="flex space-x-4">
-              <button className="bg-white text-purple-600 py-3 px-6 rounded-lg font-semibold shadow hover:bg-gray-100 transition">
-                Try for Free
-              </button>
-              <button className="bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold shadow hover:bg-purple-800 transition">
-                Get a Demo
+              <button
+                className="bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold shadow hover:bg-blue-700 transition"
+                onClick={scrollToMiddle}
+              >
+                Get Started
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <section className="features bg-white py-12 px-6 relative -mt-16 z-10">
+      <section
+        className="features bg-white py-12 px-6 relative -mt-16 z-10"
+        ref={featuresRef} // Attach the reference here
+      >
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           <FeatureCard
             title="Collaboration in Marketplace"
@@ -101,7 +111,9 @@ const Home = () => {
 
       <section className="cta bg-gradient-to-br from-purple-500 to-blue-500 text-white py-12 text-center">
         <h2 className="text-3xl font-bold mb-4">Ready to Take Your Social Media to the Next Level?</h2>
-        <button className="scroll-to-top" onClick={scrollToTop}>Get Started Now</button>
+        <button className="scroll-to-top" onClick={scrollToTop}>
+          Scroll To Top
+        </button>
       </section>
 
       <footer className="bg-gray-800 text-gray-300 py-8">
