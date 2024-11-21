@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   return (
     <div className="userdash min-h-screen p-6 flex flex-col items-center bg-gray-50">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">User Dashboard</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-8"></h1>
 
       <div className="space-y-8 w-full max-w-3xl">
         {posts.map((post) => (

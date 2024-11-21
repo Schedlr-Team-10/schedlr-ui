@@ -5,6 +5,7 @@ import CollaborationMarketplaceImg from '../assets/images/collaboration_marketpl
 import AIAssistanceImg from '../assets/images/ai_assistance.webp';
 import SchedulingImg from '../assets/images/scheduling.webp';
 import PerformanceAnalyticsImg from '../assets/images/performance_analytics.webp';
+import image from  './image.png'
 
 
 const Home = () => {
@@ -30,44 +31,76 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* Header Section */}
-      <header className="bg-gradient-to-br from-blue-600 to-purple-600 text-white py-12 text-center">
-        <h1 className="text-5xl font-extrabold tracking-tight mb-4">
-          Schedlr: Centralized Social Media Management
-        </h1>
-        <p className="text-lg font-light mb-6">
-          Streamline your social media collaboration, scheduling, and analytics across all platforms in one place.
-        </p>
-        <button className="bg-white text-blue-600 py-2 px-6 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
-          Start Scheduling Now
-        </button>
-      </header>
-
-      {/* Features Section */}
-      <section className="features bg-white py-12 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-          <FeatureCard
-            title="Collaboration in Marketplace"
-            description="Collaborate with your team and exchange ideas with ease."
-            image={CollaborationMarketplaceImg}
-          />
-          <FeatureCard
-            title="AI Assistance"
-            description="Generate compelling and engaging content with AI tools."
-            image={AIAssistanceImg}
-          />
-          <FeatureCard
-            title="Scheduling"
-            description="Plan your content calendar and post on time, every time."
-            image={SchedulingImg}
-          />
-          <FeatureCard
-            title="Performance Analytics"
-            description="Gain detailed insights to drive better results."
-            image={PerformanceAnalyticsImg}
-          />
+      <header
+        className="relative bg-cover bg-center bg-no-repeat py-20 lg:py-32"
+        style={{
+          backgroundImage: `url(https://t3.ftcdn.net/jpg/03/89/32/80/360_F_389328016_ak3iUrk15slWfEZdYL96O6eKTUyImDeC.jpg)`,
+        }}
+      ><div className="max-w-7xl mx-auto px-6 lg:flex lg:items-center lg:justify-between">
+        {/* Left Section: Text */}
+        <div className="lg:w-1/2 space-y-6">
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+            Make your life as a
+            social media marketer
+            way easier
+          </h1>
+          <p className="text-lg md:text-xl font-light text-gray-100">
+            Connect all your social media accounts, sit back and let the magic
+            happen. Get clear analytics for all your social profiles in one
+            dashboard. Schedule and report your content in seconds.
+          </p>
+          <div className="flex space-x-4">
+            <button className="bg-white text-purple-600 py-3 px-6 rounded-lg font-semibold shadow hover:bg-gray-100 transition">
+              Try for Free
+            </button>
+            <button className="bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold shadow hover:bg-purple-800 transition">
+              Get a Demo
+            </button>
+          </div>
         </div>
-      </section>
+
+        {/* Right Section: Image */}
+        <div className="lg:w-1/2 mt-12 lg:mt-0">
+          <div className="relative">
+            
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-blue-500 opacity-30 rounded-lg"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+
+
+    <section className="features bg-white py-12 px-6 relative -mt-16 z-10">
+
+  <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+    <FeatureCard
+      title="Collaboration in Marketplace"
+      description="Collaborate with your team and exchange ideas with ease."
+      image={CollaborationMarketplaceImg}
+      buttonText="Explore MarketPlace"
+    />
+    <FeatureCard
+      title="AI Assistance"
+      description="Generate compelling and engaging content with AI tools."
+      image={AIAssistanceImg}
+      buttonText="Explore MarketPlace"
+    />
+    <FeatureCard
+      title="Scheduling"
+      description="Plan your content calendar and post on time, every time."
+      image={SchedulingImg}
+      buttonText="Explore MarketPlace"
+    />
+    <FeatureCard
+      title="Performance Analytics"
+      description="Gain detailed insights to drive better results."
+      image={PerformanceAnalyticsImg}
+      buttonText="Explore MarketPlace"
+    />
+  </div>
+</section>
+
 
       {/* Call-to-Action Section */}
       <section className="cta bg-gradient-to-br from-purple-500 to-blue-500 text-white py-12 text-center">
@@ -97,16 +130,25 @@ const Home = () => {
   );
 };
 
-const FeatureCard = ({ title, description, image }) => (
-  <div className="feature-card bg-gray-100 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+const FeatureCard = ({ title, description, image, buttonText }) => (
+  <div className="h-72 relative feature-card bg-gray-100 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+    {/* Background Image */}
     <img
       src={image}
       alt={title}
-      className="w-full h-48 object-cover rounded-md mb-4"
+      className="absolute inset-0 w-full h-full object-cover"
     />
-    <h3 className="text-xl font-bold text-gray-800">{title}</h3>
-    <p className="text-gray-600">{description}</p>
+    {/* Transparent Overlay */}
+    <div className="absolute inset-0 bg-black/40"></div>
+    {/* Text and Button at Bottom */}
+    <div className="absolute bottom-0 inset-x-0 bg-black/60 text-white p-4 flex flex-col justify-center">
+      <h3 className="text-lg font-bold">{title}</h3>
+      <button className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+        {buttonText}
+      </button>
+    </div>
   </div>
 );
+
 
 export default Home;
