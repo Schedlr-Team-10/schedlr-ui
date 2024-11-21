@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-// import { FaArrowUp } from "react-icons/fa";
 import "./Entrystyle.css";
+import { Link } from "react-router-dom";
 import CollaborationMarketplaceImg from '../assets/images/collaboration_marketplace.webp';
 import AIAssistanceImg from '../assets/images/ai_assistance.webp';
 import SchedulingImg from '../assets/images/scheduling.webp';
@@ -11,10 +11,7 @@ import {
   FaInstagram,
   FaLinkedin,
   FaGithub,
-  FaArrowUp,
 } from "react-icons/fa";
-import image from  './image.png'
-
 
 const Home = () => {
   const [showScroll, setShowScroll] = useState(false);
@@ -44,79 +41,69 @@ const Home = () => {
         style={{
           backgroundImage: `url(https://t3.ftcdn.net/jpg/03/89/32/80/360_F_389328016_ak3iUrk15slWfEZdYL96O6eKTUyImDeC.jpg)`,
         }}
-      ><div className="max-w-7xl mx-auto px-6 lg:flex lg:items-center lg:justify-between">
-        {/* Left Section: Text */}
-        <div className="lg:w-1/2 space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-            Make your life as a
-            social media marketer
-            way easier
-          </h1>
-          <p className="text-lg md:text-xl font-light text-gray-100">
-            Connect all your social media accounts, sit back and let the magic
-            happen. Get clear analytics for all your social profiles in one
-            dashboard. Schedule and report your content in seconds.
-          </p>
-          <div className="flex space-x-4">
-            <button className="bg-white text-purple-600 py-3 px-6 rounded-lg font-semibold shadow hover:bg-gray-100 transition">
-              Try for Free
-            </button>
-            <button className="bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold shadow hover:bg-purple-800 transition">
-              Get a Demo
-            </button>
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:flex lg:items-center lg:justify-between">
+          <div className="lg:w-1/2 space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              Make your life as a
+              social media marketer
+              way easier
+            </h1>
+            <p className="text-lg md:text-xl font-light text-gray-100">
+              Connect all your social media accounts, sit back and let the magic
+              happen. Get clear analytics for all your social profiles in one
+              dashboard. Schedule and report your content in seconds.
+            </p>
+            <div className="flex space-x-4">
+              <button className="bg-white text-purple-600 py-3 px-6 rounded-lg font-semibold shadow hover:bg-gray-100 transition">
+                Try for Free
+              </button>
+              <button className="bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold shadow hover:bg-purple-800 transition">
+                Get a Demo
+              </button>
+            </div>
           </div>
         </div>
+      </header>
 
-        {/* Right Section: Image */}
-        <div className="lg:w-1/2 mt-12 lg:mt-0">
-          <div className="relative">
-            
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-blue-500 opacity-30 rounded-lg"></div>
-          </div>
+      <section className="features bg-white py-12 px-6 relative -mt-16 z-10">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <FeatureCard
+            title="Collaboration in Marketplace"
+            description="Collaborate with your team and exchange ideas with ease."
+            image={CollaborationMarketplaceImg}
+            buttonText="Explore MarketPlace"
+            link="/marketplace"
+          />
+          <FeatureCard
+            title="AI Assistance"
+            description="Generate compelling and engaging content with AI tools."
+            image={AIAssistanceImg}
+            buttonText="Explore AI Assistant"
+            link="/createpost"
+          />
+          <FeatureCard
+            title="Scheduling"
+            description="Plan your content calendar and post on time, every time."
+            image={SchedulingImg}
+            buttonText="Explore Scheduling"
+            link="/createpost"
+          />
+          <FeatureCard
+            title="Performance Analytics"
+            description="Gain detailed insights to drive better results."
+            image={PerformanceAnalyticsImg}
+            buttonText="Explore Analytics"
+            link="/insights"
+          />
         </div>
-      </div>
-    </header>
-
-
-
-    <section className="features bg-white py-12 px-6 relative -mt-16 z-10">
-
-  <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-    <FeatureCard
-      title="Collaboration in Marketplace"
-      description="Collaborate with your team and exchange ideas with ease."
-      image={CollaborationMarketplaceImg}
-      buttonText="Explore MarketPlace"
-    />
-    <FeatureCard
-      title="AI Assistance"
-      description="Generate compelling and engaging content with AI tools."
-      image={AIAssistanceImg}
-      buttonText="Explore AI Assistant"
-    />
-    <FeatureCard
-      title="Scheduling"
-      description="Plan your content calendar and post on time, every time."
-      image={SchedulingImg}
-      buttonText="Explore Scheduling"
-    />
-    <FeatureCard
-      title="Performance Analytics"
-      description="Gain detailed insights to drive better results."
-      image={PerformanceAnalyticsImg}
-      buttonText="Explore Analytics"
-    />
-  </div>
-</section>
-
-
-      {/* Call-to-Action Section */}
-      <section className="cta bg-gradient-to-br from-purple-500 to-blue-500 text-white py-12 text-center">
-        <h2 className="text-3xl font-bold mb-4">Ready to Take Your Social Media to the Next Level?</h2>
-        <button className="scroll-to-top" onClick={scrollToTop} Get Started Now>Get Started Now</button>
       </section>
 
-      {/* Footer Section */}
+      <section className="cta bg-gradient-to-br from-purple-500 to-blue-500 text-white py-12 text-center">
+        <h2 className="text-3xl font-bold mb-4">Ready to Take Your Social Media to the Next Level?</h2>
+        <button className="scroll-to-top" onClick={scrollToTop}>Get Started Now</button>
+      </section>
+
       <footer className="bg-gray-800 text-gray-300 py-8">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <p>© 2024 Schedlr. All rights reserved.</p>
@@ -147,26 +134,23 @@ const SocialIcons = () => (
   </ul>
 );
 
-
-const FeatureCard = ({ title, description, image, buttonText }) => (
+const FeatureCard = ({ title, description, image, buttonText, link }) => (
   <div className="h-72 relative feature-card bg-gray-100 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-    {/* Background Image */}
     <img
       src={image}
       alt={title}
       className="absolute inset-0 w-full h-full object-cover"
     />
-    {/* Transparent Overlay */}
     <div className="absolute inset-0 bg-black/40"></div>
-    {/* Text and Button at Bottom */}
     <div className="absolute bottom-0 inset-x-0 bg-black/60 text-white p-4 flex flex-col justify-center">
       <h3 className="text-lg font-bold">{title}</h3>
-      <button className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-        {buttonText}
-      </button>
+      <Link to={link}>
+        <button className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+          {buttonText}
+        </button>
+      </Link>
     </div>
   </div>
 );
-
 
 export default Home;
