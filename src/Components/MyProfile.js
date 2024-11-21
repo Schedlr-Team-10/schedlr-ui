@@ -1,161 +1,253 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {PINTEREST_CLIENT_ID, PINTEREST_REDIRECT_URL, PINTEREST_SCOPE, PINTEREST_CODE } from './util/Constants';
 
 const MyProfile = () => {
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [userid, setUserid] = useState("");
-  const [profileImage, setProfileImage] = useState(
-    "https://via.placeholder.com/150"
-  );
-
-  const handleProfilePictureUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("profilePicture", file);
-    formData.append("userId", userid);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8081/myProfile/uploadProfilePic",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setProfileImage(response.data.imageUrl);
-      alert("Profile picture updated successfully!");
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-      alert("Failed to upload profile picture.");
-    }
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [userid, setUserid] = useState('1');
+  const [postImages, setPostImages] = useState([]);
+  // State for password reset fields
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
+  const buildLinkedInAuthUrl = () => {
+      const linkedInAuthUrl = 'https://www.linkedin.com/oauth/v2/authorization';
+      const params = {
+          response_type: 'code',
+          client_id: '862ar2q201lf2i', 
+          client_secret: 'WPL_AP1.xXWyOLBXLlP9NFfF.Fi6kBg==',
+          redirect_uri: 'http://localhost:3000/myprofile', 
+          state: 'DCEeFWf45A53sdfKef424', 
+          scope: 'openid profile email w_member_social'
+      };
+      const queryParams = new URLSearchParams(params).toString();
+      return `${linkedInAuthUrl}?${queryParams}`;
   };
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const id = localStorage.getItem("userId");
-      setUserid(id);
+  const handleLinkedInLogin = () => {
+      const authUrl = buildLinkedInAuthUrl();
+      window.location.href = authUrl; // Redirect to the LinkedIn authorization URL
+  };
+
+  const sendCodeToBackend = async (code, state, userId) => {
       try {
-        const response = await axios.get(
-          `http://localhost:8081/myProfile/userInfo?userId=${id}`
-        );
-        setUserName(response.data.username);
-        setEmail(response.data.email);
-        if (response.data.profileImageUrl) {
-          setProfileImage(response.data.profileImageUrl);
-        }
+          console.log("Calling SPRING BOOT API");
+          const response = await axios.post('http://localhost:8081/linkedin/authCode', {
+              code,
+              state,
+              userId
+          });
+          console.log('Response from backend:', response.data);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+          console.error('Error sending code to backend:', error);
       }
     };
-    fetchUserInfo();
-  }, []);
 
+    const fetchUserInfo = async (id) => {
+        console.log("Id : " + localStorage.getItem("userId"));
+        const url = `http://localhost:8081/myProfile/userInfo?userId=${localStorage.getItem("userId").toString()}`;
+
+        try {
+            const response = await fetch(url); // Adjust the URL as needed
+            const data = await response.json();
+            console.log(data);
+            setUserName(data.username);
+            setEmail(data.email);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+      };
+      const handleChangePassword = async () => {
+        if (newPassword !== confirmPassword) {
+            alert('New Password and Confirm Password do not match!');
+            return;
+        }
+        try {
+            const response = await axios.post('http://localhost:8081/myProfile/changePassword', {
+                password: newPassword,
+                userId: userid
+            });
+            if (response.status === 200) {
+                alert('Password changed successfully');
+                setCurrentPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
+            } else {
+                alert('Failed to change password');
+            }
+        } catch (error) {
+            console.error('Error changing password:', error);
+            alert('Error changing password');
+        }
+    };
+    const fetchPostHistory = async () => {
+        try {
+            const userId = localStorage.getItem("userId");
+            const response = await axios.get(`http://localhost:8081/schedlr/posthistory?userId=${userId}`);
+            setPostImages(response.data); // Assuming the response is an array of image URLs
+        } catch (error) {
+            console.error('Error fetching post history:', error);
+        }
+    };
+    useEffect(() => {
+        const id = localStorage.getItem("userId");
+        setUserid(id);
+        console.log("UserId actually value is: "+userid);
+        fetchUserInfo(id);
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        if (code && state) {
+            sendCodeToBackend(code, state, localStorage.getItem("userId"));
+        }
+        fetchPostHistory();
+    }, []);
+
+    const handlePInterestLogin = () => {
+      const clientId = PINTEREST_CLIENT_ID;
+      const redirectUri = PINTEREST_REDIRECT_URL;
+      const scope = PINTEREST_SCOPE;
+      const responseType = PINTEREST_CODE;
+  
+      const oauthUrl = `https://www.pinterest.com/oauth/?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=${responseType}`;
+  
+      window.location.href = oauthUrl;
+  };
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-blue-50 via-blue-100 to-blue-200 p-6">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center">
-          <img
-            src={profileImage}
-            alt="Profile"
-            className="w-36 h-36 rounded-full border-4 border-blue-400 shadow-md"
-          />
-          <h1 className="text-2xl font-bold text-gray-800 mt-4">
-            {userName || "User Name"}
-          </h1>
-          <p className="text-gray-500">{email || "user@example.com"}</p>
-          <label
-            htmlFor="profilePicture"
-            className="mt-6 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full shadow-md cursor-pointer transition-all"
-          >
-            Upload Profile Pic
-          </label>
-          <input
-            id="profilePicture"
-            type="file"
-            className="hidden"
-            onChange={handleProfilePictureUpload}
-          />
-          <div className="w-full mt-6">
-            <label className="block text-sm font-medium text-gray-600 mb-2">
-              Website Completion
-            </label>
-            <div className="w-full bg-gray-300 rounded-full h-5">
-              <div
-                className="bg-green-500 h-5 rounded-full flex items-center justify-center text-xs text-white font-semibold"
-                style={{ width: "80%" }}
-              >
-                80%
+    <div>
+      <div
+        id="myprofile"
+        className="home flex justify-start bg-[#ECF0F1] py-8"
+      >
+        <div class="mb-[300px] mt-0 border-t-0 my-2">
+          {/* Profile Section */}
+          <div className="w-[250px] bg-white border border-gray-300 rounded-lg p-5 shadow-lg mr-5">
+            <img
+              src="https://via.placeholder.com/150" // Replace with actual image URL or use a static path
+              alt="Profile"
+              className="rounded-full mx-auto w-28 h-28"
+            />
+            <h2 className="text-center text-xl font-bold mt-5">
+              {userName || "User Name"}
+            </h2>
+            <p className="text-center text-gray-600 overflow-hidden">
+              {email || "user@example.com"}
+            </p>
+            <div className="flex justify-around mt-7">
+              <div className="bg-[#4267B]">
+                <i class="fa-brands fa-twitter fa-xl mr-2"></i>
+              </div>
+              <div className="bg-[#4267B]">
+                <i class="fa-brands fa-linkedin fa-xl mr-2"></i>
+              </div>
+              <div className="bg-[#4267B]">
+                <i class="fa-brands fa-pinterest fa-xl mr-2"></i>
+              </div>
+            </div>
+            <div className="my-8">
+              <label className="block text-gray-600">
+                Website Completion
+              </label>
+              <div className="w-full bg-gray-300 rounded-full h-4 mt-2">
+                <div
+                  className="bg-blue-600 h-4 rounded-full"
+                  style={{ width: "80%" }}
+                >
+                  <span className="block text-center text-white text-xs">
+                    80%
+                  </span>
+                </div>
+              </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Social Media & Reset Password */}
-        <div className="space-y-6">
-          {/* Social Media Section */}
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl shadow-xl p-8">
-            <h1 className="text-xl font-bold mb-6">Social Media Integration</h1>
-            <div className="grid grid-cols-3 gap-4">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                LinkedIn
-              </button>
-              <button className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Pinterest
-              </button>
-              <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Twitter
-              </button>
+          {/* User Info updation and Password Section */}
+          <div className='mt-0 border-t-0'>
+            <div className="border w-[600px] py-8 px-5 mb-5 rounded-lg shadow-2xl bg-[#f6f6f7]">
+              <h1 className="text-center mb-10 font-rajdhani text-2xl font-medium">
+                Checkin your Social Media Accounts
+              </h1>
+              <div className="grid grid-cols-3 gap-4 px-10">
+                <button
+                  className="border border-black bg-[#d62976] text-white p-1 col-span-3"
+                  onClick={handlePInterestLogin}
+                >
+                  Pinterest
+                </button>
+                <button
+                  className="border border-black bg-[#0C63BC] text-white p-1 col-span-3"
+                  onClick={handleLinkedInLogin}
+                >
+                  Linkedin
+                </button>
+                <button className="border border-black bg-[#1da1f2] text-white p-1 col-span-3 ">
+                  Twitter
+                </button>
+              </div>
+              </div>
+              <div className="border w-[600px]  py-8 px-5 my-8 rounded-lg bg-[#f6f6f7] shadow-2xl">
+              <h1 className="text-center mb-10 font-rajdhani text-2xl font-medium">
+                Reset your Password
+              </h1>
+              <div className="grid grid-cols-3 gap-4">
+                <label className="text-left pl-5">Current Password</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="rounded-sm col-span-2 pl-1"
+                  />
+                <label className="text-left pl-5">New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="rounded-sm col-span-2 pl-1"
+                  />
+                <label className="text-left pl-5">Confirm Password</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="rounded-sm col-span-2 pl-1"
+                />
+                <div className="col-span-1"></div>
+                <input
+                  type="button"
+                  value="Change Password"
+                  onClick={handleChangePassword}
+                  className="bg-[#5c81a6] rounded-sm text-white p-1 cursor-pointer"
+                  />
+                  </div>
+                </div>
+                </div>
+          {/* Profile Section */}
+          {/* <div className="mb-[280px] mt-0 border-t-0">
+            <div className="w-[380px] bg-white border border-gray-300 rounded-lg p-5 shadow-lg ml-5 mb-5">
+                <div className="flex justify-center">
+                    <button className="bg-[#4b8bf2] py-1 px-5 rounded-lg text-white">Create New Post</button>
+                </div>
+                <div className="flex flex-wrap justify-center mt-5 gap-1">
+                    {postImages.map((base64Image, index) => {
+                        console.log(Image ${index + 1}: data:image/png;base64,${base64Image}); // For Debugging
+                        return (
+                            <img 
+                                key={index} 
+                                className="w-[100px] h-[100px]" 
+                                src={data:image/png;base64,${base64Image}} 
+                                alt={Post ${index + 1}} 
+                            />
+                        );
+                    })}
+                </div>
             </div>
-          </div>
-
-          {/* Reset Password Section */}
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h1 className="text-xl font-bold text-gray-800 mb-6">
-              Reset Your Password
-            </h1>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Current Password
-                </label>
-                <input
-                  type="password"
-                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Confirm Password
-                </label>
-                <input
-                  type="password"
-                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                />
-              </div>
-            </div>
-            <button className="mt-6 bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-full shadow-md transition-all w-full">
-              Change Password
-            </button>
-          </div>
+        </div> */}
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
-export default MyProfile;
+  export default MyProfile;
