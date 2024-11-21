@@ -1,8 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaGithub,
+  FaArrowUp,
+} from "react-icons/fa";
+
 import "./Entrystyle.css";
+import "./Styles.css";
 
 const Home = () => {
+  const [showScroll, setShowScroll] = useState(false);
+
+  // Scroll-to-Top functionality
+  const handleScroll = () => {
+    if (window.scrollY > 300) {
+      setShowScroll(true);
+    } else {
+      setShowScroll(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     const elementsLeft = document.querySelectorAll(".hidden-left");
     const elementsRight = document.querySelectorAll(".hidden-right");
@@ -22,100 +52,121 @@ const Home = () => {
     elementsLeft.forEach((el) => observer.observe(el));
     elementsRight.forEach((el) => observer.observe(el));
 
-    return () => observer.disconnect(); 
+    return () => observer.disconnect(); // Cleanup on component unmount
   }, []);
 
   return (
     <div className="home justify-center">
-      <div className="mx-5 flex flex-end">
-        <div className="my-2">
-          {/* Jumbotron Section */}
-          <div className="flex justify-center">
-            {/* <img className="w-[500px] h-[300px]" src="https://whatdreammeans.com/wp-content/uploads/2021/08/social-networks.jpg"/> */}
-            <div>
-              <h4>AI Powered Social Media Scheduler</h4>
-            </div>
-          </div>
+      {/* Sections */}
+      <div className="mx-5 flex flex-col">
+        <Section
+          title="Centralized Platform"
+          description="A social media collaboration tool designed to streamline team efforts in content creation, scheduling, and performance analytics across multiple platforms."
+          imageSrc="Allinone.jpg"
+          imageAlt="All in one"
+          reverse={false}
+        />
 
-          {/* Second section */}
-          <div className="flex border my-1 hidden-right flex-wrap w-[1120px]">
-            <img className="w-[315px] h-auto rounded-lg" src="Allinone.jpg" alt="All in one"/>
-            <div className="w-[800px] px-[18px] pb-5 my-0">
-              <h1 className="text-3xl">Centralized platform</h1>
-              <p>
-                A social media collaboration tool designed to streamline team
-                efforts in content creation, scheduling, and performance
-                analytics across multiple platforms. It offers AI-powered
-                content generation, a built-in marketplace for post exchanges,
-                and seamless integration with Facebook, LinkedIn, Instagram, and
-                Twitter. The tool enhances productivity through post scheduling,
-                real-time collaboration, and detailed analytics, allowing teams
-                to optimize their social media strategy and engagement
-                efficiently.
-              </p>
-            </div>
-          </div>
+        <Section
+          title="Collaboration in Marketplace"
+          description="Streamline team efforts with a built-in marketplace for post exchanges and real-time collaboration, enabling teams to optimize their social media strategy."
+          imageSrc="Marketplace.jpg"
+          imageAlt="Marketplace"
+          reverse={true}
+        />
 
-          {/* Third section */}
-          <div className="flex border hidden-left flex-wrap w-[1120px] my-5">
-          <div className="w-[800px] px-[18px] pb-5 my-0">
-            <h1 className="text-3xl">Colloboration in Marketplace</h1>
-              <p>
-                A social media collaboration tool designed to streamline team
-                efforts in content creation, scheduling, and performance
-                analytics across multiple platforms. It offers AI-powered
-                content generation, a built-in marketplace for post exchanges,
-                and seamless integration with Facebook, LinkedIn, Instagram, and
-                Twitter. The tool enhances productivity through post scheduling,
-                real-time collaboration, and detailed analytics, allowing teams
-                to optimize their social media strategy and engagement
-                efficiently.
-              </p>
-            </div>
-            <img className="w-[315px] h-auto rounded-lg" src="Marketplace.jpg" alt="Marketplace" />
-          </div>
+        <Section
+          title="Insights"
+          description="Detailed analytics and performance insights across multiple platforms to improve your social media strategy effectively."
+          imageSrc="Analysis.jpg"
+          imageAlt="Analysis"
+          reverse={false}
+        />
 
-          {/* Fourth section */}
-          <div className="flex border my-5 hidden-right flex-wrap w-[1120px]">
-            <img className="w-[315px] h-auto rounded-lg" src="Analysis.jpg" alt="Analysis"/>
-            <div className="w-[800px] px-[18px] pb-5 my-0">
-            <h1 className="text-3xl">Insights</h1>
-              <p>
-                A social media collaboration tool designed to streamline team
-                efforts in content creation, scheduling, and performance
-                analytics across multiple platforms. It offers AI-powered
-                content generation, a built-in marketplace for post exchanges,
-                and seamless integration with Facebook, LinkedIn, Instagram, and
-                Twitter. The tool enhances productivity through post scheduling,
-                real-time collaboration, and detailed analytics, allowing teams
-                to optimize their social media strategy and engagement
-                efficiently.
-              </p>
-            </div>
-          </div>
-
-          {/* Fifth section */}
-          <div className="flex border my-5 hidden-left flex-wrap w-[1120px]">
-          <div className="w-[800px] px-[18px] pb-5 my-0">
-            <h1 className="text-3xl">AI Assitant for Post Descriptions</h1>
-              <p>
-                A social media collaboration tool designed to streamline team
-                efforts in content creation, scheduling, and performance
-                analytics across multiple platforms. It offers AI-powered
-                content generation, a built-in marketplace for post exchanges,
-                and seamless integration with Facebook, LinkedIn, Instagram, and
-                Twitter. The tool enhances productivity through post scheduling,
-                real-time collaboration, and detailed analytics, allowing teams
-                to optimize their social media strategy and engagement
-                efficiently.
-              </p>
-            </div>
-            <img className="w-[315px] h-auto rounded-lg"  src="ai.jpg" alt="AI" />
-          </div>
-        </div>
+        <Section
+          title="AI Assistant for Post Descriptions"
+          description="AI-powered tools for generating compelling and engaging content, enhancing productivity and streamlining the content creation process."
+          imageSrc="ai.jpg"
+          imageAlt="AI Assistant"
+          reverse={true}
+        />
       </div>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* Scroll-to-Top Button */}
+      {showScroll && (
+        <button className="scroll-to-top" onClick={scrollToTop}>
+          <FaArrowUp />
+        </button>
+      )}
     </div>
   );
 };
+
+const Navbar = () => (
+  <nav className="navbar">
+    <h3>Schedlr</h3>
+    <ul className="nav-links">
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/features">Features</Link>
+      </li>
+      <li>
+        <Link to="/pricing">Pricing</Link>
+      </li>
+      <li>
+        <Link to="/contact">Contact</Link>
+      </li>
+    </ul>
+  </nav>
+);
+
+const Section = ({ title, description, imageSrc, imageAlt, reverse }) => (
+  <div
+    className={`flex border my-5 flex-wrap w-[1120px] ${
+      reverse ? "hidden-left" : "hidden-right"
+    }`}
+  >
+    {!reverse && <img className="w-[315px] h-auto rounded-lg" src={imageSrc} alt={imageAlt} />}
+    <div className="w-[800px] px-[18px] pb-5">
+      <h1 className="text-3xl">{title}</h1>
+      <p>{description}</p>
+    </div>
+    {reverse && <img className="w-[315px] h-auto rounded-lg" src={imageSrc} alt={imageAlt} />}
+  </div>
+);
+
+const Footer = () => (
+  <div className="footer">
+    <div className="footer-content">
+      <p>© 2024 Schedlr. All rights reserved.</p>
+      <SocialIcons />
+    </div>
+  </div>
+);
+
+const SocialIcons = () => (
+  <ul className="flex justify-center gap-4">
+    <li>
+      <FaFacebook className="w-6 h-6 text-blue-600" />
+    </li>
+    <li>
+      <FaTwitter className="w-6 h-6 text-blue-400" />
+    </li>
+    <li>
+      <FaInstagram className="w-6 h-6 text-pink-500" />
+    </li>
+    <li>
+      <FaLinkedin className="w-6 h-6 text-blue-800" />
+    </li>
+    <li>
+      <FaGithub className="w-6 h-6 text-gray-900" />
+    </li>
+  </ul>
+);
 
 export default Home;
