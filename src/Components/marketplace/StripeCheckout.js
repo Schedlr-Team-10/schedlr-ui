@@ -25,7 +25,7 @@ const StripeCheckout = () => {
         setClientSecret(response.data);
       } catch (error) {
         console.error("Error creating payment intent:", error);
-        setPaymentError("Failed to create payment intent");
+        // setPaymentError("Failed to create payment intent");
       }
     };
 

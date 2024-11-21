@@ -2,6 +2,7 @@ body {
   font-family: 'Arial', sans-serif; 
   background-color: #f9f9f9; 
   margin: 0;
+
 }
 
 
@@ -9,13 +10,14 @@ body {
   /* max-width: 1200px; 
   margin: 0 auto; 
   padding: 0 20px;  */
-  /* background-image: url('https://wallpapers.com/images/hd/1920x1080-social-background-xpq6lou5leuxv26v.jpg'); */
+  background-image: url('https://img.freepik.com/free-psd/social-media-sales-background_23-2151465320.jpg'); 
   background-size: cover;
   background-position: center;
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
+  padding-bottom: 100px;
   align-items: center;
 }
 

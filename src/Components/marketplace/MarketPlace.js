@@ -109,8 +109,6 @@ const formatFollowers = (count) => {
 const MarketPlace = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
-  const [minFollowers, setMinFollowers] = useState(0);
-  const [maxFollowers, setMaxFollowers] = useState(Infinity);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(Infinity);
   const [selectedInfluencer, setSelectedInfluencer] = useState(null);
@@ -151,22 +149,14 @@ const MarketPlace = () => {
       const matchesTags = selectedTags.every((tag) =>
         influencer.tags.includes(tag)
       );
-      const totalFollowers =
-        influencer.linkedinFollowers +
-        influencer.pinterestFollowers +
-        influencer.twitterFollowers;
-      const matchesFollowers =
-        totalFollowers >= minFollowers && totalFollowers <= maxFollowers;
       const matchesPrice =
         parseInt(influencer.pricePerPhoto.replace("$", "")) >= minPrice &&
         parseInt(influencer.pricePerPhoto.replace("$", "")) <= maxPrice;
-      return matchesSearch && matchesTags && matchesFollowers && matchesPrice;
+      return matchesSearch && matchesTags && matchesPrice;
     });
   }, [
     searchQuery,
     selectedTags,
-    minFollowers,
-    maxFollowers,
     minPrice,
     maxPrice,
   ]);
@@ -231,18 +221,7 @@ const MarketPlace = () => {
         </div>
 
         <div className="range-filters">
-          {/* <label>Follower Count:</label>
-          <input
-            type="number"
-            placeholder="Min Followers"
-            onChange={(e) => setMinFollowers(Number(e.target.value))}
-          />
-          <input
-            type="number"
-            placeholder="Max Followers"
-            onChange={(e) => setMaxFollowers(Number(e.target.value))}
-          /> */}
-
+         
           <label>Price Range:</label>
           <input
             type="number"

@@ -1,7 +1,13 @@
 .marketplace-container {
+  /* display: flex;
+  height: 100vh; */
+  /* background-color: #f8fafc; */
+  min-height: 100vh;
+  padding: 1.5rem;
   display: flex;
-  height: 100vh;
-  background-color: #f8fafc;
+  flex-direction: row;
+  align-items: center;
+  background-color: #faf5d5;
 }
 
 .influencer-name {
@@ -11,7 +17,7 @@
 
 .influencer-list {
   width: 30%;
-  background-color: #ffffff;
+  background-color: #fffafa;
   padding: 15px;
   border-right: 1px solid #e5e7eb;
   overflow-y: auto;
@@ -54,7 +60,9 @@
   position: relative;
   width: 70%;
   padding: 20px;
-  background-color: #ffffff;
+  background: #2E3192 → #1BFFFF;
+  /* background: linear-gradient(to left, rgb(243, 214, 113), rgb(148, 217, 255)); */
+  /* background-color: #f7c7c7; */
   color: #1f2937;
   overflow-y: auto;
   box-shadow: -3px 0 8px rgba(0, 0, 0, 0.05);
