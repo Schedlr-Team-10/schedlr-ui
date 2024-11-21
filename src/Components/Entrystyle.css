@@ -5,11 +5,7 @@ body {
 
 }
 
-
 .container {
-  /* max-width: 1200px; 
-  margin: 0 auto; 
-  padding: 0 20px;  */
   background-image: url('https://img.freepik.com/free-psd/social-media-sales-background_23-2151465320.jpg'); 
   background-size: cover;
   background-position: center;
@@ -158,13 +154,16 @@ img:hover {
 }
 
 .home{
-  background-color: burlywood;
+  /* background-color: burlywood; */
+  background: linear-gradient(to bottom right, #facc15, #f472b6, #a855f7);
 }
 
 .userdash{
-  background-color: burlywood;
+  /* background-color: burlywood; */
+  background: linear-gradient(to bottom right, #facc15, #f472b6, #a855f7);
 }
 
 .create{
-  background-color: burlywood;
+  /* background-color: burlywood; */
+  background: linear-gradient(to bottom right, #facc15, #f472b6, #a855f7);
 }

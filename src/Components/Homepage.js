@@ -7,7 +7,7 @@ export default function Homepage({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [accountType, setAccountType] = useState("PERSONAL"); 
+  const [accountType, setAccountType] = useState("PERSONAL"); // Default to PERSONAL
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -26,8 +26,10 @@ export default function Homepage({ onLogin }) {
           localStorage.setItem("userId", response.data.userid);
           localStorage.setItem("accountType", response.data.accountType);
 
-          onLogin(); 
+          // Trigger authentication state change
+          onLogin(); // Call onLogin to update isAuthenticated in App.js
 
+          // Navigate to homepage
           navigate("/home");
         } else {
           alert("Login failed: User object not found.");
@@ -46,7 +48,7 @@ export default function Homepage({ onLogin }) {
           username: username,
           email: email,
           password: password,
-          accountType: accountType, 
+          accountType: accountType, // Include the accountType in registration payload
         });
 
         if (response.status !== 200) {
@@ -55,7 +57,7 @@ export default function Homepage({ onLogin }) {
         }
 
         alert("Registration successful! Please login.");
-        setIsLogin(true); 
+        setIsLogin(true); // Switch to login form after successful registration
       } catch (error) {
         alert("Signup failed: " + (error.response?.data || "Unknown error"));
       }
@@ -122,8 +124,8 @@ export default function Homepage({ onLogin }) {
                 onChange={(e) => setAccountType(e.target.value)}
                 required
               >
-                <option className="form1" value="INFLUENCER">Influencer</option>
-                <option className="form1" value="PERSONAL">Personal</option>
+                <option value="INFLUENCER">Influencer</option>
+                <option value="PERSONAL">Personal</option>
               </select>
               <button type="submit">SignUp</button>
               <p>

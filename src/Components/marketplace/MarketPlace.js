@@ -154,12 +154,7 @@ const MarketPlace = () => {
         parseInt(influencer.pricePerPhoto.replace("$", "")) <= maxPrice;
       return matchesSearch && matchesTags && matchesPrice;
     });
-  }, [
-    searchQuery,
-    selectedTags,
-    minPrice,
-    maxPrice,
-  ]);
+  }, [searchQuery, selectedTags, minPrice, maxPrice]);
 
   const navigate = useNavigate();
 
@@ -190,50 +185,53 @@ const MarketPlace = () => {
 
   return (
     <div className="marketplace-container">
-      <div className="filters-container">
-        <input
-          type="text"
-          placeholder="Search influencers..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
-
-        <div className="tags-filter">
-          <label>Filter by Category:</label>
-          {["Tech Enthusiast", "Fashion", "Lifestyle", "Social Media"].map(
-            (tag) => (
-              <button
-                key={tag}
-                className={`tag ${selectedTags.includes(tag) ? "active" : ""}`}
-                onClick={() =>
-                  setSelectedTags((prev) =>
-                    prev.includes(tag)
-                      ? prev.filter((t) => t !== tag)
-                      : [...prev, tag]
-                  )
-                }
-              >
-                {tag}
-              </button>
-            )
-          )}
-        </div>
-
-        <div className="range-filters">
-         
-          <label>Price Range:</label>
+      <div className="influ">
+        <div className="filters-container">
           <input
-            type="number"
-            placeholder="Min Price"
-            onChange={(e) => setMinPrice(Number(e.target.value))}
+            type="text"
+            placeholder="Search influencers..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-bar"
           />
-          <input
-            type="number"
-            placeholder="Max Price"
-            onChange={(e) => setMaxPrice(Number(e.target.value))}
-          />
-        </div>
+
+          <div className="tags-filter">
+            <label>Filter by Category:</label>
+            {["Tech Enthusiast", "Fashion", "Lifestyle", "Social Media"].map(
+              (tag) => (
+                <button
+                  key={tag}
+                  className={`tag ${
+                    selectedTags.includes(tag) ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setSelectedTags((prev) =>
+                      prev.includes(tag)
+                        ? prev.filter((t) => t !== tag)
+                        : [...prev, tag]
+                    )
+                  }
+                >
+                  {tag}
+                </button>
+              )
+            )}
+          </div>
+
+          <div className="range-filters">
+            <label>Price Range:</label>
+            <input
+              type="number"
+              placeholder="Min Price"
+              onChange={(e) => setMinPrice(Number(e.target.value))}
+            />
+            <input
+              type="number"
+              placeholder="Max Price"
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+            />
+          </div>
+      
       </div>
 
       <div className="influencer-list">
@@ -322,23 +320,28 @@ const MarketPlace = () => {
 
           {selectedServices.length > 0 && (
             <button
-            className="collaboration-btn"
-            onClick={() => {
-              if (!message.trim()) {
-                alert("Please enter a message for the influencer.");
-                return;
-              }
-              const amount = selectedServices.length * 100; // Example amount calculation
-              navigate(`/checkout?amount=${amount}&message=${encodeURIComponent(message)}`); // Redirect to payment page
-            }}
-          >
-            Request Collaboration for {selectedServices.join(", ")}
-          </button>
+              className="collaboration-btn"
+              onClick={() => {
+                if (!message.trim()) {
+                  alert("Please enter a message for the influencer.");
+                  return;
+                }
+                const amount = selectedServices.length * 100; // Example amount calculation
+                navigate(
+                  `/checkout?amount=${amount}&message=${encodeURIComponent(
+                    message
+                  )}`
+                ); // Redirect to payment page
+              }}
+            >
+              Request Collaboration for {selectedServices.join(", ")}
+            </button>
           )}
         </div>
       )}
 
       {isModalOpen && <ImageModal imageSrc={modalImage} onClose={closeModal} />}
+    </div>
     </div>
   );
 };

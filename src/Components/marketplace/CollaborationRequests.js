@@ -142,7 +142,8 @@ const CollaborationRequests = () => {
   };
 
   return (
-    <div className="collaboration-requests-container">
+    <div className="cont">
+    <div className="collaboration-requests">
       <h1 className="collaboration-requests-title">Collaboration Requests</h1>
       {requests.length === 0 ? (
         <p className="no-requests">No collaboration requests found.</p>
@@ -185,6 +186,7 @@ const CollaborationRequests = () => {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 };

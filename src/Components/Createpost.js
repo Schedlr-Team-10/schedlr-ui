@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { generateDescription } from "../Components/api/gptService";
+import "./CreatePost.css";
 
 const CreatePost = () => {
   const [uploadImage, setUploadImage] = useState(null);
@@ -118,26 +119,20 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-pink-400 to-purple-500 flex flex-col items-center justify-center p-8 text-gray-800">
-      {/* Main Container */}
-      <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-8">
-        <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-8">
-          Create Your Post
-        </h1>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="create-post">
+      <div className="main-container">
+        <h1 className="title">Create Your Post</h1>
+        <div className="content-container">
           {/* Image Upload Section */}
-          <div className="bg-yellow-100 rounded-lg p-6 shadow-inner flex flex-col items-center space-y-4">
+          <div className="upload-section">
             {uploadImage ? (
               <img
                 src={URL.createObjectURL(uploadImage)}
                 alt="Uploaded"
-                className="w-full h-48 object-cover rounded-lg shadow-lg"
+                className="uploaded-image"
               />
             ) : (
-              <div className="w-full h-48 flex items-center justify-center border-4 border-dashed border-yellow-400 rounded-lg text-yellow-600 font-semibold">
-                Upload Image Here
-              </div>
+              <div className="upload-placeholder">Upload Image Here</div>
             )}
             <input
               id="fileInput"
@@ -145,40 +140,32 @@ const CreatePost = () => {
               className="hidden"
               onChange={handleChange}
             />
-            <button
-              onClick={triggerFileInput}
-              className="bg-yellow-400 hover:bg-yellow-500 text-white py-2 px-4 rounded-full shadow-md transition-transform transform hover:scale-105"
-            >
+            <button onClick={triggerFileInput} className="upload-button">
               Upload Image
             </button>
           </div>
 
           {/* Post Description and Actions */}
-          <div className="flex flex-col space-y-6">
+          <div className="action-section">
             <textarea
-              className="w-full h-32 rounded-lg p-4 bg-purple-100 text-gray-800 placeholder-gray-500 shadow-inner focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="description-input"
               placeholder="Write your post description..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
-
-            <button
-              onClick={openModal}
-              className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-md transition-transform transform hover:scale-105"
-            >
+            <button onClick={openModal} className="generate-button">
               Generate Description
             </button>
-
-            <div className="grid grid-cols-2 gap-4">
+            <div className="platform-buttons">
               {["LinkedIn", "Pinterest", "Twitter", "Facebook"].map(
                 (platform) => (
                   <button
                     key={platform}
                     onClick={() => togglePlatformSelection(platform)}
-                    className={`py-2 px-4 rounded-full font-semibold transition-all transform hover:scale-105 shadow-md ${
+                    className={`platform-button ${
                       selectedPlatforms.includes(platform)
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-200 hover:bg-gray-300"
+                        ? "selected"
+                        : "unselected"
                     }`}
                   >
                     {platform}
@@ -186,28 +173,19 @@ const CreatePost = () => {
                 )
               )}
             </div>
-
-            <button
-              onClick={postToSelectedPlatforms}
-              className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full shadow-md transition-transform transform hover:scale-105"
-            >
+            <button onClick={postToSelectedPlatforms} className="post-button">
               {loading ? "Posting..." : "Post Now"}
             </button>
-
-            <div>
-              <label className="block font-semibold mb-2">Schedule Post:</label>
+            <div className="schedule-section">
+              <label>Schedule Post:</label>
               <input
                 type="datetime-local"
-                className="w-full rounded-lg p-2 bg-gray-100 focus:ring-2 focus:ring-pink-500"
+                className="schedule-input"
                 value={scheduleTime}
                 onChange={(e) => setScheduleTime(e.target.value)}
               />
             </div>
-
-            <button
-              onClick={schedulePost}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-full shadow-md transition-transform transform hover:scale-105"
-            >
+            <button onClick={schedulePost} className="schedule-button">
               {scheduleLoading ? "Scheduling..." : "Schedule Now"}
             </button>
           </div>
@@ -216,22 +194,20 @@ const CreatePost = () => {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-96 shadow-lg transform transition-transform duration-300">
-            <h2 className="text-lg font-semibold text-gray-800 border-b pb-2">
-              Generate Description
-            </h2>
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Generate Description</h2>
             <input
               type="text"
-              className="w-full rounded-lg p-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 mt-4"
+              className="keyword-input"
               placeholder="Enter keywords or hashtags..."
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
             />
             <button
               onClick={handleGenerateDescription}
-              className={`w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold mt-4 ${
-                loading ? "opacity-70 cursor-not-allowed" : ""
+              className={`generate-modal-button ${
+                loading ? "disabled" : ""
               }`}
               disabled={loading}
             >
@@ -239,26 +215,17 @@ const CreatePost = () => {
             </button>
             <textarea
               readOnly
-              className="w-full rounded-lg p-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-4 text-gray-700"
+              className="generated-text"
               value={generatedText}
             ></textarea>
-            <div className="flex justify-between space-x-2 mt-4">
-              <button
-                onClick={copyToClipboard}
-                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-semibold"
-              >
+            <div className="modal-buttons">
+              <button onClick={copyToClipboard} className="copy-button">
                 Copy
               </button>
-              <button
-                onClick={pasteDescription}
-                className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg font-semibold"
-              >
+              <button onClick={pasteDescription} className="paste-button">
                 Paste
               </button>
-              <button
-                onClick={closeModal}
-                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg font-semibold"
-              >
+              <button onClick={closeModal} className="close-button">
                 Close
               </button>
             </div>
