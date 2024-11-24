@@ -12,6 +12,9 @@ const CreatePost = () => {
   const [keywords, setKeywords] = useState("");
   const [generatedText, setGeneratedText] = useState("");
 
+  const [isCollaborationOpen, setIsCollaborationOpen] = useState(false);
+  const [collaborationCode, setCollaborationCode] = useState("");
+
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -118,7 +121,7 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br flex flex-col items-center justify-center p-8 text-gray-800 ">
+    <div className="min-h-screen bg-gradient-to-br flex flex-col items-center justify-center p-8 text-gray-800">
       {/* Main Container */}
       <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-8">
         <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-8">
@@ -132,10 +135,10 @@ const CreatePost = () => {
               <img
                 src={URL.createObjectURL(uploadImage)}
                 alt="Uploaded"
-                className="w-full h-48 object-cover rounded-lg shadow-lg"
+                className="w-full h-92 object-cover rounded-lg shadow-lg"
               />
             ) : (
-              <div className="w-full h-48 flex items-center justify-center border-4 border-dashed border-yellow-400 rounded-lg text-yellow-600 font-semibold">
+              <div className="w-full h-96 flex items-center justify-center border-4 border-dashed border-yellow-400 rounded-lg text-yellow-600 font-semibold">
                 Upload Image Here
               </div>
             )}
@@ -155,6 +158,25 @@ const CreatePost = () => {
 
           {/* Post Description and Actions */}
           <div className="flex flex-col space-y-6">
+
+            {/* Collaboration Section */}
+            <div>
+              <button
+                onClick={() => setIsCollaborationOpen(!isCollaborationOpen)}
+                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-10 rounded-full shadow-md transition-transform transform hover:scale-105"
+              >
+                Do you have a collaboration code?
+              </button>
+              {isCollaborationOpen && (
+                <input
+                  type="text"
+                  className="mt-4  rounded-lg p-2 bg-gray-100 focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter collaboration code..."
+                  value={collaborationCode}
+                  onChange={(e) => setCollaborationCode(e.target.value)}
+                />
+              )}
+            </div>
             <textarea
               className="w-full h-32 rounded-lg p-4 bg-purple-100 text-gray-800 placeholder-gray-500 shadow-inner focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Write your post description..."
@@ -169,22 +191,22 @@ const CreatePost = () => {
               Generate Description
             </button>
 
+            
+
             <div className="grid grid-cols-3 gap-3">
-              {["LinkedIn", "PInterest", "Twitter"].map(
-                (platform) => (
-                  <button
-                    key={platform}
-                    onClick={() => togglePlatformSelection(platform)}
-                    className={`py-2 px-4 rounded-full font-semibold transition-all transform hover:scale-105 shadow-md ${
-                      selectedPlatforms.includes(platform)
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-200 hover:bg-gray-300"
-                    }`}
-                  >
-                    {platform}
-                  </button>
-                )
-              )}
+              {["LinkedIn", "PInterest", "Twitter"].map((platform) => (
+                <button
+                  key={platform}
+                  onClick={() => togglePlatformSelection(platform)}
+                  className={`py-2 px-4 rounded-full font-semibold transition-all transform hover:scale-105 shadow-md ${
+                    selectedPlatforms.includes(platform)
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 hover:bg-gray-300"
+                  }`}
+                >
+                  {platform}
+                </button>
+              ))}
             </div>
 
             <button
