@@ -10,38 +10,51 @@ export const Header = ({ isAuthenticated, handleLogout }) => {
   };
 
   return (
-    <div className="header bg-[#000000] flex justify-between items-center h-14 px-10 sticky top-0 z-50 shadow-lg">
-      <h2 className="header5 justify-start text-white text-center font-bold">SCHEDLR</h2>
-      <div className="flex space-x-4">
+    <div className="bg-black flex justify-between items-center h-14 px-10 sticky top-0 z-50 shadow-md">
+      <h2 className="text-white text-2xl font-bold mr-20 pb-2 font-julius">SCHEDLR</h2>
+      <div>
         {isAuthenticated ? (
-          <>
-            <ul className="listlink flex justify-center no-underline">
-        
-        <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white font-serif">
-          <Link to="/dashboard">Dashboard</Link>
-        </li>
-        <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white font-serif">
-          <Link to="/createpost">CreatePost</Link>
-        </li>
-        <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white font-serif">
-          <Link to="/marketplace">MarketPlace</Link>
-        </li>
-        <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white font-serif">
-          <Link to="/insights">Insights</Link>
-        </li>
-        <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white font-serif">
-          <Link to="/home">AboutUs</Link>
-        </li>
-        <li className="hover:bg-slate-500 mx-2 p-1 px-2 rounded-lg text-white font-serif">
-          <Link to="/myprofile">MyProfile</Link>
-        </li>
-        <button onClick={handleLogoutAndRedirect} className="text-white hover:bg-slate-500 px-3 py-1 rounded-lg">Logout</button>
-        </ul>
-          </>
-        ) : (
-          <></>
-          // <Link className="text-white hover:bg-slate-500 px-3 py-1 rounded-lg" to="/login">Login</Link>
-        )}
+          <ul className="flex space-x-4 items-center m-0 p-0 list-none">
+            <li className="rounded-md transition duration-300 ease-in-out hover:bg-gray-600">
+              <Link to="/dashboard" className="text-white px-3 py-2 block font-julius">
+                Dashboard
+              </Link>
+            </li>
+            <li className="rounded-md transition duration-300 ease-in-out hover:bg-gray-600">
+              <Link to="/createpost" className="text-white px-3 py-2 block font-julius">
+                CreatePost
+              </Link>
+            </li>
+            <li className="rounded-md transition duration-300 ease-in-out hover:bg-gray-600">
+              <Link to="/marketplace" className="text-white px-3 py-2 block font-julius">
+                MarketPlace
+              </Link>
+            </li>
+            <li className="rounded-md transition duration-300 ease-in-out hover:bg-gray-600">
+              <Link to="/insights" className="text-white px-3 py-2 block font-julius">
+                Insights
+              </Link>
+            </li>
+            <li className="rounded-md transition duration-300 ease-in-out hover:bg-gray-600">
+              <Link to="/home" className="text-white px-3 py-2 block font-julius">
+                AboutUs
+              </Link>
+            </li>
+            <li className="rounded-md transition duration-300 ease-in-out hover:bg-gray-600">
+              <Link to="/myprofile" className="text-white px-3 py-2 block font-julius">
+                MyProfile
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={handleLogoutAndRedirect}
+                className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 transition duration-300 shadow-md"
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
+        ) : null}
       </div>
     </div>
   );

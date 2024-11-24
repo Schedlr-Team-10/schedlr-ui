@@ -1,147 +1,167 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
 import "./Entrystyle.css";
+import { Link } from "react-router-dom";
+import CollaborationMarketplaceImg from '../assets/images/collaboration_marketplace.webp';
+import AIAssistanceImg from '../assets/images/ai_assistance.webp';
+import SchedulingImg from '../assets/images/scheduling.webp';
+import PerformanceAnalyticsImg from '../assets/images/performance_analytics.webp';
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaGithub,
+} from "react-icons/fa";
 
 const Home = () => {
+  const [showScroll, setShowScroll] = useState(false);
+  const featuresRef = useRef(null); // Reference for scrolling to the features section
+
+  // Scroll-to-Top functionality
+  const handleScroll = () => {
+    if (window.scrollY > 300) {
+      setShowScroll(true);
+    } else {
+      setShowScroll(false);
+    }
+  };
+
+  const scrollToMiddle = () => {
+    if (featuresRef.current) {
+      featuresRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
-    const elementsLeft = document.querySelectorAll(".hidden-left");
-    const elementsRight = document.querySelectorAll(".hidden-right");
-
-    const observer = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    elementsLeft.forEach((el) => observer.observe(el));
-    elementsRight.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect(); // Cleanup on component unmount
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="home justify-center">
-      <div className="mx-5 flex flex-col">
-        {/* Jumbotron Section */}
-        <div className="flex justify-center my-2">
-          <h4>AI Powered Social Media Scheduler</h4>
+    <div className="home">
+      <header
+        className="relative bg-cover bg-center bg-no-repeat py-20 lg:py-32"
+        style={{
+          backgroundImage: `url(https://t3.ftcdn.net/jpg/03/89/32/80/360_F_389328016_ak3iUrk15slWfEZdYL96O6eKTUyImDeC.jpg)`,
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:flex lg:items-center lg:justify-between">
+          <div className="lg:w-1/2 space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              Make your life as a
+              social media marketer
+              way easier
+            </h1>
+            <p className="text-lg md:text-xl font-light text-gray-100">
+              Connect all your social media accounts, sit back and let the magic
+              happen. Get clear analytics for all your social profiles in one
+              dashboard. Schedule and report your content in seconds.
+            </p>
+            <div className="flex space-x-4">
+              <button
+                className="bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold shadow hover:bg-blue-700 transition"
+                onClick={scrollToMiddle}
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
         </div>
+      </header>
 
-        {/* Sections */}
-        <Section
-          title="Centralized Platform"
-          description="A social media collaboration tool designed to streamline team efforts in content creation, scheduling, and performance analytics across multiple platforms. It offers AI-powered content generation, a built-in marketplace for post exchanges, and seamless integration with Facebook, LinkedIn, Instagram, and Twitter."
-          imageSrc="Allinone.jpg"
-          imageAlt="All in one"
-          reverse={false}
-        />
+      <section
+        className="features bg-white py-12 px-6 relative -mt-16 z-10"
+        ref={featuresRef} // Attach the reference here
+      >
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <FeatureCard
+            title="Collaboration in Marketplace"
+            description="Collaborate with your team and exchange ideas with ease."
+            image={CollaborationMarketplaceImg}
+            buttonText="Explore MarketPlace"
+            link="/marketplace"
+          />
+          <FeatureCard
+            title="AI Assistance"
+            description="Generate compelling and engaging content with AI tools."
+            image={AIAssistanceImg}
+            buttonText="Explore AI Assistant"
+            link="/createpost"
+          />
+          <FeatureCard
+            title="Scheduling"
+            description="Plan your content calendar and post on time, every time."
+            image={SchedulingImg}
+            buttonText="Explore Scheduling"
+            link="/createpost"
+          />
+          <FeatureCard
+            title="Performance Analytics"
+            description="Gain detailed insights to drive better results."
+            image={PerformanceAnalyticsImg}
+            buttonText="Explore Analytics"
+            link="/insights"
+          />
+        </div>
+      </section>
 
-        <Section
-          title="Collaboration in Marketplace"
-          description="Streamline team efforts with a built-in marketplace for post exchanges and real-time collaboration, enabling teams to optimize their social media strategy and engagement efficiently."
-          imageSrc="Marketplace.jpg"
-          imageAlt="Marketplace"
-          reverse={true}
-        />
+      <section className="cta bg-gradient-to-br from-purple-500 to-blue-500 text-white py-12 text-center">
+        <h2 className="text-3xl font-bold mb-4">Ready to Take Your Social Media to the Next Level?</h2>
+        <button className="scroll-to-top" onClick={scrollToTop}>
+          Scroll To Top
+        </button>
+      </section>
 
-        <Section
-          title="Insights"
-          description="Detailed analytics and performance insights across multiple platforms to improve your social media strategy and engagement effectively."
-          imageSrc="Analysis.jpg"
-          imageAlt="Analysis"
-          reverse={false}
-        />
-
-        <Section
-          title="AI Assistant for Post Descriptions"
-          description="AI-powered tools for generating compelling and engaging content, enhancing productivity and streamlining the content creation process."
-          imageSrc="ai.jpg"
-          imageAlt="AI Assistant"
-          reverse={true}
-        />
-      </div>
-
-      {/* Footer */}
-      <Footer />
+      <footer className="bg-gray-800 text-gray-300 py-8">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <p>© 2024 Schedlr. All rights reserved.</p>
+          <SocialIcons />
+        </div>
+      </footer>
     </div>
   );
 };
 
-const Section = ({ title, description, imageSrc, imageAlt, reverse }) => (
-  <div
-    className={`flex border my-5 flex-wrap w-[1120px] ${
-      reverse ? "hidden-left" : "hidden-right"
-    }`}
-  >
-    {!reverse && <img className="w-[315px] h-auto rounded-lg" src={imageSrc} alt={imageAlt} />}
-    <div className="w-[800px] px-[18px] pb-5">
-      <h1 className="text-3xl">{title}</h1>
-      <p>{description}</p>
-    </div>
-    {reverse && <img className="w-[315px] h-auto rounded-lg" src={imageSrc} alt={imageAlt} />}
-  </div>
-);
-
-const Footer = () => (
-  <div className="w-full max-w-[1440px] gap-8 pt-[60px] pb-10 sm:pt-16 sm:pb-8 px-5 sm:px-20">
-    <div className="flex flex-col lg:flex-row justify-between items-center gap-[60px] text-center sm:text-left text-[18px] leading-[23.4px]">
-      {/* Footer Content */}
-      <div className="flex flex-col items-center justify-center lg:items-start space-y-3 min-w-[320px]">
-        <p>Social Media Scheduling Tool</p>
-        <SocialIcons />
-      </div>
-      {/* Footer Links */}
-      <FooterLinks />
-    </div>
-    <div className="w-full min-h-[1px] my-10 sm:my-8 bg-white bg-opacity-10"></div>
-  </div>
-);
-
 const SocialIcons = () => (
-  <ul className="flex justify-center gap-[10px]">
-    {["GitHub", "Instagram", "LinkedIn", "Twitter", "Facebook"].map((platform) => (
-      <li key={platform}>
-        <button
-          className="w-11 h-11 flex justify-center items-center rounded-full bg-[#3e3e3e] hover:bg-pink transition-all"
-          aria-label={platform}
-        >
-          {/* Dynamically load the icon based on the platform */}
-          <img
-            src={`/icons/${platform.toLowerCase()}.png`}
-            alt={`${platform} icon`}
-            className="w-6 h-6"
-          />
-        </button>
-      </li>
-    ))}
+  <ul className="flex justify-center gap-4">
+    <li>
+      <FaFacebook className="w-6 h-6 text-blue-600" />
+    </li>
+    <li>
+      <FaTwitter className="w-6 h-6 text-blue-400" />
+    </li>
+    <li>
+      <FaInstagram className="w-6 h-6 text-pink-500" />
+    </li>
+    <li>
+      <FaLinkedin className="w-6 h-6 text-blue-800" />
+    </li>
+    <li>
+      <FaGithub className="w-6 h-6 text-gray-900" />
+    </li>
   </ul>
 );
 
-
-const FooterLinks = () => (
-  <div className="flex flex-col sm:flex-row justify-between gap-[60px] max-w-[600px] w-full">
-    {[
-      { title: "Free Tools", links: ["Free Marketing Tools", "List your agency"] },
-      { title: "Resources", links: ["Blog", "Docs", "Channels", "Roadmap", "Discord"] },
-      { title: "Company", links: ["Pricing", "Terms of Service", "Privacy Policy"] },
-    ].map(({ title, links }) => (
-      <div key={title} className="space-y-3 sm:space-y-5">
-        <p className="font-[700]">{title}</p>
-        <ul className="space-y-2 sm:space-y-3">
-          {links.map((link) => (
-            <li key={link} className="hover:text-pink transition-all">
-              <a href={`/${link.toLowerCase().replace(/\s/g, "-")}`}>{link}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
+const FeatureCard = ({ title, description, image, buttonText, link }) => (
+  <div className="h-72 relative feature-card bg-gray-100 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+    <img
+      src={image}
+      alt={title}
+      className="absolute inset-0 w-full h-full object-cover"
+    />
+    <div className="absolute inset-0 bg-black/40"></div>
+    <div className="absolute bottom-0 inset-x-0 bg-black/60 text-white p-4 flex flex-col justify-center">
+      <h3 className="text-lg font-bold">{title}</h3>
+      <Link to={link}>
+        <button className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+          {buttonText}
+        </button>
+      </Link>
+    </div>
   </div>
 );
 

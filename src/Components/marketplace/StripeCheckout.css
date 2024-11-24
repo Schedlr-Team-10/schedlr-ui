@@ -5,7 +5,9 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #f8fafc;
+    /* background-color: #f8fafc; */
+    /* background-color: burlywood; */
+    background: linear-gradient(to bottom right, #facc15, #f472b6, #a855f7);
     padding: 20px;
   }
   

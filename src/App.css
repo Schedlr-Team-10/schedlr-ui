@@ -63,7 +63,7 @@ body {
 
 .form button {
   padding: 10px;
-  background-color:#033452;
+  background-color: #033452;
   color: white;
   border: none;
   border-radius: 5px;
@@ -82,24 +82,41 @@ body {
   text-align: center;
 }
 
-/* Hide elements initially */
 .hidden-left, .hidden-right {
   opacity: 0;
-  transform: translateX(-200px); /* For left */
+  transform: translateX(-200px); 
   transition: transform 0.5s ease-out, opacity 0.5s ease-out;
 }
 
 .hidden-right {
-  transform: translateX(200px); /* For right */
+  transform: translateX(200px); 
 }
 
-/* Show elements with animation */
 .show {
   opacity: 1;
   transform: translateX(0);
 }
 
-/* Ensure no unwanted overflow */
 body {
   overflow-x: hidden;
+}
+
+.form select {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.form select:focus {
+  outline: none;
+  border-color: #033452;
+  box-shadow: 0 0 5px rgba(3, 52, 82, 0.5);
+}
+
+.form1 {
+  padding: 10px;
 }

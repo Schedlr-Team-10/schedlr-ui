@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
+  const [profileData, setProfileData] = useState({ name: '', email: '', profileViews: 0, postImpressions: 0 });
 
   useEffect(() => {
-    // Fetch post history when component mounts
     const fetchPostHistory = async () => {
       try {
-        const userId = localStorage.getItem("userId");
+        const userId = localStorage.getItem('userId');
         const response = await axios.get(`http://localhost:8081/schedlr/posthistory?userId=${userId}`);
         const data = response.data;
 
-        // Map and sort the response data by date in descending order
         const formattedPosts = data
           .map(post => ({
             id: post.postId,
@@ -34,25 +34,67 @@ const Dashboard = () => {
       }
     };
 
+    const fetchProfileData = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        const response = await axios.get(`http://localhost:8081/myProfile/userInfo?userId=${userId}`);
+        const { username, email, profileViews, postImpressions } = response.data;
+        setProfileData({ name: username, email, profileViews, postImpressions });
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
+    };
+
     fetchPostHistory();
+    fetchProfileData();
   }, []);
 
   return (
-    <div className="userdash min-h-screen p-6 flex flex-col items-center bg-gray-50">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">User Dashboard</h1>
+    <div className="dashboard min-h-screen flex bg-gray-50 px-52">
+      {/* Left Side: Profile Details */}
+      <div className="w-1/4 h-screen sticky top-0 space-y-6 p-6">
+        {/* Profile Card */}
+        <div className="bg-white shadow-md rounded-lg p-6 overflow-hidden">
+          <img
+            src="https://via.placeholder.com/100"
+            alt="Profile"
+            className="rounded-full mx-auto w-24 h-24 mb-4"
+          />
+          <h2 className="text-center text-xl font-bold truncate">{profileData.name || 'User Name'}</h2>
+          <p className="text-center text-gray-600 truncate">{profileData.email || 'user@example.com'}</p>
+          <div className="mt-4">
+            <p className="text-sm text-gray-600">
+              Profile Views: <span className="font-semibold">{profileData.profileViews}</span>
+            </p>
+            <p className="text-sm text-gray-600">
+              Post Impressions: <span className="font-semibold">{profileData.postImpressions}</span>
+            </p>
+          </div>
+        </div>
 
-      <div className="space-y-8 w-full max-w-3xl">
+        {/* Create a New Post Card */}
+        <div className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center">
+          <h3 className="text-lg font-bold mb-4">Create a New Post</h3>
+          <Link to="/createpost">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-10 rounded">
+            Create Post
+          </button></Link>
+        </div>
+      </div>
+
+      {/* Right Side: Post History */}
+      <div className="w-3/4 overflow-y-auto p-6 space-y-6">
         {posts.map((post) => (
           <div
             key={post.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden w-full flex"
+            className="bg-white shadow-md rounded-lg overflow-hidden flex"
           >
             {/* Separate Image Container */}
             <div className="w-1/2">
-              <img 
-                src={post.image} 
-                alt="Post" 
-                className="w-full h-[400px] object-cover rounded-l-lg" 
+              <img
+                src={post.image}
+                alt="Post"
+                className="w-full h-[300px] object-cover rounded-l-lg"
               />
             </div>
 
@@ -62,9 +104,6 @@ const Dashboard = () => {
               <p className="text-lg text-gray-800 font-medium leading-relaxed">
                 {post.description}
               </p>
-
-              {/* Uploaded On Text */}
-              <p className="text-sm text-gray-600">Uploaded on:</p>
 
               {/* Platform Tags */}
               <div className="flex flex-wrap gap-2">

@@ -1,127 +1,239 @@
-/* Container for the whole collaboration request section */
-.collaboration-requests-container {
-    /* background: linear-gradient(to left, rgb(240, 150, 130), rgb(251, 198, 106)); */
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
+.cont {
+  background: linear-gradient(to bottom right, #facc15, #f472b6, #a855f7);
+  padding: 24px;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Page title styling */
+.collaboration-requests-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #4a4a4a;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Controls container styling (Search, Filter, Sort) */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Space between controls */
+  margin-bottom: 20px; /* Space below the controls */
+}
+
+.filter-dropdown, .sort-dropdown, .search-bar {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Message for no requests */
+.no-requests {
+  text-align: center;
+  font-size: 1.25rem;
+  color: #888;
+  margin-top: 24px;
+}
+
+/* Grid layout for request cards */
+.request-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* Individual request card */
+.request-card {
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for card */
+.request-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Customer name */
+.request-customer-name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8px;
+}
+
+/* Proposal text */
+.request-proposal {
+  font-size: 1.1rem;
+  color: #4f4f4f;
+}
+
+/* Date styling */
+.request-date {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Action buttons container */
+.action-buttons {
+  margin-top: 16px;
+}
+
+.action-button-group {
+  display: flex;
+  gap: 16px;
+}
+
+/* Shared button styles */
+.action-button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Accept button styles */
+.accept-button {
+  background: linear-gradient(135deg, #28a745, #34d058);
+  color: white;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.accept-button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* Reject button styles */
+.reject-button {
+  background: linear-gradient(135deg, #dc3545, #ff6f61);
+  color: white;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.reject-button:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+/* Status text styling */
+.request-status {
+  font-weight: bold;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Specific status colors */
+.accepted-status {
+  color: #28a745;
+}
+
+.rejected-status {
+  color: #dc3545;
+}
+
+.pending-status {
+  color: #ffc107;
+}
+
+/* Details button styling */
+.details-button {
+  margin-top: 12px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: white;
+  background: linear-gradient(135deg, #007bff, #66b2ff);
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.details-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Modal styling */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  z-index: 999;
+  padding: 20px;
+  max-width: 400px;
+  width: 90%;
+  animation: fade-in 0.3s ease-out;
+}
+
+.modal-content {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  text-align: left; 
+}
+
+.close-modal-button {
+  display: block;
+  margin: 20px auto 0; /* Center the button */
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.close-modal-button:hover {
+  background: #c82333;
+}
+
+/* Animation for modal */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
   }
-  
-  /* Title of the page */
-  .collaboration-requests-title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 32px;
-    color: #333;
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
-  
-  /* Message when no requests are available */
-  .no-requests {
-    text-align: center;
-    font-size: 1.25rem;
-    color: #888;
-  }
-  
-  /* Grid layout for request cards */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
   .request-cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 32px;
-  }
-  
-  /* Individual request card styles */
-  .request-card {
-    padding: 24px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    /* background-color: white; */
-    /* background-color: lightblue; */
-    background: linear-gradient(to left, rgb(133, 206, 252), rgb(45, 167, 233));
-    box-shadow: rgba(0,0,0, 0.24)0px 3px 8px;
-    transition: box-shadow 0.2s ease;
-  }
-  
-  /* Hover effect on card */
-  .request-card:hover {
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Customer name styling */
-  .request-customer-name {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  /* Proposal text styling */
-  .request-proposal {
-    font-size: 1rem;
-    color: #666;
-    margin-top: 8px;
-  }
-  
-  /* Date styling */
-  .request-date {
-    font-size: 0.875rem;
-    color: #999;
-    margin-top: 8px;
-  }
-  
-  /* Button group styling */
-  .action-buttons {
-    margin-top: 16px;
-  }
-  
-  /* Action buttons styling */
-  .action-button-group {
-    display: flex;
+    grid-template-columns: 1fr;
     gap: 16px;
   }
-  
-  /* Common action button styling */
+
+  .collaboration-requests-title {
+    font-size: 2rem;
+  }
+
   .action-button {
-    padding: 10px 16px;
-    font-size: 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
+    padding: 8px 12px;
   }
-  
-  /* Accept button specific styles */
-  .accept-button {
-    background-color: #28a745;
-    color: white;
+
+  .details-button {
+    font-size: 0.85rem;
   }
-  
-  .accept-button:hover {
-    background-color: #218838;
-  }
-  
-  /* Reject button specific styles */
-  .reject-button {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .reject-button:hover {
-    background-color: #c82333;
-  }
-  
-  /* Status text styling */
-  .request-status {
-    font-weight: bold;
-    margin-top: 8px;
-  }
-  
-  .accepted-status {
-    color: #28a745;
-  }
-  
-  .rejected-status {
-    color: #dc3545;
-  }
-  
-  .pending-status {
-    color: #ffc107;
-  }
-  
+}

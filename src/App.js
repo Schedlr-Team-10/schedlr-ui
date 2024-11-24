@@ -13,6 +13,8 @@ import PinterestAccessStatus from "./Components/PinterestAccessStatus";
 import StripeCheckout from "./Components/marketplace/StripeCheckout";
 import CollaborationRequests from "./Components/marketplace/CollaborationRequests";
 import "./App.css";
+import ResetPassword from "./Components/ResetPassword";
+import Marketplaceinf from "./Components/marketplaceInfluencers/Marketplaceinf";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -41,9 +43,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage onLogin={handleLogin} />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           {isAuthenticated && (
             <>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/marketplaceInf" element={<Marketplaceinf />} />
               <Route path="/createpost" element={<CreatePost />} />
               {/* <Route path="/marketplace" element={<MarketPlace />} /> */}
               <Route path="/insights" element={<Insights />} />

@@ -11,12 +11,12 @@ const stripePromise = loadStripe("pk_test_51QMdkjDPmFCVYWzf3FxnEfsfq7mMm2uIrCHqI
 const StripeCheckout = () => {
   const [clientSecret, setClientSecret] = useState("");
   const [paymentError, setPaymentError] = useState("");
-  const [searchParams] = useSearchParams(); // Get query params
+  const [searchParams] = useSearchParams(); 
   const stripe = useStripe();
   const elements = useElements();
 
-  const amount = searchParams.get("amount"); // Get amount from query params
-  const message = searchParams.get("message"); // Get message from query params
+  const amount = searchParams.get("amount"); 
+  const message = searchParams.get("message");
 
   useEffect(() => {
     const createPaymentIntent = async () => {
@@ -25,7 +25,7 @@ const StripeCheckout = () => {
         setClientSecret(response.data);
       } catch (error) {
         console.error("Error creating payment intent:", error);
-        setPaymentError("Failed to create payment intent");
+        // setPaymentError("Failed to create payment intent");
       }
     };
 
@@ -58,7 +58,7 @@ const StripeCheckout = () => {
 
   return (
     <div className="stripe-checkout-container">
-      <h2>Stripe Checkout</h2>
+      <h2>Enter Card Details for Payment</h2>
       <p className="checkout-message">Message: {message}</p>
       <p className="checkout-message">Amount: ${amount}</p>
       {paymentError && <p className="payment-error">{paymentError}</p>}

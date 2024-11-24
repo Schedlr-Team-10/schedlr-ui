@@ -14,7 +14,6 @@ const influencers = [
     pinterestFollowers: 20000,
     twitterFollowers: 50000,
     pricePerPhoto: "$300",
-    pricePerVideo: "$500",
     pricePerTweet: "$150",
     tags: ["Tech Enthusiast", "Social Media"],
   },
@@ -27,7 +26,6 @@ const influencers = [
     pinterestFollowers: 50000,
     twitterFollowers: 120000,
     pricePerPhoto: "$400",
-    pricePerVideo: "$600",
     pricePerTweet: "$200",
     tags: ["Fashion", "Lifestyle"],
   },
@@ -40,7 +38,6 @@ const influencers = [
     pinterestFollowers: 45000,
     twitterFollowers: 200000,
     pricePerPhoto: "$700",
-    pricePerVideo: "$1200",
     pricePerTweet: "$350",
     tags: ["Billionaire", "Inventor", "Social Media Influencer"],
   },
@@ -52,7 +49,6 @@ const influencers = [
     pinterestFollowers: 30000,
     twitterFollowers: 80000,
     pricePerPhoto: "$250",
-    pricePerVideo: "$450",
     pricePerTweet: "$120",
     tags: ["Web Developer", "Photographer", "Social Media Star"],
   },
@@ -65,7 +61,6 @@ const influencers = [
     pinterestFollowers: 60000,
     twitterFollowers: 150000,
     pricePerPhoto: "$350",
-    pricePerVideo: "$550",
     pricePerTweet: "$180",
     tags: ["Activist", "Author", "Knowledge Sharer"],
   },
@@ -78,7 +73,6 @@ const influencers = [
     pinterestFollowers: 70000,
     twitterFollowers: 200000,
     pricePerPhoto: "$500",
-    pricePerVideo: "$800",
     pricePerTweet: "$250",
     tags: ["Social Media Influencer", "Fitness Enthusiast"],
   },
@@ -91,7 +85,6 @@ const influencers = [
     pinterestFollowers: 25000,
     twitterFollowers: 70000,
     pricePerPhoto: "$350",
-    pricePerVideo: "$550",
     pricePerTweet: "$180",
     tags: ["Anime Influencer", "Motivational Speaker"],
   },
@@ -109,8 +102,6 @@ const formatFollowers = (count) => {
 const MarketPlace = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
-  const [minFollowers, setMinFollowers] = useState(0);
-  const [maxFollowers, setMaxFollowers] = useState(Infinity);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(Infinity);
   const [selectedInfluencer, setSelectedInfluencer] = useState(null);
@@ -151,25 +142,12 @@ const MarketPlace = () => {
       const matchesTags = selectedTags.every((tag) =>
         influencer.tags.includes(tag)
       );
-      const totalFollowers =
-        influencer.linkedinFollowers +
-        influencer.pinterestFollowers +
-        influencer.twitterFollowers;
-      const matchesFollowers =
-        totalFollowers >= minFollowers && totalFollowers <= maxFollowers;
       const matchesPrice =
         parseInt(influencer.pricePerPhoto.replace("$", "")) >= minPrice &&
         parseInt(influencer.pricePerPhoto.replace("$", "")) <= maxPrice;
-      return matchesSearch && matchesTags && matchesFollowers && matchesPrice;
+      return matchesSearch && matchesTags && matchesPrice;
     });
-  }, [
-    searchQuery,
-    selectedTags,
-    minFollowers,
-    maxFollowers,
-    minPrice,
-    maxPrice,
-  ]);
+  }, [searchQuery, selectedTags, minPrice, maxPrice]);
 
   const navigate = useNavigate();
 
@@ -200,61 +178,53 @@ const MarketPlace = () => {
 
   return (
     <div className="marketplace-container">
-      <div className="filters-container">
-        <input
-          type="text"
-          placeholder="Search influencers..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
-
-        <div className="tags-filter">
-          <label>Filter by Category:</label>
-          {["Tech Enthusiast", "Fashion", "Lifestyle", "Social Media"].map(
-            (tag) => (
-              <button
-                key={tag}
-                className={`tag ${selectedTags.includes(tag) ? "active" : ""}`}
-                onClick={() =>
-                  setSelectedTags((prev) =>
-                    prev.includes(tag)
-                      ? prev.filter((t) => t !== tag)
-                      : [...prev, tag]
-                  )
-                }
-              >
-                {tag}
-              </button>
-            )
-          )}
-        </div>
-
-        <div className="range-filters">
-          {/* <label>Follower Count:</label>
+      <div className="influ">
+        <div className="filters-container">
           <input
-            type="number"
-            placeholder="Min Followers"
-            onChange={(e) => setMinFollowers(Number(e.target.value))}
+            type="text"
+            placeholder="Search influencers..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-bar"
           />
-          <input
-            type="number"
-            placeholder="Max Followers"
-            onChange={(e) => setMaxFollowers(Number(e.target.value))}
-          /> */}
 
-          <label>Price Range:</label>
-          <input
-            type="number"
-            placeholder="Min Price"
-            onChange={(e) => setMinPrice(Number(e.target.value))}
-          />
-          <input
-            type="number"
-            placeholder="Max Price"
-            onChange={(e) => setMaxPrice(Number(e.target.value))}
-          />
-        </div>
+          <div className="tags-filter">
+            <label>Filter by Category:</label>
+            {["Tech Enthusiast", "Fashion", "Lifestyle", "Social Media"].map(
+              (tag) => (
+                <button
+                  key={tag}
+                  className={`tag ${
+                    selectedTags.includes(tag) ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setSelectedTags((prev) =>
+                      prev.includes(tag)
+                        ? prev.filter((t) => t !== tag)
+                        : [...prev, tag]
+                    )
+                  }
+                >
+                  {tag}
+                </button>
+              )
+            )}
+          </div>
+
+          <div className="range-filters">
+            <label>Price Range:</label>
+            <input
+              type="number"
+              placeholder="Min Price"
+              onChange={(e) => setMinPrice(Number(e.target.value))}
+            />
+            <input
+              type="number"
+              placeholder="Max Price"
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+            />
+          </div>
+      
       </div>
 
       <div className="influencer-list">
@@ -317,14 +287,6 @@ const MarketPlace = () => {
               Price per Photo: {selectedInfluencer.pricePerPhoto}
             </p>
             <p
-              className={`price-item video ${
-                selectedServices.includes("Video") ? "active" : ""
-              }`}
-              onClick={() => toggleService("Video")}
-            >
-              Price per Video: {selectedInfluencer.pricePerVideo}
-            </p>
-            <p
               className={`price-item tweet ${
                 selectedServices.includes("Tweet") ? "active" : ""
               }`}
@@ -343,23 +305,28 @@ const MarketPlace = () => {
 
           {selectedServices.length > 0 && (
             <button
-            className="collaboration-btn"
-            onClick={() => {
-              if (!message.trim()) {
-                alert("Please enter a message for the influencer.");
-                return;
-              }
-              const amount = selectedServices.length * 100; // Example amount calculation
-              navigate(`/checkout?amount=${amount}&message=${encodeURIComponent(message)}`); // Redirect to payment page
-            }}
-          >
-            Request Collaboration for {selectedServices.join(", ")}
-          </button>
+              className="collaboration-btn"
+              onClick={() => {
+                if (!message.trim()) {
+                  alert("Please enter a message for the influencer.");
+                  return;
+                }
+                const amount = selectedServices.length * 100; // Example amount calculation
+                navigate(
+                  `/checkout?amount=${amount}&message=${encodeURIComponent(
+                    message
+                  )}`
+                ); // Redirect to payment page
+              }}
+            >
+              Request Collaboration for {selectedServices.join(", ")}
+            </button>
           )}
         </div>
       )}
 
       {isModalOpen && <ImageModal imageSrc={modalImage} onClose={closeModal} />}
+    </div>
     </div>
   );
 };
