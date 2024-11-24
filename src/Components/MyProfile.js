@@ -1,23 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Cropper from 'react-easy-crop';
-import { PINTEREST_CLIENT_ID, PINTEREST_REDIRECT_URL, PINTEREST_SCOPE, PINTEREST_CODE } from './util/Constants';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Cropper from "react-easy-crop";
+import {
+  PINTEREST_CLIENT_ID,
+  PINTEREST_REDIRECT_URL,
+  PINTEREST_SCOPE,
+  PINTEREST_CODE,
+} from "./util/Constants";
 
 const MyProfile = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [userid, setUserid] = useState('1');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [userid, setUserid] = useState("1");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Profile picture states
-  const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
+  const [profileImage, setProfileImage] = useState(
+    "https://via.placeholder.com/150"
+  );
   const [selectedImage, setSelectedImage] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isCropping, setIsCropping] = useState(false);
+
+  // States for editing profile
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [bio, setBio] = useState("");
+  const [profileUrls, setProfileUrls] = useState({
+    pinterest: "",
+    linkedin: "",
+    twitter: "",
+  });
+  const [chargeForPost, setChargeForPost] = useState("");
+  const [chargeForVideo, setChargeForVideo] = useState("");
 
   const handlePInterestLogin = () => {
     const oauthUrl = `https://www.pinterest.com/oauth/?client_id=${PINTEREST_CLIENT_ID}&redirect_uri=${PINTEREST_REDIRECT_URL}&scope=${PINTEREST_SCOPE}&response_type=${PINTEREST_CODE}`;
@@ -25,13 +43,13 @@ const MyProfile = () => {
   };
 
   const buildLinkedInAuthUrl = () => {
-    const linkedInAuthUrl = 'https://www.linkedin.com/oauth/v2/authorization';
+    const linkedInAuthUrl = "https://www.linkedin.com/oauth/v2/authorization";
     const params = {
-      response_type: 'code',
-      client_id: '862ar2q201lf2i',
-      redirect_uri: 'http://localhost:3000/myprofile',
-      state: 'DCEeFWf45A53sdfKef424',
-      scope: 'openid profile email w_member_social',
+      response_type: "code",
+      client_id: "862ar2q201lf2i",
+      redirect_uri: "http://localhost:3000/myprofile",
+      state: "DCEeFWf45A53sdfKef424",
+      scope: "openid profile email w_member_social",
     };
     const queryParams = new URLSearchParams(params).toString();
     return `${linkedInAuthUrl}?${queryParams}`;
@@ -50,30 +68,33 @@ const MyProfile = () => {
       setUserName(data.username);
       setEmail(data.email);
     } catch (error) {
-      console.error('Error fetching user info:', error);
+      console.error("Error fetching user info:", error);
     }
   };
 
   const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
-      alert('New Password and Confirm Password do not match!');
+      alert("New Password and Confirm Password do not match!");
       return;
     }
     try {
-      const response = await axios.post('http://localhost:8081/myProfile/changePassword', {
-        password: newPassword,
-        userId: userid,
-      });
+      const response = await axios.post(
+        "http://localhost:8081/myProfile/changePassword",
+        {
+          password: newPassword,
+          userId: userid,
+        }
+      );
       if (response.status === 200) {
-        alert('Password changed successfully');
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
+        alert("Password changed successfully");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
       } else {
-        alert('Failed to change password');
+        alert("Failed to change password");
       }
     } catch (error) {
-      console.error('Error changing password:', error);
+      console.error("Error changing password:", error);
     }
   };
 
@@ -94,12 +115,18 @@ const MyProfile = () => {
   };
 
   const handleSaveCroppedImage = () => {
-    setProfileImage(selectedImage);
+    setProfileImage(selectedImage); // Here you can crop and save the actual cropped image
     setIsCropping(false);
   };
 
+  const handleSaveProfileChanges = () => {
+    // Save profile changes logic
+    alert("Profile updated successfully!");
+    setIsEditingProfile(false);
+  };
+
   useEffect(() => {
-    const userIdFromStorage = localStorage.getItem('userId');
+    const userIdFromStorage = localStorage.getItem("userId");
     setUserid(userIdFromStorage);
     fetchUserInfo(userIdFromStorage);
   }, []);
@@ -117,9 +144,9 @@ const MyProfile = () => {
               className="rounded-full mx-auto w-28 h-28 object-cover"
             />
             <h2 className="text-center text-xl font-bold mt-5">
-              {userName || 'User Name'}
+              {userName || "User Name"}
             </h2>
-            <p className="text-center text-gray-600">{email || 'user@example.com'}</p>
+            <p className="text-center text-gray-600">{email || "user@example.com"}</p>
             <div className="mt-5">
               <label className="block text-gray-700 mb-2">Update Profile Picture</label>
               <input
@@ -129,6 +156,12 @@ const MyProfile = () => {
                 className="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer"
               />
             </div>
+            <button
+              onClick={() => setIsEditingProfile(true)}
+              className="mt-4 bg-blue-600 text-white py-2 px-4 rounded shadow-md hover:bg-blue-700 transition"
+            >
+              Edit Profile
+            </button>
           </div>
         </div>
 
@@ -146,6 +179,18 @@ const MyProfile = () => {
                   onCropChange={setCrop}
                   onZoomChange={setZoom}
                   onCropComplete={onCropComplete}
+                />
+              </div>
+              <div className="mt-4">
+                <label className="block text-gray-700 mb-2">Zoom:</label>
+                <input
+                  type="range"
+                  min={1}
+                  max={3}
+                  step={0.1}
+                  value={zoom}
+                  onChange={(e) => setZoom(e.target.value)}
+                  className="w-full"
                 />
               </div>
               <div className="flex justify-between mt-4">
@@ -166,64 +211,146 @@ const MyProfile = () => {
           </div>
         )}
 
-        {/* Social Media and Reset Password Section */}
-        <div className="col-span-2 space-y-8">
-          {/* Social Media Check-in */}
-          <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold text-center mb-6">Check-in to Social Media</h2>
-            <div className="flex justify-around">
-              <button
-                className="bg-[#d62976] text-white py-2 px-4 rounded shadow-md hover:bg-[#c8236f] transition mx-4"
-                onClick={handlePInterestLogin}
-              >
-                Pinterest
-              </button>
-              <button
-                className="bg-[#0A66C2] text-white py-2 px-4 rounded shadow-md hover:bg-[#084a90] transition mx-4"
-                onClick={handleLinkedInLogin}
-              >
-                LinkedIn
-              </button>
-              <button className="bg-[#1DA1F2] text-white py-2 px-4 rounded shadow-md hover:bg-[#177cc8] transition mx-4">
-                Twitter
-              </button>
-            </div>
-          </div>
-
-          {/* Password Reset Section */}
-          <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold text-center mb-6">Reset Password</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <label className="col-span-1 text-right pr-4">Current Password:</label>
-              <input
-                type="password"
-                className="col-span-2 border border-gray-300 rounded-lg px-2 py-1"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-              <label className="col-span-1 text-right pr-4">New Password:</label>
-              <input
-                type="password"
-                className="col-span-2 border border-gray-300 rounded-lg px-2 py-1"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <label className="col-span-1 text-right pr-4">Confirm Password:</label>
-              <input
-                type="password"
-                className="col-span-2 border border-gray-300 rounded-lg px-2 py-1"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <div className="col-span-3 flex justify-center">
+        {/* Profile Edit Modal */}
+        {isEditingProfile && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div
+              className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full"
+              style={{ maxHeight: "90vh", overflowY: "auto" }}
+            >
+              <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-gray-700 mb-2">Bio:</label>
+                  <textarea
+                    className="w-full border border-gray-300 rounded-lg px-2 py-1"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    placeholder="Write your bio here"
+                  ></textarea>
+                </div>
+                <h3 className="text-lg font-semibold">Social Media Links:</h3>
+                {Object.keys(profileUrls).map((platform) => (
+                  <div key={platform}>
+                    <label className="block text-gray-700 mb-2 capitalize">
+                      {platform}:
+                    </label>
+                    <input
+                      type="url"
+                      className="w-full border border-gray-300 rounded-lg px-2 py-1"
+                      value={profileUrls[platform]}
+                      onChange={(e) =>
+                        setProfileUrls({
+                          ...profileUrls,
+                          [platform]: e.target.value,
+                        })
+                      }
+                      placeholder={`Enter ${platform} profile URL`}
+                    />
+                  </div>
+                ))}
+                <div>
+                  <label className="block text-gray-700 mb-2">
+                    Charge for Post:
+                  </label>
+                  <input
+                    type="number"
+                    className="w-full border border-gray-300 rounded-lg px-2 py-1"
+                    value={chargeForPost}
+                    onChange={(e) => setChargeForPost(e.target.value)}
+                    placeholder="Enter charge for post"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-2">
+                    Charge for Video:
+                  </label>
+                  <input
+                    type="number"
+                    className="w-full border border-gray-300 rounded-lg px-2 py-1"
+                    value={chargeForVideo}
+                    onChange={(e) => setChargeForVideo(e.target.value)}
+                    placeholder="Enter charge for video"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between mt-6">
                 <button
-                  onClick={handleChangePassword}
-                  className="bg-blue-600 text-white py-2 px-6 rounded shadow-md hover:bg-blue-700 transition"
+                  onClick={() => setIsEditingProfile(false)}
+                  className="bg-gray-600 text-white py-2 px-4 rounded"
                 >
-                  Change Password
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveProfileChanges}
+                  className="bg-blue-600 text-white py-2 px-4 rounded"
+                >
+                  Save Changes
                 </button>
               </div>
             </div>
+          </div>
+        )}
+      </div>
+
+      {/* Social Media Check-in */}
+      <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-8 mt-8">
+        <h2 className="text-2xl font-bold text-center mb-6">
+          Check-in to Social Media
+        </h2>
+        <div className="flex justify-around">
+          <button
+            className="bg-[#d62976] text-white py-2 px-4 rounded shadow-md hover:bg-[#c8236f] transition mx-4"
+            onClick={handlePInterestLogin}
+          >
+            Pinterest
+          </button>
+          <button
+            className="bg-[#0A66C2] text-white py-2 px-4 rounded shadow-md hover:bg-[#084a90] transition mx-4"
+            onClick={handleLinkedInLogin}
+          >
+            LinkedIn
+          </button>
+          <button className="bg-[#1DA1F2] text-white py-2 px-4 rounded shadow-md hover:bg-[#177cc8] transition mx-4">
+            Twitter
+          </button>
+        </div>
+      </div>
+
+      {/* Password Reset Section */}
+      <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-8 mt-8">
+        <h2 className="text-2xl font-bold text-center mb-6">Reset Password</h2>
+        <div className="grid grid-cols-3 gap-4">
+          <label className="col-span-1 text-right pr-4">Current Password:</label>
+          <input
+            type="password"
+            className="col-span-2 border border-gray-300 rounded-lg px-2 py-1"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+          />
+          <label className="col-span-1 text-right pr-4">New Password:</label>
+          <input
+            type="password"
+            className="col-span-2 border border-gray-300 rounded-lg px-2 py-1"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <label className="col-span-1 text-right pr-4">
+            Confirm Password:
+          </label>
+          <input
+            type="password"
+            className="col-span-2 border border-gray-300 rounded-lg px-2 py-1"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <div className="col-span-3 flex justify-center">
+            <button
+              onClick={handleChangePassword}
+              className="bg-blue-600 text-white py-2 px-6 rounded shadow-md hover:bg-blue-700 transition"
+            >
+              Change Password
+            </button>
           </div>
         </div>
       </div>
