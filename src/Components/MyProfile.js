@@ -7,6 +7,7 @@ import {
   PINTEREST_SCOPE,
   PINTEREST_CODE,
 } from "./util/Constants";
+import { changePassword, LinkedAuth } from "./util/Util";
 
 const MyProfile = () => {
   const [userName, setUserName] = useState("");
@@ -17,15 +18,19 @@ const MyProfile = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // Profile Picture and Bio States
-  const [profileImage, setProfileImage] = useState(
-    "https://via.placeholder.com/150"
-  );
+  const [profileImage, setProfileImage] = useState(null);
   const [bio, setBio] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [isCropping, setIsCropping] = useState(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [profilePic, setProfilePic] = useState(null);
+  const [responseMessage, setResponseMessage] = useState("");
+
+  const handleFileChange = (event) => {
+    setProfilePic(event.target.files[0]);
+  };
 
   // Social Media Links and Costs States
   const [profileUrls, setProfileUrls] = useState({
@@ -67,6 +72,9 @@ const MyProfile = () => {
     try {
       const response = await axios.get(url);
       const data = response.data;
+      console.log("Data full : "+data.bio);
+      setBio(data.bio);
+      setProfileImage(data.profilepic);
       setUserName(data.username);
       setEmail(data.email);
     } catch (error) {
@@ -81,21 +89,15 @@ const MyProfile = () => {
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:8081/myProfile/changePassword",
-        {
-          password: newPassword,
-          userId: userid,
-        }
-      );
-      if (response.status === 200) {
+      const response = changePassword(userid, newPassword);
+      if (response) {
         alert("Password changed successfully");
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
       } else {
         alert("Failed to change password");
       }
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
     } catch (error) {
       console.error("Error changing password:", error);
     }
@@ -112,22 +114,55 @@ const MyProfile = () => {
       const reader = new FileReader();
       reader.onload = () => {
         setSelectedImage(reader.result);
-        setIsCropping(true);
+        setIsCropping(true); 
+        setProfilePic(file);  
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); 
     }
   };
+  
 
   const handleSaveCroppedImage = () => {
-    setProfileImage(selectedImage); // Replace with cropping logic if needed
+    setProfileImage(selectedImage); 
     setIsCropping(false);
   };
 
-  // Save Functions
-  const handleSaveProfile = () => {
-    alert("Profile updated successfully!");
-    setIsUpdatingProfile(false);
+  const handleSaveProfile = async (event) => {
+    event.preventDefault();
+  
+    if (!bio && !profilePic) {
+      setResponseMessage("Please provide at least one field to update.");
+      return;
+    }
+  
+    const formData = new FormData();
+    
+    if (profilePic) formData.append("profilePic", profilePic);
+  
+    if (bio) formData.append("bio", bio);
+  
+    try {
+      const userId = localStorage.getItem("userId");
+      const response = await axios.put(
+        `http://localhost:8082/schedlr/${userId}/updateProfile`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+  
+      setResponseMessage("Profile updated successfully!");
+      console.log("Updated User:", response.data);
+      setIsUpdatingProfile(false);
+      fetchUserInfo(userId);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setResponseMessage("Failed to update profile. Please try again.");
+    }
   };
+  
 
   const handleSaveSocialMedia = () => {
     alert("Social media links and costs updated successfully!");
@@ -141,30 +176,8 @@ const MyProfile = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const state = urlParams.get('state');
-
-    if (code && state) {
-      const payload = {
-        code: code,
-        state: state,
-        userId: userid
-      };
-
-      fetch('http://localhost:8081/linkedin/authCode', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('Response from backend:', data);
-        })
-        .catch((error) => {
-          console.error('Error calling backend:', error);
-        });
-    } else {
-      console.error('Code or state parameter is missing in the URL');
+    if (code!=null && state!=null) {
+      LinkedAuth(code, state, userid);
     }
   }, []);
 
@@ -230,107 +243,99 @@ const MyProfile = () => {
         </div>
 
         {/* Right Side: Social Media Links and Costs */}
-        <div className="bg-white border border-gray-300 rounded-lg p-5 shadow-lg">
-          <h2 className="text-xl font-bold mb-4 text-center">Social Media & Costs</h2>
-          {!isEditingSocialMedia ? (
-            <div>
-              <p className="mb-3">
-                <strong>Pinterest:</strong> {profileUrls.pinterest}
-              </p>
-              <p className="mb-3">
-                <strong>LinkedIn:</strong> {profileUrls.linkedin}
-              </p>
-              <p className="mb-3">
-                <strong>Twitter:</strong> {profileUrls.twitter}
-              </p>
-              <p className="mb-3">
-                <strong>Charge for Post:</strong> ${chargeForPost}
-              </p>
-              <p className="mb-3">
-                <strong>Charge for Video:</strong> ${chargeForVideo}
-              </p>
-              <button
-                onClick={() => setIsEditingSocialMedia(true)}
-                className="bg-blue-600 text-white py-2 px-4 rounded shadow-md hover:bg-blue-700 transition w-full"
-              >
-                Edit
-              </button>
-            </div>
-          ) : (
-            <div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Pinterest:</label>
-                <input
-                  type="url"
-                  className="w-full border border-gray-300 rounded-lg px-2 py-1"
-                  value={profileUrls.pinterest}
-                  onChange={(e) =>
-                    setProfileUrls({ ...profileUrls, pinterest: e.target.value })
-                  }
-                  placeholder="Enter Pinterest profile URL"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">LinkedIn:</label>
-                <input
-                  type="url"
-                  className="w-full border border-gray-300 rounded-lg px-2 py-1"
-                  value={profileUrls.linkedin}
-                  onChange={(e) =>
-                    setProfileUrls({ ...profileUrls, linkedin: e.target.value })
-                  }
-                  placeholder="Enter LinkedIn profile URL"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Twitter:</label>
-                <input
-                  type="url"
-                  className="w-full border border-gray-300 rounded-lg px-2 py-1"
-                  value={profileUrls.twitter}
-                  onChange={(e) =>
-                    setProfileUrls({ ...profileUrls, twitter: e.target.value })
-                  }
-                  placeholder="Enter Twitter profile URL"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Charge for Post:</label>
-                <input
-                  type="number"
-                  className="w-full border border-gray-300 rounded-lg px-2 py-1"
-                  value={chargeForPost}
-                  onChange={(e) => setChargeForPost(e.target.value)}
-                  placeholder="Enter charge for post"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Charge for Video:</label>
-                <input
-                  type="number"
-                  className="w-full border border-gray-300 rounded-lg px-2 py-1"
-                  value={chargeForVideo}
-                  onChange={(e) => setChargeForVideo(e.target.value)}
-                  placeholder="Enter charge for video"
-                />
-              </div>
-              <div className="flex justify-between">
-                <button
-                  onClick={() => setIsEditingSocialMedia(false)}
-                  className="bg-gray-600 text-white py-2 px-4 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSaveSocialMedia}
-                  className="bg-blue-600 text-white py-2 px-4 rounded"
-                >
-                  Save
-                </button>
-              </div>
+        < >
+          {localStorage.getItem("accountType") === "INFLUENCER" && (
+            <div className="bg-white border border-gray-300 rounded-lg p-5 shadow-lg">
+              <h2 className="text-xl font-bold mb-4 text-center">Social Media & Costs</h2>
+              {!isEditingSocialMedia ? (
+                <div className="">
+                  <p className="mb-3 mt-10">
+                    <strong>Pinterest:</strong> {profileUrls.pinterest}
+                  </p>
+                  <p className="mb-3">
+                    <strong>LinkedIn:</strong> {profileUrls.linkedin}
+                  </p>
+                  <p className="mb-3">
+                    <strong>Twitter:</strong> {profileUrls.twitter}
+                  </p>
+                  <p className="mb-3">
+                    <strong>Charge for Post:</strong> ${chargeForPost}
+                  </p>
+                  <button
+                    onClick={() => setIsEditingSocialMedia(true)}
+                    className="bg-blue-600 text-white py-2 px-4 rounded shadow-md hover:bg-blue-700 transition w-full mt-10"
+                  >
+                    Edit
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">Pinterest:</label>
+                    <input
+                      type="url"
+                      className="w-full border border-gray-300 rounded-lg px-2 py-1"
+                      value={profileUrls.pinterest}
+                      onChange={(e) =>
+                        setProfileUrls({ ...profileUrls, pinterest: e.target.value })
+                      }
+                      placeholder="Enter Pinterest profile URL"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">LinkedIn:</label>
+                    <input
+                      type="url"
+                      className="w-full border border-gray-300 rounded-lg px-2 py-1"
+                      value={profileUrls.linkedin}
+                      onChange={(e) =>
+                        setProfileUrls({ ...profileUrls, linkedin: e.target.value })
+                      }
+                      placeholder="Enter LinkedIn profile URL"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">Twitter:</label>
+                    <input
+                      type="url"
+                      className="w-full border border-gray-300 rounded-lg px-2 py-1"
+                      value={profileUrls.twitter}
+                      onChange={(e) =>
+                        setProfileUrls({ ...profileUrls, twitter: e.target.value })
+                      }
+                      placeholder="Enter Twitter profile URL"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">Charge for Post:</label>
+                    <input
+                      type="number"
+                      className="w-full border border-gray-300 rounded-lg px-2 py-1"
+                      value={chargeForPost}
+                      onChange={(e) => setChargeForPost(e.target.value)}
+                      placeholder="Enter charge for post"
+                    />
+                  </div>
+                  <div className="flex justify-between">
+                    <button
+                      onClick={() => setIsEditingSocialMedia(false)}
+                      className="bg-gray-600 text-white py-2 px-4 rounded"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveSocialMedia}
+                      className="bg-blue-600 text-white py-2 px-4 rounded"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
-        </div>
+        </>
+
       </div>
 
       {/* Social Media Check-in */}

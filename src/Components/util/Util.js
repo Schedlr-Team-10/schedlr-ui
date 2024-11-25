@@ -25,16 +25,43 @@ export const fetchPostHistory = async (userId) => {
 // API to change the user's password
 export const changePassword = async (userId, newPassword) => {
   try {
-    const response = await axios.post('http://localhost:8081/myProfile/changePassword', {
-      password: newPassword,
-      userId,
-    });
-    return response.status === 200; // Return success status
+    console.log("checking password auth : "+ userId+" : "+ newPassword);
+    const response = await axios.post(
+      "http://localhost:8081/myProfile/changePassword",
+      {
+        password: newPassword,
+        userId: userId,
+      }
+    );
+    return response.status === 200;
   } catch (error) {
     console.error('Error changing password:', error);
     throw error; // Handle error in the component
   }
 };
+
+export const LinkedAuth = async(code, state, userid)=> {
+  const payload = {
+    code: code,
+    state: state,
+    userId: userid
+  };
+
+  fetch('http://localhost:8081/linkedin/authCode', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Response from backend:', data);
+    })
+    .catch((error) => {
+      console.error('Error calling backend:', error);
+    });
+}
 
 // API to send LinkedIn authorization code to the backend
 export const sendLinkedInCode = async (code, state, userId) => {
