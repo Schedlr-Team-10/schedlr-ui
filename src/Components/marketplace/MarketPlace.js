@@ -96,10 +96,8 @@ const MarketPlace = () => {
   const [selectedRequestType, setSelectedRequestType] = useState("Post");
   const [message, setMessage] = useState("");
 
-  // Extract unique tags dynamically
-  const uniqueTags = Array.from(
-    new Set(influencers.flatMap((influencer) => influencer.tags))
-  );
+  // Simplified filter tags
+  const uniqueTags = ["Tech Enthusiast", "Fashion", "Social Media", "Lifestyle"];
 
   // Filter influencers based on search, tags, and price
   const filteredInfluencers = useMemo(() => {
@@ -186,10 +184,7 @@ const MarketPlace = () => {
             onClick={() => setSelectedInfluencer(influencer)}
           >
             <img src={influencer.profilePic} alt={influencer.name} />
-            <div className="contact-info">
-              <h4>{influencer.name}</h4>
-              <p>{influencer.bio}</p>
-            </div>
+            <span className="contact-name">{influencer.name}</span>
           </div>
         ))}
       </div>
