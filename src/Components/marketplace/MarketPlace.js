@@ -85,6 +85,77 @@ const influencers = [
     pricePerTweet: 180,
     tags: ["Anime Influencer", "Motivational Speaker"],
   },
+  {
+    name: "Deadpool",
+    profilePic:
+      "https://w0.peakpx.com/wallpaper/903/975/HD-wallpaper-deadpool-hero-man-thumbnail.jpg",
+    bio: "Fashion Guru and Lifestyle Blogger",
+    linkedinFollowers: 25000,
+    pinterestFollowers: 50000,
+    twitterFollowers: 120000,
+    pricePerPhoto: 400,
+    pricePerTweet: 200,
+    tags: ["Fashion", "Lifestyle"],
+  },
+  {
+    name: "Iron Man",
+    profilePic:
+      "https://i.pinimg.com/originals/24/8b/e5/248be556957e41fabbcf795dc06db02d.jpg",
+    bio: "Billionaire, Inventor, and Social Media Influencer",
+    linkedinFollowers: 30000,
+    pinterestFollowers: 45000,
+    twitterFollowers: 200000,
+    pricePerPhoto: 700,
+    pricePerTweet: 350,
+    tags: ["Billionaire", "Inventor", "Social Media Influencer"],
+  },
+  {
+    name: "Peter Parker",
+    profilePic: "https://images.alphacoders.com/134/1347144.png",
+    bio: "Web Developer, Photographer, and Social Media Star",
+    linkedinFollowers: 18000,
+    pinterestFollowers: 30000,
+    twitterFollowers: 80000,
+    pricePerPhoto: 250,
+    pricePerTweet: 120,
+    tags: ["Web Developer", "Photographer", "Social Media Star"],
+  },
+  {
+    name: "Captain America",
+    profilePic:
+      "https://www.twincities.com/wp-content/uploads/2016/04/from-captain-america-civil-war-to-finding-dory-10-movies-to-look-forward-to-in-2016-734527.jpg",
+    bio: "Activist, Author, and Knowledge Sharer",
+    linkedinFollowers: 40000,
+    pinterestFollowers: 60000,
+    twitterFollowers: 150000,
+    pricePerPhoto: 350,
+    pricePerTweet: 180,
+    tags: ["Activist", "Author", "Knowledge Sharer"],
+  },
+  {
+    name: "Gojo Satoru",
+    profilePic:
+      "https://4kwallpapers.com/images/wallpapers/satoru-gojo-black-1920x1200-14684.png",
+    bio: "Social Media Influencer, Fitness Enthusiast",
+    linkedinFollowers: 50000,
+    pinterestFollowers: 70000,
+    twitterFollowers: 200000,
+    pricePerPhoto: 500,
+    pricePerTweet: 250,
+    tags: ["Social Media Influencer", "Fitness Enthusiast"],
+  },
+  {
+    name: "Zenitsu",
+    profilePic:
+      "https://wallpapers.com/images/featured/zenitsu-background-tfv5jhezo7un4m02.jpg",
+    bio: "Anime Influencer, Motivational Speaker",
+    linkedinFollowers: 15000,
+    pinterestFollowers: 25000,
+    twitterFollowers: 70000,
+    pricePerPhoto: 350,
+    pricePerTweet: 180,
+    tags: ["Anime Influencer", "Motivational Speaker"],
+  },
 ];
 
 const MarketPlace = () => {
