@@ -138,6 +138,34 @@ const MyProfile = () => {
     const userIdFromStorage = localStorage.getItem("userId");
     setUserid(userIdFromStorage);
     fetchUserInfo(userIdFromStorage);
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const state = urlParams.get('state');
+
+    if (code && state) {
+      const payload = {
+        code: code,
+        state: state,
+        userId: userid
+      };
+
+      fetch('http://localhost:8081/linkedin/authCode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Response from backend:', data);
+        })
+        .catch((error) => {
+          console.error('Error calling backend:', error);
+        });
+    } else {
+      console.error('Code or state parameter is missing in the URL');
+    }
   }, []);
 
   return (

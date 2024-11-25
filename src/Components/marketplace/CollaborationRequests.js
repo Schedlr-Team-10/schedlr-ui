@@ -39,19 +39,51 @@ const CollaborationRequests = () => {
     fetchRequests();
   }, []);
 
-  // Handle Accept/Reject Action
-  const handleAction = (id, action) => {
-    setRequests((prevRequests) =>
-      prevRequests.map((request) =>
-        request.collaboration.id === id
-          ? {
-              ...request,
-              collaboration: { ...request.collaboration, status: action },
-            }
-          : request
-      )
-    );
+  const handleAction = async (id, action) => {
+    const influencerId = localStorage.getItem("userId"); // Get influencerId from localStorage
+    const userId = id; // userId is the id of the request user
+
+    console.log("userid is : "+userId);
+    console.log("Influencerid is : "+ influencerId);
+    console.log("Action is : "+ action);
+  
+    if (!influencerId) {
+      setError("User not logged in or influencerId missing");
+      return;
+    }
+  
+    try {
+      // Call the endpoint
+      const response = await fetch(
+        `http://localhost:8081/influencers/changeStatus?userId=${userId}&influencerId=${influencerId}&status=${action}`,
+        {
+          method: "POST", // Assuming this is a POST request
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to update the status.");
+      }
+  
+      // Update the local state to reflect the status change
+      setRequests((prevRequests) =>
+        prevRequests.map((request) =>
+          request.collaboration.id === id
+            ? {
+                ...request,
+                collaboration: { ...request.collaboration, status: action },
+              }
+            : request
+        )
+      );
+    } catch (err) {
+      setError(err.message);
+    }
   };
+  
 
   // Filter and Sort Requests
   const filteredRequests = requests
