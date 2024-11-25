@@ -1,162 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import axios from "axios";
 import "./MarketPlace.css";
-
-const influencers = [
-  {
-    name: "Monkey D. Luffy",
-    profilePic:
-      "https://wallpapers.com/images/hd/glitchcore-luffy-aesthetic-klup4qfestimdsa2.jpg",
-    bio: "Social Media Influencer, Tech Enthusiast",
-    linkedinFollowers: 15000,
-    pinterestFollowers: 20000,
-    twitterFollowers: 50000,
-    pricePerPhoto: 300,
-    pricePerTweet: 150,
-    tags: ["Tech Enthusiast", "Social Media"],
-  },
-  {
-    name: "Deadpool",
-    profilePic:
-      "https://w0.peakpx.com/wallpaper/903/975/HD-wallpaper-deadpool-hero-man-thumbnail.jpg",
-    bio: "Fashion Guru and Lifestyle Blogger",
-    linkedinFollowers: 25000,
-    pinterestFollowers: 50000,
-    twitterFollowers: 120000,
-    pricePerPhoto: 400,
-    pricePerTweet: 200,
-    tags: ["Fashion", "Lifestyle"],
-  },
-  {
-    name: "Iron Man",
-    profilePic:
-      "https://i.pinimg.com/originals/24/8b/e5/248be556957e41fabbcf795dc06db02d.jpg",
-    bio: "Billionaire, Inventor, and Social Media Influencer",
-    linkedinFollowers: 30000,
-    pinterestFollowers: 45000,
-    twitterFollowers: 200000,
-    pricePerPhoto: 700,
-    pricePerTweet: 350,
-    tags: ["Billionaire", "Inventor", "Social Media Influencer"],
-  },
-  {
-    name: "Peter Parker",
-    profilePic: "https://images.alphacoders.com/134/1347144.png",
-    bio: "Web Developer, Photographer, and Social Media Star",
-    linkedinFollowers: 18000,
-    pinterestFollowers: 30000,
-    twitterFollowers: 80000,
-    pricePerPhoto: 250,
-    pricePerTweet: 120,
-    tags: ["Web Developer", "Photographer", "Social Media Star"],
-  },
-  {
-    name: "Captain America",
-    profilePic:
-      "https://www.twincities.com/wp-content/uploads/2016/04/from-captain-america-civil-war-to-finding-dory-10-movies-to-look-forward-to-in-2016-734527.jpg",
-    bio: "Activist, Author, and Knowledge Sharer",
-    linkedinFollowers: 40000,
-    pinterestFollowers: 60000,
-    twitterFollowers: 150000,
-    pricePerPhoto: 350,
-    pricePerTweet: 180,
-    tags: ["Activist", "Author", "Knowledge Sharer"],
-  },
-  {
-    name: "Gojo Satoru",
-    profilePic:
-      "https://4kwallpapers.com/images/wallpapers/satoru-gojo-black-1920x1200-14684.png",
-    bio: "Social Media Influencer, Fitness Enthusiast",
-    linkedinFollowers: 50000,
-    pinterestFollowers: 70000,
-    twitterFollowers: 200000,
-    pricePerPhoto: 500,
-    pricePerTweet: 250,
-    tags: ["Social Media Influencer", "Fitness Enthusiast"],
-  },
-  {
-    name: "Zenitsu",
-    profilePic:
-      "https://wallpapers.com/images/featured/zenitsu-background-tfv5jhezo7un4m02.jpg",
-    bio: "Anime Influencer, Motivational Speaker",
-    linkedinFollowers: 15000,
-    pinterestFollowers: 25000,
-    twitterFollowers: 70000,
-    pricePerPhoto: 350,
-    pricePerTweet: 180,
-    tags: ["Anime Influencer", "Motivational Speaker"],
-  },
-  {
-    name: "Deadpool",
-    profilePic:
-      "https://w0.peakpx.com/wallpaper/903/975/HD-wallpaper-deadpool-hero-man-thumbnail.jpg",
-    bio: "Fashion Guru and Lifestyle Blogger",
-    linkedinFollowers: 25000,
-    pinterestFollowers: 50000,
-    twitterFollowers: 120000,
-    pricePerPhoto: 400,
-    pricePerTweet: 200,
-    tags: ["Fashion", "Lifestyle"],
-  },
-  {
-    name: "Iron Man",
-    profilePic:
-      "https://i.pinimg.com/originals/24/8b/e5/248be556957e41fabbcf795dc06db02d.jpg",
-    bio: "Billionaire, Inventor, and Social Media Influencer",
-    linkedinFollowers: 30000,
-    pinterestFollowers: 45000,
-    twitterFollowers: 200000,
-    pricePerPhoto: 700,
-    pricePerTweet: 350,
-    tags: ["Billionaire", "Inventor", "Social Media Influencer"],
-  },
-  {
-    name: "Peter Parker",
-    profilePic: "https://images.alphacoders.com/134/1347144.png",
-    bio: "Web Developer, Photographer, and Social Media Star",
-    linkedinFollowers: 18000,
-    pinterestFollowers: 30000,
-    twitterFollowers: 80000,
-    pricePerPhoto: 250,
-    pricePerTweet: 120,
-    tags: ["Web Developer", "Photographer", "Social Media Star"],
-  },
-  {
-    name: "Captain America",
-    profilePic:
-      "https://www.twincities.com/wp-content/uploads/2016/04/from-captain-america-civil-war-to-finding-dory-10-movies-to-look-forward-to-in-2016-734527.jpg",
-    bio: "Activist, Author, and Knowledge Sharer",
-    linkedinFollowers: 40000,
-    pinterestFollowers: 60000,
-    twitterFollowers: 150000,
-    pricePerPhoto: 350,
-    pricePerTweet: 180,
-    tags: ["Activist", "Author", "Knowledge Sharer"],
-  },
-  {
-    name: "Gojo Satoru",
-    profilePic:
-      "https://4kwallpapers.com/images/wallpapers/satoru-gojo-black-1920x1200-14684.png",
-    bio: "Social Media Influencer, Fitness Enthusiast",
-    linkedinFollowers: 50000,
-    pinterestFollowers: 70000,
-    twitterFollowers: 200000,
-    pricePerPhoto: 500,
-    pricePerTweet: 250,
-    tags: ["Social Media Influencer", "Fitness Enthusiast"],
-  },
-  {
-    name: "Zenitsu",
-    profilePic:
-      "https://wallpapers.com/images/featured/zenitsu-background-tfv5jhezo7un4m02.jpg",
-    bio: "Anime Influencer, Motivational Speaker",
-    linkedinFollowers: 15000,
-    pinterestFollowers: 25000,
-    twitterFollowers: 70000,
-    pricePerPhoto: 350,
-    pricePerTweet: 180,
-    tags: ["Anime Influencer", "Motivational Speaker"],
-  },
-];
 
 const MarketPlace = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -166,6 +10,20 @@ const MarketPlace = () => {
   const [selectedInfluencer, setSelectedInfluencer] = useState(null);
   const [selectedRequestType, setSelectedRequestType] = useState("Post");
   const [message, setMessage] = useState("");
+  const [influencers, setInfluencers] = useState([]);
+
+  // Fetch influencers from the backend
+  useEffect(() => {
+    const fetchInfluencers = async () => {
+      try {
+        const response = await axios.get("http://localhost:8081/influencers/findallInfl");
+        setInfluencers(response.data);
+      } catch (error) {
+        console.error("Error fetching influencers:", error);
+      }
+    };
+    fetchInfluencers();
+  }, []);
 
   // Simplified filter tags
   const uniqueTags = ["Tech Enthusiast", "Fashion", "Social Media", "Lifestyle"];
@@ -173,27 +31,54 @@ const MarketPlace = () => {
   // Filter influencers based on search, tags, and price
   const filteredInfluencers = useMemo(() => {
     return influencers.filter((influencer) => {
-      const matchesSearch = influencer.name
+      const matchesSearch = influencer.username
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
       const matchesTags =
         selectedTags.length === 0 ||
-        selectedTags.every((tag) => influencer.tags.includes(tag));
+        selectedTags.every((tag) => influencer.tags?.includes(tag));
       const matchesPrice =
         (!minPrice || influencer.pricePerPhoto >= minPrice) &&
         (!maxPrice || influencer.pricePerPhoto <= maxPrice);
       return matchesSearch && matchesTags && matchesPrice;
     });
-  }, [searchQuery, selectedTags, minPrice, maxPrice]);
+  }, [searchQuery, selectedTags, minPrice, maxPrice, influencers]);
 
-  const handleSendRequest = () => {
+  // Fetch influencer details
+  const fetchInfluencerDetails = async (influencerId, influencerName) => {
+    try {
+      const response = await axios.post(`http://localhost:8081/influencers/${influencerId}`, {
+        influencerId,
+        influencerName,
+      });
+      setSelectedInfluencer(response.data.influencerWithUserNameDTO);
+    } catch (error) {
+      console.error("Error fetching influencer details:", error);
+    }
+  };
+
+  // Handle collaboration request
+  const handleSendRequest = async () => {
     if (!message.trim()) {
       alert("Please enter a message.");
       return;
     }
-    alert(
-      `Request sent to ${selectedInfluencer.name} for ${selectedRequestType}:\n${message}`
-    );
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/influencers/raiseCollabReq",
+        null, 
+        {
+          params: {
+            userId: 1, 
+            influencerId: selectedInfluencer.influencerId,
+            message,
+          },
+        }
+      );
+      alert(`Collaboration request sent:\n${response.data.message}`);
+    } catch (error) {
+      console.error("Error sending request:", error);
+    }
     setMessage("");
   };
 
@@ -248,14 +133,17 @@ const MarketPlace = () => {
       <div className="influencers-section">
         {filteredInfluencers.map((influencer) => (
           <div
-            key={influencer.name}
+            key={influencer.userid}
             className={`contact ${
-              selectedInfluencer?.name === influencer.name ? "active" : ""
+              selectedInfluencer?.influencerId === influencer.userid ? "active" : ""
             }`}
-            onClick={() => setSelectedInfluencer(influencer)}
+            onClick={() => fetchInfluencerDetails(influencer.userid, influencer.username)}
           >
-            <img src={influencer.profilePic} alt={influencer.name} />
-            <span className="contact-name">{influencer.name}</span>
+            <img
+              src={influencer.profilePic || "placeholder-image.png"}
+              alt={influencer.username}
+            />
+            <span className="contact-name">{influencer.username}</span>
           </div>
         ))}
       </div>
@@ -266,7 +154,7 @@ const MarketPlace = () => {
           <>
             <div className="chat-header">
               <img
-                src={selectedInfluencer.profilePic}
+                src={selectedInfluencer.profilePic || "placeholder-image.png"}
                 alt={selectedInfluencer.name}
               />
               <div>
@@ -277,15 +165,15 @@ const MarketPlace = () => {
             <div className="followers">
               <div className="follower">
                 <i className="fab fa-linkedin"></i>{" "}
-                {selectedInfluencer.linkedinFollowers.toLocaleString()}
+                {selectedInfluencer.linkedinFollowers?.toLocaleString() || 0}
               </div>
               <div className="follower">
                 <i className="fab fa-pinterest"></i>{" "}
-                {selectedInfluencer.pinterestFollowers.toLocaleString()}
+                {selectedInfluencer.pinterestFollowers?.toLocaleString() || 0}
               </div>
               <div className="follower">
                 <i className="fab fa-twitter"></i>{" "}
-                {selectedInfluencer.twitterFollowers.toLocaleString()}
+                {selectedInfluencer.twitterFollowers?.toLocaleString() || 0}
               </div>
             </div>
             <div className="request-options">
@@ -311,7 +199,7 @@ const MarketPlace = () => {
                 <strong>Price for {selectedRequestType}:</strong>{" "}
                 {selectedRequestType === "Post"
                   ? `$${selectedInfluencer.pricePerPhoto}`
-                  : `$${selectedInfluencer.pricePerTweet}`}
+                  : `$${selectedInfluencer.pricePerVideo}`}
               </p>
             </div>
             <textarea
