@@ -1,8 +1,5 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useMemo } from "react";
 import "./MarketPlace.css";
-import axios from "axios";
-import ImageModal from "./ImageModal";
 
 const influencers = [
   {
@@ -13,8 +10,8 @@ const influencers = [
     linkedinFollowers: 15000,
     pinterestFollowers: 20000,
     twitterFollowers: 50000,
-    pricePerPhoto: "$300",
-    pricePerTweet: "$150",
+    pricePerPhoto: 300,
+    pricePerTweet: 150,
     tags: ["Tech Enthusiast", "Social Media"],
   },
   {
@@ -25,8 +22,8 @@ const influencers = [
     linkedinFollowers: 25000,
     pinterestFollowers: 50000,
     twitterFollowers: 120000,
-    pricePerPhoto: "$400",
-    pricePerTweet: "$200",
+    pricePerPhoto: 400,
+    pricePerTweet: 200,
     tags: ["Fashion", "Lifestyle"],
   },
   {
@@ -37,8 +34,8 @@ const influencers = [
     linkedinFollowers: 30000,
     pinterestFollowers: 45000,
     twitterFollowers: 200000,
-    pricePerPhoto: "$700",
-    pricePerTweet: "$350",
+    pricePerPhoto: 700,
+    pricePerTweet: 350,
     tags: ["Billionaire", "Inventor", "Social Media Influencer"],
   },
   {
@@ -48,8 +45,8 @@ const influencers = [
     linkedinFollowers: 18000,
     pinterestFollowers: 30000,
     twitterFollowers: 80000,
-    pricePerPhoto: "$250",
-    pricePerTweet: "$120",
+    pricePerPhoto: 250,
+    pricePerTweet: 120,
     tags: ["Web Developer", "Photographer", "Social Media Star"],
   },
   {
@@ -60,8 +57,8 @@ const influencers = [
     linkedinFollowers: 40000,
     pinterestFollowers: 60000,
     twitterFollowers: 150000,
-    pricePerPhoto: "$350",
-    pricePerTweet: "$180",
+    pricePerPhoto: 350,
+    pricePerTweet: 180,
     tags: ["Activist", "Author", "Knowledge Sharer"],
   },
   {
@@ -72,8 +69,8 @@ const influencers = [
     linkedinFollowers: 50000,
     pinterestFollowers: 70000,
     twitterFollowers: 200000,
-    pricePerPhoto: "$500",
-    pricePerTweet: "$250",
+    pricePerPhoto: 500,
+    pricePerTweet: 250,
     tags: ["Social Media Influencer", "Fitness Enthusiast"],
   },
   {
@@ -84,249 +81,188 @@ const influencers = [
     linkedinFollowers: 15000,
     pinterestFollowers: 25000,
     twitterFollowers: 70000,
-    pricePerPhoto: "$350",
-    pricePerTweet: "$180",
+    pricePerPhoto: 350,
+    pricePerTweet: 180,
     tags: ["Anime Influencer", "Motivational Speaker"],
   },
 ];
 
-const formatFollowers = (count) => {
-  if (count >= 1000 && count < 1000000) {
-    return `${(count / 1000).toFixed(1)}k`;
-  } else if (count >= 1000000) {
-    return `${(count / 1000000).toFixed(1)}M`;
-  }
-  return count;
-};
-
 const MarketPlace = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(Infinity);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const [selectedInfluencer, setSelectedInfluencer] = useState(null);
-  const [selectedServices, setSelectedServices] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalImage, setModalImage] = useState(null);
+  const [selectedRequestType, setSelectedRequestType] = useState("Post");
   const [message, setMessage] = useState("");
 
-  const handleViewProfile = useCallback((influencer) => {
-    setSelectedInfluencer(influencer);
-    setSelectedServices([]);
-    setMessage("");
-  }, []);
+  // Extract unique tags dynamically
+  const uniqueTags = Array.from(
+    new Set(influencers.flatMap((influencer) => influencer.tags))
+  );
 
-  const toggleService = useCallback((service) => {
-    setSelectedServices((prevServices) =>
-      prevServices.includes(service)
-        ? prevServices.filter((s) => s !== service)
-        : [...prevServices, service]
-    );
-  }, []);
-
-  const openModal = useCallback((imageSrc) => {
-    setModalImage(imageSrc);
-    setIsModalOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-    setModalImage(null);
-  }, []);
-
+  // Filter influencers based on search, tags, and price
   const filteredInfluencers = useMemo(() => {
     return influencers.filter((influencer) => {
       const matchesSearch = influencer.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
-      const matchesTags = selectedTags.every((tag) =>
-        influencer.tags.includes(tag)
-      );
+      const matchesTags =
+        selectedTags.length === 0 ||
+        selectedTags.every((tag) => influencer.tags.includes(tag));
       const matchesPrice =
-        parseInt(influencer.pricePerPhoto.replace("$", "")) >= minPrice &&
-        parseInt(influencer.pricePerPhoto.replace("$", "")) <= maxPrice;
+        (!minPrice || influencer.pricePerPhoto >= minPrice) &&
+        (!maxPrice || influencer.pricePerPhoto <= maxPrice);
       return matchesSearch && matchesTags && matchesPrice;
     });
   }, [searchQuery, selectedTags, minPrice, maxPrice]);
 
-  const navigate = useNavigate();
-
-  const handleCollaborationRequest = () => {
-    if (selectedServices.length === 0) {
-      alert("Please select at least one service.");
+  const handleSendRequest = () => {
+    if (!message.trim()) {
+      alert("Please enter a message.");
       return;
     }
-
-    if (message.trim() === "") {
-      alert("Please enter a message for the influencer.");
-      return;
-    }
-
     alert(
-      `Request Collaboration for: ${selectedServices.join(
-        ", "
-      )}\nMessage: ${message}`
+      `Request sent to ${selectedInfluencer.name} for ${selectedRequestType}:\n${message}`
     );
-
-    // Optionally send this data to a backend API
-    axios.post("/api/request-collaboration", {
-      influencer: selectedInfluencer.name,
-      services: selectedServices,
-      message,
-    });
+    setMessage("");
   };
 
   return (
     <div className="marketplace-container">
-      <div className="influ">
-        <div className="filters-container">
+      {/* Filters Section */}
+      <div className="filters-section">
+        <div className="search-container">
           <input
             type="text"
             placeholder="Search influencers..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-bar"
           />
-
-          <div className="tags-filter">
-            <label>Filter by Category:</label>
-            {["Tech Enthusiast", "Fashion", "Lifestyle", "Social Media"].map(
-              (tag) => (
-                <button
-                  key={tag}
-                  className={`tag ${
-                    selectedTags.includes(tag) ? "active" : ""
-                  }`}
-                  onClick={() =>
-                    setSelectedTags((prev) =>
-                      prev.includes(tag)
-                        ? prev.filter((t) => t !== tag)
-                        : [...prev, tag]
-                    )
-                  }
-                >
-                  {tag}
-                </button>
-              )
-            )}
-          </div>
-
-          <div className="range-filters">
-            <label>Price Range:</label>
+        </div>
+        <div className="filters-container">
+          <h4>Filter by Category:</h4>
+          {uniqueTags.map((tag) => (
+            <button
+              key={tag}
+              className={`tag ${selectedTags.includes(tag) ? "active" : ""}`}
+              onClick={() =>
+                setSelectedTags((prevTags) =>
+                  prevTags.includes(tag)
+                    ? prevTags.filter((t) => t !== tag)
+                    : [...prevTags, tag]
+                )
+              }
+            >
+              {tag}
+            </button>
+          ))}
+          <h4>Filter by Price Range:</h4>
+          <div className="price-filters">
             <input
               type="number"
               placeholder="Min Price"
+              value={minPrice}
               onChange={(e) => setMinPrice(Number(e.target.value))}
             />
             <input
               type="number"
               placeholder="Max Price"
+              value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
             />
           </div>
-      
+        </div>
       </div>
 
-      <div className="influencer-list">
-        <h2 className="section-title">Browse Influencers</h2>
-        {filteredInfluencers.map((influencer, index) => (
+      {/* Influencers Section */}
+      <div className="influencers-section">
+        {filteredInfluencers.map((influencer) => (
           <div
-            key={index}
-            className="influencer-item"
-            onClick={() => handleViewProfile(influencer)}
+            key={influencer.name}
+            className={`contact ${
+              selectedInfluencer?.name === influencer.name ? "active" : ""
+            }`}
+            onClick={() => setSelectedInfluencer(influencer)}
           >
-            <img
-              src={influencer.profilePic}
-              alt={influencer.name}
-              className="influencer-pic"
-            />
-            <div className="influencer-info">
-              <p className="influencer-name">{influencer.name}</p>
+            <img src={influencer.profilePic} alt={influencer.name} />
+            <div className="contact-info">
+              <h4>{influencer.name}</h4>
+              <p>{influencer.bio}</p>
             </div>
           </div>
         ))}
       </div>
 
-      {selectedInfluencer && (
-        <div className="influencer-details">
-          <button
-            className="close-profile-btn"
-            onClick={() => setSelectedInfluencer(null)}
-          >
-            ✕
-          </button>
-          <h3 className="influencer-name">{selectedInfluencer.name}</h3>
-          <img
-            src={selectedInfluencer.profilePic}
-            alt={selectedInfluencer.name}
-            className="profile-pic-large"
-            onClick={() => openModal(selectedInfluencer.profilePic)}
-          />
-          <p>{selectedInfluencer.bio}</p>
-          <div className="social-followers">
-            <div className="follower-item linkedin">
-              <i className="fab fa-linkedin"></i>
-              <h5>{formatFollowers(selectedInfluencer.linkedinFollowers)}</h5>
+      {/* Details Section */}
+      <div className="details-section">
+        {selectedInfluencer ? (
+          <>
+            <div className="chat-header">
+              <img
+                src={selectedInfluencer.profilePic}
+                alt={selectedInfluencer.name}
+              />
+              <div>
+                <h3>{selectedInfluencer.name}</h3>
+                <p>{selectedInfluencer.bio}</p>
+              </div>
             </div>
-            <div className="follower-item pinterest">
-              <i className="fab fa-pinterest"></i>
-              <h5>{formatFollowers(selectedInfluencer.pinterestFollowers)}</h5>
+            <div className="followers">
+              <div className="follower">
+                <i className="fab fa-linkedin"></i>{" "}
+                {selectedInfluencer.linkedinFollowers.toLocaleString()}
+              </div>
+              <div className="follower">
+                <i className="fab fa-pinterest"></i>{" "}
+                {selectedInfluencer.pinterestFollowers.toLocaleString()}
+              </div>
+              <div className="follower">
+                <i className="fab fa-twitter"></i>{" "}
+                {selectedInfluencer.twitterFollowers.toLocaleString()}
+              </div>
             </div>
-            <div className="follower-item twitter">
-              <i className="fab fa-twitter"></i>
-              <h5>{formatFollowers(selectedInfluencer.twitterFollowers)}</h5>
+            <div className="request-options">
+              <button
+                className={`request-type ${
+                  selectedRequestType === "Post" ? "active" : ""
+                }`}
+                onClick={() => setSelectedRequestType("Post")}
+              >
+                Post
+              </button>
+              <button
+                className={`request-type ${
+                  selectedRequestType === "Video" ? "active" : ""
+                }`}
+                onClick={() => setSelectedRequestType("Video")}
+              >
+                Video
+              </button>
             </div>
-          </div>
-          <div className="pricing">
-            <p
-              className={`price-item photo ${
-                selectedServices.includes("Photo") ? "active" : ""
-              }`}
-              onClick={() => toggleService("Photo")}
-            >
-              Price per Photo: {selectedInfluencer.pricePerPhoto}
-            </p>
-            <p
-              className={`price-item tweet ${
-                selectedServices.includes("Tweet") ? "active" : ""
-              }`}
-              onClick={() => toggleService("Tweet")}
-            >
-              Price per Tweet: {selectedInfluencer.pricePerTweet}
-            </p>
-          </div>
-
-          <textarea
-            className="message-input"
-            placeholder="Enter your message here..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          ></textarea>
-
-          {selectedServices.length > 0 && (
-            <button
-              className="collaboration-btn"
-              onClick={() => {
-                if (!message.trim()) {
-                  alert("Please enter a message for the influencer.");
-                  return;
-                }
-                const amount = selectedServices.length * 100; // Example amount calculation
-                navigate(
-                  `/checkout?amount=${amount}&message=${encodeURIComponent(
-                    message
-                  )}`
-                ); // Redirect to payment page
-              }}
-            >
-              Request Collaboration for {selectedServices.join(", ")}
+            <div className="pricing">
+              <p>
+                <strong>Price for {selectedRequestType}:</strong>{" "}
+                {selectedRequestType === "Post"
+                  ? `$${selectedInfluencer.pricePerPhoto}`
+                  : `$${selectedInfluencer.pricePerTweet}`}
+              </p>
+            </div>
+            <textarea
+              placeholder="Type your message here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button onClick={handleSendRequest} className="send-request-btn">
+              Send Request
             </button>
-          )}
-        </div>
-      )}
-
-      {isModalOpen && <ImageModal imageSrc={modalImage} onClose={closeModal} />}
-    </div>
+          </>
+        ) : (
+          <div className="placeholder">
+            <h3>Select an influencer to view details</h3>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
