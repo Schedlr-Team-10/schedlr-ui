@@ -147,7 +147,7 @@ const CollaborationRequests = () => {
                       onClick={() =>
                         handleAction(request.collaboration.id, "ACCEPTED")
                       }
-                      className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+                      className="bg-green-500 text-white py-2 px-12 rounded-md hover:bg-green-600"
                     >
                       Accept
                     </button>
@@ -155,7 +155,7 @@ const CollaborationRequests = () => {
                       onClick={() =>
                         handleAction(request.collaboration.id, "REJECTED")
                       }
-                      className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+                      className="bg-red-500 text-white py-2 px-12 rounded-md hover:bg-red-600"
                     >
                       Reject
                     </button>
