@@ -1,48 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CollaborationRequests.css";
 
 const CollaborationRequests = () => {
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      customerName: "Ravi Shankar",
-      proposal: "I want to collaborate with you for a new fitness product.",
-      date: "2024-11-21T12:00:00Z",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      customerName: "Vamsi Muppana",
-      proposal: "Let's create content for a fashion brand for my startup.",
-      date: "2024-11-21T14:30:00Z",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      customerName: "Sindhu Sameera",
-      proposal: "Collaborate for a travel and adventure campaign.",
-      date: "2024-11-15T10:15:00Z",
-      status: "Pending",
-    },
-    {
-      id: 4,
-      customerName: "Sarah Lee",
-      proposal: "Let's work together on a tech gadget promotion.",
-      date: "2024-11-12T09:00:00Z",
-      status: "Pending",
-    },
-  ]);
-
+  const [requests, setRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
   const [sortOption, setSortOption] = useState("date");
   const [modalData, setModalData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch requests from the backend
+  useEffect(() => {
+    const influencerId = localStorage.getItem("userId"); // Get influencerId from localStorage
+    if (!influencerId) {
+      setError("User not logged in or influencerId missing");
+      setLoading(false);
+      return;
+    }
+
+    const fetchRequests = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8081/influencers/CollaborationReqs?influencerId=${influencerId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch collaboration requests");
+        }
+        const data = await response.json();
+        setRequests(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, []);
 
   // Handle Accept/Reject Action
   const handleAction = (id, action) => {
     setRequests((prevRequests) =>
       prevRequests.map((request) =>
-        request.id === id ? { ...request, status: action } : request
+        request.collaboration.id === id
+          ? {
+              ...request,
+              collaboration: { ...request.collaboration, status: action },
+            }
+          : request
       )
     );
   };
@@ -50,17 +56,22 @@ const CollaborationRequests = () => {
   // Filter and Sort Requests
   const filteredRequests = requests
     .filter((request) =>
-      filterStatus === "All" ? true : request.status === filterStatus
+      filterStatus === "All"
+        ? true
+        : request.collaboration.status === filterStatus
     )
     .filter((request) =>
-      request.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+      request.username.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
       if (sortOption === "date") {
-        return new Date(b.date) - new Date(a.date);
+        return (
+          new Date(b.collaboration.collaborationToken || Date.now()) -
+          new Date(a.collaboration.collaborationToken || Date.now())
+        );
       }
       if (sortOption === "name") {
-        return a.customerName.localeCompare(b.customerName);
+        return a.username.localeCompare(b.username);
       }
       return 0;
     });
@@ -75,80 +86,96 @@ const CollaborationRequests = () => {
     setModalData(null);
   };
 
+  // Loading and Error States
+  if (loading) {
+    return <div className="text-center text-xl font-semibold">Loading requests...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-600">{error}</div>;
+  }
+
   return (
-    <div className="cont">
-      <h1 className="collaboration-requests-title">Collaboration Requests</h1>
+    <div className="max-w-6xl mx-auto p-6">
+      
 
       {/* Search and Filter Section */}
-      <div className="controls">
+      <div className="flex justify-between mb-3">
         <input
           type="text"
-          placeholder="Search by customer name"
+          placeholder="Search by username"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-bar"
+          className="border p-2 w-64 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mr-5"
         />
-        <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-          className="filter-dropdown"
-        >
-          <option value="All">All</option>
-          <option value="Pending">Pending</option>
-          <option value="Accepted">Accepted</option>
-          <option value="Rejected">Rejected</option>
-        </select>
-        <select
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
-          className="sort-dropdown"
-        >
-          <option value="date">Sort by Date</option>
-          <option value="name">Sort by Name</option>
-        </select>
+        <div className="flex space-x-4">
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="border p-2 rounded-md"
+          >
+            <option value="All">All</option>
+            <option value="PENDING">Pending</option>
+            <option value="ACCEPTED">Accepted</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className="border p-2 rounded-md"
+          >
+            <option value="date">Sort by Date</option>
+            <option value="name">Sort by Name</option>
+          </select>
+        </div>
       </div>
 
       {/* Collaboration Requests */}
       {filteredRequests.length === 0 ? (
-        <p className="no-requests">No collaboration requests found.</p>
+        <p className="text-center text-xl">No collaboration requests found.</p>
       ) : (
-        <div className="request-cards-container">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredRequests.map((request) => (
-            <div key={request.id} className="request-card">
-              <h2 className="request-customer-name">{request.customerName}</h2>
-              <p className="request-proposal">{request.proposal}</p>
-              <p className="request-date">
-                Received: {new Date(request.date).toLocaleDateString()}
-              </p>
+            <div key={request.collaboration.id} className="bg-white p-6 rounded-lg shadow-lg border">
+              <h2 className="text-2xl font-semibold">{request.username}</h2>
+              <p className="text-sm text-gray-500">{request.collaboration.message}</p>
 
-              <div className="action-buttons">
-                {request.status === "Pending" ? (
-                  <div className="action-button-group">
+              <div className="mt-4 flex items-center justify-between">
+                {request.collaboration.status === "PENDING" ? (
+                  <div className="flex space-x-2">
                     <button
-                      onClick={() => handleAction(request.id, "Accepted")}
-                      className="action-button accept-button"
+                      onClick={() =>
+                        handleAction(request.collaboration.id, "ACCEPTED")
+                      }
+                      className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
                     >
                       Accept
                     </button>
                     <button
-                      onClick={() => handleAction(request.id, "Rejected")}
-                      className="action-button reject-button"
+                      onClick={() =>
+                        handleAction(request.collaboration.id, "REJECTED")
+                      }
+                      className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
                     >
                       Reject
                     </button>
                   </div>
                 ) : (
-                  <p
-                    className={`request-status ${request.status.toLowerCase()}-status`}
+                  <span
+                    className={`${
+                      request.collaboration.status === "ACCEPTED"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    } font-bold`}
                   >
-                    {request.status}
-                  </p>
+                    {request.collaboration.status}
+                  </span>
                 )}
               </div>
 
               <button
                 onClick={() => openModal(request)}
-                className="details-button"
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
               >
                 View Details
               </button>
@@ -159,23 +186,22 @@ const CollaborationRequests = () => {
 
       {/* Modal for Request Details */}
       {modalData && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Request Details</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg w-1/2">
+            <h2 className="text-2xl font-semibold mb-4">Request Details</h2>
             <p>
-              <strong>Customer Name:</strong> {modalData.customerName}
+              <strong>Customer Name:</strong> {modalData.username}
             </p>
             <p>
-              <strong>Proposal:</strong> {modalData.proposal}
+              <strong>Proposal:</strong> {modalData.collaboration.message}
             </p>
             <p>
-              <strong>Date:</strong>{" "}
-              {new Date(modalData.date).toLocaleDateString()}
+              <strong>Status:</strong> {modalData.collaboration.status}
             </p>
-            <p>
-              <strong>Status:</strong> {modalData.status}
-            </p>
-            <button onClick={closeModal} className="close-modal-button">
+            <button
+              onClick={closeModal}
+              className="mt-4 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+            >
               Close
             </button>
           </div>
