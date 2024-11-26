@@ -12,6 +12,7 @@ const MarketPlace = () => {
   const [selectedRequestType, setSelectedRequestType] = useState("Post");
   const [message, setMessage] = useState("");
   const [influencers, setInfluencers] = useState([]);
+  const [collaborationToken, setCollaborationToken] = useState(null);
 
   // Fetch influencers from the backend
   useEffect(() => {
@@ -106,6 +107,76 @@ const MarketPlace = () => {
       console.error("Error sending request:", error);
     }
     setMessage(""); // Clear the input message
+  };
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    const influencerId = selectedInfluencer?.influencerId;
+
+    if (userId && influencerId) {
+      const uniqueKey = `collaborationToken_${userId}_${influencerId}`;
+      const savedToken = localStorage.getItem(uniqueKey);
+
+      if (savedToken) {
+        setCollaborationToken(savedToken);
+        setCollaborationStatus("COMPLETED");
+      }
+    }
+  }, [selectedInfluencer]);
+
+  const handleMakePayment = async () => {
+    if (!selectedInfluencer || !selectedInfluencer.influencerId) {
+      alert("No influencer selected.");
+      return;
+    }
+
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      alert("User is not logged in.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/influencers/changeStatus",
+        null,
+        {
+          params: {
+            userId: userId,
+            influencerId: selectedInfluencer.influencerId,
+            status: "COMPLETED",
+          },
+        }
+      );
+
+      alert("Payment completed successfully!");
+      console.log(response.data);
+
+      const token = response.data.collaborationToken;
+      const uniqueKey = `collaborationToken_${userId}_${selectedInfluencer.influencerId}`;
+
+      setCollaborationStatus("COMPLETED");
+      setCollaborationToken(token);
+
+      // Save the collaboration token in localStorage with a unique key
+      localStorage.setItem(uniqueKey, token);
+    } catch (error) {
+      console.error("Error completing payment:", error);
+      alert("Failed to complete payment. Please try again.");
+    }
+  };
+
+  const handleCopyToClipboard = () => {
+    if (collaborationToken) {
+      navigator.clipboard.writeText(collaborationToken).then(
+        () => {
+          alert("Collaboration code copied to clipboard!");
+        },
+        (err) => {
+          console.error("Could not copy text: ", err);
+        }
+      );
+    }
   };
 
   return (
@@ -226,7 +297,7 @@ const MarketPlace = () => {
                 <i className="fab fa-twitter"></i>
               </a>
             )}
-            
+
             <div className="request-options">
               <button
                 className={`request-type ${
@@ -259,19 +330,30 @@ const MarketPlace = () => {
             {collaborationStatus ? (
               <p>
                 <strong>Status:</strong> {collaborationStatus}
+                {collaborationStatus === "COMPLETED" && collaborationToken ? (
+                  <div>
+                    <p>
+                      <strong>Your Collaboration Code:</strong>{" "}
+                      {collaborationToken}
+                    </p>
+                    <button
+                      onClick={handleCopyToClipboard}
+                      className="copy-btn"
+                    >
+                      Copy to Clipboard
+                    </button>
+                  </div>
+                ) : null}
                 {collaborationStatus === "ACCEPTED" ? (
                   <div>
                     <button
-                      onClick={handleSendRequest}
+                      onClick={handleMakePayment}
                       className="send-request-btn"
-                      disabled={collaborationStatus === "PENDING"} // Disable button if status is pending
                     >
-                      Payment Pending
+                      Make Payment
                     </button>
                   </div>
-                ) : (
-                  <div></div>
-                )}
+                ) : null}
               </p>
             ) : (
               <>
@@ -283,7 +365,6 @@ const MarketPlace = () => {
                 <button
                   onClick={handleSendRequest}
                   className="send-request-btn"
-                  disabled={collaborationStatus === "PENDING"} // Disable button if status is pending
                 >
                   Send Request
                 </button>
