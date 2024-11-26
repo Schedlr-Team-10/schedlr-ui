@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { generateDescription } from "../Components/api/gptService";
+import {checkCollaborationCode} from "./util/Util";
 
 const CreatePost = () => {
   const [uploadImage, setUploadImage] = useState(null);
@@ -13,7 +14,7 @@ const CreatePost = () => {
   const [generatedText, setGeneratedText] = useState("");
 
   const [isCollaborationOpen, setIsCollaborationOpen] = useState(false);
-  const [collaborationCode, setCollaborationCode] = useState("");
+  const [collaborationCode, setCollaborationCode] = useState(null);
 
   const handleChange = (e) => {
     const file = e.target.files[0];
@@ -60,7 +61,28 @@ const CreatePost = () => {
     );
   };
 
-  const postToSelectedPlatforms = async () => {
+  const postNow = async()=>{
+    console.log("Called the postnow method");
+
+    if(isCollaborationOpen){
+      
+      console.log("is a collab req?");
+      try{
+        const influencerId = await checkCollaborationCode(collaborationCode);
+        console.log("Influencer Id is : "+ influencerId);
+        postToSelectedPlatforms(influencerId);
+        postToSelectedPlatforms(localStorage.getItem("userId"));
+      }
+      catch(error){
+        alert("Collaboration code is Invalid");
+      }
+    }else{ 
+      postToSelectedPlatforms(localStorage.getItem("userId"));
+    }
+  };
+
+  const postToSelectedPlatforms = async (selectedUserId) => {
+    console.log("called the postupload method..!!"+ selectedUserId);
     if (selectedPlatforms.length === 0) {
       alert("Please select at least one platform.");
       return;
@@ -70,7 +92,7 @@ const CreatePost = () => {
       const formData = new FormData();
       formData.append("description", description);
       formData.append("uploadImage", uploadImage);
-      formData.append("userId", localStorage.getItem("userId"));
+      formData.append("userId", selectedUserId);
       formData.append("platforms", JSON.stringify(selectedPlatforms));
 
       const response = await fetch("http://localhost:8081/schedlr/postupload", {
@@ -210,7 +232,7 @@ const CreatePost = () => {
             </div>
 
             <button
-              onClick={postToSelectedPlatforms}
+              onClick={postNow}
               className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full shadow-md transition-transform transform hover:scale-105"
             >
               {loading ? "Posting..." : "Post Now"}

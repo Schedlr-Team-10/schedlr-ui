@@ -103,3 +103,24 @@ export const saveOrUpdateInfluencer = async (influencerId, linkedinProfile, pint
     alert('Error occurred while saving/updating influencer!');
   }
 };
+
+
+export const checkCollaborationCode = async (code) => {
+  try {
+      const response = await fetch(`http://localhost:8081/influencers/checkCollabCode?code=${encodeURIComponent(code)}`, {
+          method: 'GET',
+      });
+
+      if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.text(); // Ensure we fetch the response as text
+      const influencerId = parseInt(data, 10); // Parse the response to an integer
+      console.log("Influencer ID:", influencerId);
+      return influencerId; // Return the parsed integer
+  } catch (error) {
+      console.error("Error checking collaboration code:", error);
+      throw error; // Re-throw the error for the caller to handle
+  }
+};

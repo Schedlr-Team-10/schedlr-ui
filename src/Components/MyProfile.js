@@ -14,7 +14,7 @@ import {saveOrUpdateInfluencer}  from "./util/Util";
 const MyProfile = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
-  const [userid, setUserid] = useState("1");
+  const [userid, setUserid] = useState(localStorage.getItem("userId"));
   
 
   // Profile Picture and Bio States
