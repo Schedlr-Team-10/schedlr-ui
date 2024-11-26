@@ -79,3 +79,27 @@ export const sendLinkedInCode = async (code, state, userId) => {
 };
 
 
+export const saveOrUpdateInfluencer = async (influencerId, linkedinProfile, pinterestProfile, twitterProfile, pricePerPhoto) => {
+  const url = `http://localhost:8081/influencers/saveOrUpdate?influencerId=${influencerId}&linkedinProfile=${linkedinProfile}&pinterestProfile=${pinterestProfile}&twitterProfile=${twitterProfile}&pricePerPhoto=${pricePerPhoto}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST', // Specify the method (POST)
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      alert('Influencer saved/updated successfully!');
+      console.log('Response:', result);
+    } else {
+      alert('Failed to save/update influencer!');
+      console.log('Error:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error occurred while calling API:', error);
+    alert('Error occurred while saving/updating influencer!');
+  }
+};

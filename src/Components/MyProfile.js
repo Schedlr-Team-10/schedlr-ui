@@ -9,6 +9,7 @@ import {
 } from "./util/Constants";
 import { LinkedAuth } from "./util/Util";
 import PasswordRest from "./PasswordReset";
+import {saveOrUpdateInfluencer}  from "./util/Util";
 
 const MyProfile = () => {
   const [userName, setUserName] = useState("");
@@ -138,6 +139,7 @@ const MyProfile = () => {
   
 
   const handleSaveSocialMedia = () => {
+    const response = saveOrUpdateInfluencer(localStorage.getItem("userId"), profileUrls.linkedin, profileUrls.pinterest, profileUrls.twitter, chargeForPost)
     alert("Social media links and costs updated successfully!");
     setIsEditingSocialMedia(false);
   };
