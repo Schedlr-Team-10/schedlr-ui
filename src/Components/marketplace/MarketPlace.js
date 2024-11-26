@@ -233,27 +233,45 @@ const MarketPlace = () => {
 
             {/* Collaboration Section */}
             {/* Collaboration Section */}
-{collaborationStatus ? (
-  <p>
-    <strong>Status:</strong> {collaborationStatus}
-  </p>
-) : (
-  <>
-    <textarea
-      placeholder="Type your message here..."
-      value={message}
-      onChange={(e) => setMessage(e.target.value)}
-    />
-    <button
-      onClick={handleSendRequest}
-      className="send-request-btn"
-      disabled={collaborationStatus === "PENDING"} // Disable button if status is pending
-    >
-      Send Request
-    </button>
-  </>
-)}
+            {console.log(collaborationStatus)}
+            {collaborationStatus!=="REJECTED" ? (
+              <p>
+                <strong>Status:</strong> {collaborationStatus}
+                { 
+                  collaborationStatus==="ACCEPTED" ? (
+                      <div>
+                          <button
+                            onClick={handleSendRequest}
+                            className="send-request-btn"
+                            disabled={collaborationStatus === "PENDING"} // Disable button if status is pending
+                          >
+                            Payment Pending
+                          </button>
+                      </div>
+                  ) : (
+                    <div>
 
+                    </div>
+                  )
+                }
+              </p>
+            ) : (
+              <>
+                <textarea
+                  placeholder="Type your message here..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+                <button
+                  onClick={handleSendRequest}
+                  className="send-request-btn"
+                  disabled={collaborationStatus === "PENDING"} // Disable button if status is pending
+                >
+                  Send Request
+                </button>
+              </>
+            )}
+      
           </>
         ) : (
           <div className="placeholder">
