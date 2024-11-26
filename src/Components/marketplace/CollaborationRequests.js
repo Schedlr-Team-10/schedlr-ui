@@ -9,6 +9,7 @@ const CollaborationRequests = () => {
   const [modalData, setModalData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [state, setState]= useState(true);
 
   // Fetch requests from the backend
   useEffect(() => {
@@ -37,12 +38,12 @@ const CollaborationRequests = () => {
     };
 
     fetchRequests();
-  }, []);
+  }, [state]);
 
   const handleAction = async (id, action) => {
     const influencerId = localStorage.getItem("userId"); // Get influencerId from localStorage
     const userId = id; // userId is the id of the request user
-
+  
     console.log("userid is : "+userId);
     console.log("Influencerid is : "+ influencerId);
     console.log("Action is : "+ action);
@@ -53,7 +54,7 @@ const CollaborationRequests = () => {
     }
   
     try {
-      // Call the endpoint
+      // Call the endpoint to change the status
       const response = await fetch(
         `http://localhost:8081/influencers/changeStatus?userId=${userId}&influencerId=${influencerId}&status=${action}`,
         {
@@ -66,6 +67,8 @@ const CollaborationRequests = () => {
   
       if (!response.ok) {
         throw new Error("Failed to update the status.");
+      }else{
+        setState(!state);
       }
   
       // Update the local state to reflect the status change
@@ -79,10 +82,15 @@ const CollaborationRequests = () => {
             : request
         )
       );
+      
+      // You can also add a console log to verify the updated state:
+      console.log("Updated requests:", requests);
+  
     } catch (err) {
       setError(err.message);
     }
   };
+  
   
 
   // Filter and Sort Requests
@@ -177,7 +185,7 @@ const CollaborationRequests = () => {
                   <div className="flex space-x-2">
                     <button
                       onClick={() =>
-                        handleAction(request.collaboration.id, "ACCEPTED")
+                        handleAction(request.collaboration.userId, "ACCEPTED")
                       }
                       className="bg-green-500 text-white py-2 px-12 rounded-md hover:bg-green-600"
                     >
@@ -185,7 +193,7 @@ const CollaborationRequests = () => {
                     </button>
                     <button
                       onClick={() =>
-                        handleAction(request.collaboration.id, "REJECTED")
+                        handleAction(request.collaboration.userId, "REJECTED")
                       }
                       className="bg-red-500 text-white py-2 px-12 rounded-md hover:bg-red-600"
                     >
