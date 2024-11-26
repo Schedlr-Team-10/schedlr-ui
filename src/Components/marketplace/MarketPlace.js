@@ -8,6 +8,7 @@ const MarketPlace = () => {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedInfluencer, setSelectedInfluencer] = useState(null);
+  const [collaborationStatus, setCollaborationStatus] = useState(null);
   const [selectedRequestType, setSelectedRequestType] = useState("Post");
   const [message, setMessage] = useState("");
   const [influencers, setInfluencers] = useState([]);
@@ -16,7 +17,9 @@ const MarketPlace = () => {
   useEffect(() => {
     const fetchInfluencers = async () => {
       try {
-        const response = await axios.get("http://localhost:8081/influencers/findallInfl");
+        const response = await axios.get(
+          "http://localhost:8081/influencers/findallInfl"
+        );
         setInfluencers(response.data);
       } catch (error) {
         console.error("Error fetching influencers:", error);
@@ -26,7 +29,12 @@ const MarketPlace = () => {
   }, []);
 
   // Simplified filter tags
-  const uniqueTags = ["Tech Enthusiast", "Fashion", "Social Media", "Lifestyle"];
+  const uniqueTags = [
+    "Tech Enthusiast",
+    "Fashion",
+    "Social Media",
+    "Lifestyle",
+  ];
 
   // Filter influencers based on search, tags, and price
   const filteredInfluencers = useMemo(() => {
@@ -44,14 +52,18 @@ const MarketPlace = () => {
     });
   }, [searchQuery, selectedTags, minPrice, maxPrice, influencers]);
 
-  // Fetch influencer details
+  // Fetch influencer details and collaboration status
   const fetchInfluencerDetails = async (influencerId, influencerName) => {
     try {
-      const response = await axios.post(`http://localhost:8081/influencers/${influencerId}`, {
-        influencerId,
-        influencerName,
-      });
+      const response = await axios.post(
+        `http://localhost:8081/influencers/${influencerId}`,
+        {
+          influencerId,
+          influencerName,
+        }
+      );
       setSelectedInfluencer(response.data.influencerWithUserNameDTO);
+      setCollaborationStatus(response.data.collaborationDto?.status || null); // Set collaboration status if available
     } catch (error) {
       console.error("Error fetching influencer details:", error);
     }
@@ -64,22 +76,28 @@ const MarketPlace = () => {
       return;
     }
     try {
+      const userId = localStorage.getItem("userId"); // Retrieve userId from localStorage
+      if (!userId) {
+        alert("User is not logged in.");
+        return;
+      }
       const response = await axios.post(
         "http://localhost:8081/influencers/raiseCollabReq",
-        null, 
+        null,
         {
           params: {
-            userId: 1, 
+            userId, // Correctly pass userId
             influencerId: selectedInfluencer.influencerId,
             message,
           },
         }
       );
+      setCollaborationStatus("PENDING"); // Update status to PENDING after request is sent
       alert(`Collaboration request sent:\n${response.data.message}`);
     } catch (error) {
       console.error("Error sending request:", error);
     }
-    setMessage("");
+    setMessage(""); // Clear the input message
   };
 
   return (
@@ -135,9 +153,11 @@ const MarketPlace = () => {
           <div
             key={influencer.userid}
             className={`contact ${
-              selectedInfluencer?.influencerId === influencer.userid ? "active" : ""
+              selectedInfluencer?.userid === influencer.userid ? "active" : ""
             }`}
-            onClick={() => fetchInfluencerDetails(influencer.userid, influencer.username)}
+            onClick={() =>
+              fetchInfluencerDetails(influencer.userid, influencer.username)
+            }
           >
             <img
               src={influencer.profilePic || "placeholder-image.png"}
@@ -202,14 +222,27 @@ const MarketPlace = () => {
                   : `$${selectedInfluencer.pricePerVideo}`}
               </p>
             </div>
-            <textarea
-              placeholder="Type your message here..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <button onClick={handleSendRequest} className="send-request-btn">
-              Send Request
-            </button>
+
+            {/* Collaboration Section */}
+            {collaborationStatus ? (
+              <p>
+                <strong>Status:</strong> {collaborationStatus}
+              </p>
+            ) : (
+              <>
+                <textarea
+                  placeholder="Type your message here..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+                <button
+                  onClick={handleSendRequest}
+                  className="send-request-btn"
+                >
+                  Send Request
+                </button>
+              </>
+            )}
           </>
         ) : (
           <div className="placeholder">
