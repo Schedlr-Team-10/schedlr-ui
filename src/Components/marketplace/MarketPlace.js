@@ -75,18 +75,18 @@ const MarketPlace = () => {
       alert("Please enter a message.");
       return;
     }
-  
+
     if (!selectedInfluencer || !selectedInfluencer.influencerId) {
       alert("No influencer selected.");
       return;
     }
-  
+
     const userId = localStorage.getItem("userId");
     if (!userId) {
       alert("User is not logged in.");
       return;
     }
-  
+
     try {
       const response = await axios.post(
         "http://localhost:8081/influencers/raiseCollabReq",
@@ -99,7 +99,7 @@ const MarketPlace = () => {
           },
         }
       );
-  
+
       setCollaborationStatus("PENDING");
       alert(`Collaboration request sent: ${response.data.message}`);
     } catch (error) {
@@ -190,20 +190,43 @@ const MarketPlace = () => {
                 <p>{selectedInfluencer.bio}</p>
               </div>
             </div>
-            <div className="followers">
-              <div className="follower">
-                <i className="fab fa-linkedin"></i>{" "}
-                {selectedInfluencer.linkedinFollowers?.toLocaleString() || 0}
-              </div>
-              <div className="follower">
-                <i className="fab fa-pinterest"></i>{" "}
-                {selectedInfluencer.pinterestFollowers?.toLocaleString() || 0}
-              </div>
-              <div className="follower">
-                <i className="fab fa-twitter"></i>{" "}
-                {selectedInfluencer.twitterFollowers?.toLocaleString() || 0}
-              </div>
-            </div>
+
+            {/* LinkedIn */}
+            {selectedInfluencer.linkedinProfile && (
+              <a
+                href={selectedInfluencer.linkedinProfile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="follower"
+              >
+                <i className="fab fa-linkedin"></i>
+              </a>
+            )}
+
+            {/* Pinterest */}
+            {selectedInfluencer.pinterestProfile && (
+              <a
+                href={selectedInfluencer.pinterestProfile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="follower"
+              >
+                <i className="fab fa-pinterest"></i>
+              </a>
+            )}
+
+            {/* Twitter */}
+            {selectedInfluencer.twitterProfile && (
+              <a
+                href={selectedInfluencer.twitterProfile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="follower"
+              >
+                <i className="fab fa-twitter"></i>
+              </a>
+            )}
+            
             <div className="request-options">
               <button
                 className={`request-type ${
@@ -213,14 +236,14 @@ const MarketPlace = () => {
               >
                 Post
               </button>
-              <button
+              {/* <button
                 className={`request-type ${
                   selectedRequestType === "Video" ? "active" : ""
                 }`}
                 onClick={() => setSelectedRequestType("Video")}
               >
                 Video
-              </button>
+              </button> */}
             </div>
             <div className="pricing">
               <p>
@@ -232,28 +255,23 @@ const MarketPlace = () => {
             </div>
 
             {/* Collaboration Section */}
-            {/* Collaboration Section */}
             {console.log(collaborationStatus)}
             {collaborationStatus ? (
               <p>
                 <strong>Status:</strong> {collaborationStatus}
-                { 
-                  collaborationStatus==="ACCEPTED" ? (
-                      <div>
-                          <button
-                            onClick={handleSendRequest}
-                            className="send-request-btn"
-                            disabled={collaborationStatus === "PENDING"} // Disable button if status is pending
-                          >
-                            Payment Pending
-                          </button>
-                      </div>
-                  ) : (
-                    <div>
-
-                    </div>
-                  )
-                }
+                {collaborationStatus === "ACCEPTED" ? (
+                  <div>
+                    <button
+                      onClick={handleSendRequest}
+                      className="send-request-btn"
+                      disabled={collaborationStatus === "PENDING"} // Disable button if status is pending
+                    >
+                      Payment Pending
+                    </button>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
               </p>
             ) : (
               <>
@@ -271,7 +289,6 @@ const MarketPlace = () => {
                 </button>
               </>
             )}
-      
           </>
         ) : (
           <div className="placeholder">

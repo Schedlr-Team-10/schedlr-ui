@@ -145,15 +145,22 @@
 }
 
 .follower {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
+  margin: 0 15px; 
+  text-decoration: none; 
+  
 }
 
 .follower i {
-  margin-right: 5px;
-  font-size: 16px;
+  font-size: 2.5rem; 
+  color: #000; 
+  transition: color 0.3s ease; 
+  padding-bottom: 20px;
 }
+
+.follower i:hover {
+  color: #0077b5; /* Optional: Change color on hover */
+}
+
 
 .follower i.fab.fa-linkedin {
   color: #0077b5;
