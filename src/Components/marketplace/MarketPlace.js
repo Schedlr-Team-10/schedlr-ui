@@ -234,7 +234,7 @@ const MarketPlace = () => {
             {/* Collaboration Section */}
             {/* Collaboration Section */}
             {console.log(collaborationStatus)}
-            {collaborationStatus!=="REJECTED" ? (
+            {collaborationStatus ? (
               <p>
                 <strong>Status:</strong> {collaborationStatus}
                 { 
