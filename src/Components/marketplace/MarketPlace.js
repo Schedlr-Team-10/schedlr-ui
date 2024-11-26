@@ -56,7 +56,7 @@ const MarketPlace = () => {
   const fetchInfluencerDetails = async (influencerId, influencerName) => {
     try {
       const response = await axios.post(
-        `http://localhost:8081/influencers/${influencerId}`,
+        `http://localhost:8081/influencers/${localStorage.getItem("userId")}`,
         {
           influencerId,
           influencerName,
