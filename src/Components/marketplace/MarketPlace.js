@@ -62,8 +62,8 @@ const MarketPlace = () => {
           influencerName,
         }
       );
-      setSelectedInfluencer(response.data.influencerWithUserNameDTO);
-      setCollaborationStatus(response.data.collaborationDto?.status || null); // Set collaboration status if available
+      setSelectedInfluencer(response.data.influencerWithUserNameDTO || {});
+      setCollaborationStatus(response.data.collaborationDto?.status || null);
     } catch (error) {
       console.error("Error fetching influencer details:", error);
     }
@@ -75,25 +75,33 @@ const MarketPlace = () => {
       alert("Please enter a message.");
       return;
     }
+  
+    if (!selectedInfluencer || !selectedInfluencer.influencerId) {
+      alert("No influencer selected.");
+      return;
+    }
+  
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      alert("User is not logged in.");
+      return;
+    }
+  
     try {
-      const userId = localStorage.getItem("userId"); // Retrieve userId from localStorage
-      if (!userId) {
-        alert("User is not logged in.");
-        return;
-      }
       const response = await axios.post(
         "http://localhost:8081/influencers/raiseCollabReq",
         null,
         {
           params: {
-            userId, // Correctly pass userId
+            userId,
             influencerId: selectedInfluencer.influencerId,
             message,
           },
         }
       );
-      setCollaborationStatus("PENDING"); // Update status to PENDING after request is sent
-      alert(`Collaboration request sent:\n${response.data.message}`);
+  
+      setCollaborationStatus("PENDING");
+      alert(`Collaboration request sent: ${response.data.message}`);
     } catch (error) {
       console.error("Error sending request:", error);
     }
@@ -224,25 +232,28 @@ const MarketPlace = () => {
             </div>
 
             {/* Collaboration Section */}
-            {collaborationStatus ? (
-              <p>
-                <strong>Status:</strong> {collaborationStatus}
-              </p>
-            ) : (
-              <>
-                <textarea
-                  placeholder="Type your message here..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-                <button
-                  onClick={handleSendRequest}
-                  className="send-request-btn"
-                >
-                  Send Request
-                </button>
-              </>
-            )}
+            {/* Collaboration Section */}
+{collaborationStatus ? (
+  <p>
+    <strong>Status:</strong> {collaborationStatus}
+  </p>
+) : (
+  <>
+    <textarea
+      placeholder="Type your message here..."
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+    />
+    <button
+      onClick={handleSendRequest}
+      className="send-request-btn"
+      disabled={collaborationStatus === "PENDING"} // Disable button if status is pending
+    >
+      Send Request
+    </button>
+  </>
+)}
+
           </>
         ) : (
           <div className="placeholder">
