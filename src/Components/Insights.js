@@ -74,7 +74,7 @@ const Insights = () => {
           >
             <option value="LinkedIn">LinkedIn</option>
             <option value="Pinterest">Pinterest</option>
-            <option value="Twitter">Twitter</option>
+            {/* <option value="Twitter">Twitter</option> */}
           </select>
         </div>
 
