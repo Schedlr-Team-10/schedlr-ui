@@ -1,3 +1,20 @@
+SCHEDLR - AI-Powered Social Media Scheduling & Collaboration Tool
+
+Implemented Features:
+
+1. User Authentication: Developed a seamless login and registration page with added functionality for password recovery via OTP, ensuring a smooth user experience.
+2. My Profile Page: Created a dynamic profile page where users can update their profile picture, bio, and social media URLs. Users also have the ability to grant platform access (LinkedIn and Pinterest) and change their passwords.
+3. Create Post Feature: Designed an intuitive post creation feature allowing users to upload posts across multiple social media platforms simultaneously.
+4. AI Content Assistant: Integrated an AI-powered description generator, enabling users to generate post descriptions instantly for their social media content.
+5. Post Scheduling: Developed a scheduling feature that lets users set specific dates and times to automatically post on their chosen platforms, ensuring timely content delivery.
+6. Platform Analytics: Implemented analytics dashboards for LinkedIn and Pinterest, providing users with static data insights to track post performance.
+7. Marketplace for Collaboration: Introduced a marketplace for regular users to collaborate with influencers by sending personalized collaboration requests, including a description of the desired post.
+8. Influencer Marketplace: Designed a marketplace where influencers can review and accept or reject collaboration requests, streamlining the partnership process.
+9. Collaboration Code: Implemented an innovative collaboration code system, where once an influencer approves a collaboration request and the payment is processed, a unique one-time code is generated for the normal user. This code gives the normal user the ability to post on both their own platform and the influencer's platform simultaneously. By applying the code during post creation, the normal user can instantly share content on both accounts, enabling effortless cross-platform collaboration.
+
+
+
+
 Live App:
 https://main.di6rynwl85744.amplifyapp.com/home
 
