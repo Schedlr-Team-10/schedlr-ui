@@ -13,7 +13,28 @@ Implemented Features:
 9. Collaboration Code: Implemented an innovative collaboration code system, where once an influencer approves a collaboration request and the payment is processed, a unique one-time code is generated for the normal user. This code gives the normal user the ability to post on both their own platform and the influencer's platform simultaneously. By applying the code during post creation, the normal user can instantly share content on both accounts, enabling effortless cross-platform collaboration.
 
 
+Database Setup:
 
+The database for SCHEDLR was structured with several interrelated tables to manage user information, social media profiles, posts, and collaborations:
+
+1. Users Table: Stores user information such as username, email, password, profile picture, bio, and account type (Personal or Influencer). It also includes an OTP field for password recovery.
+
+2. Profiles Table: Holds social media access tokens for users, enabling integration with platforms like LinkedIn and Pinterest. The table tracks token expiration dates and links the profiles to user accounts.
+
+3. Post Upload Table: Stores details of user-uploaded posts, including images, descriptions, and platform-specific post IDs (e.g., Pinterest, LinkedIn), along with the upload timestamp.
+
+4. Schedule Post Upload Table: Allows users to schedule posts for future uploads on selected platforms (Pinterest, LinkedIn), including the scheduled time for each post.
+
+5. Influencers Table: Stores influencer-specific data, including their social media profiles, pricing, and tags, linked to the users table to ensure proper referencing.
+
+6. Collaboration Table: Manages collaboration requests between regular users and influencers, including messages, collaboration status (e.g., Pending, Accepted, Rejected, Payment Pending, Completed), and a unique collaboration token. This token enables cross-platform posting when collaboration is accepted and payment is completed.
+
+These tables are interlinked through foreign keys, ensuring data consistency and referential integrity across the system.
+
+
+Constraints:
+
+1. We have tried to get the real time analytics from LinkedIn and Pinterest platforms but we didn't got the permission those platforms which resulted in implementing with the static data.
 
 Live App:
 https://main.di6rynwl85744.amplifyapp.com/home
