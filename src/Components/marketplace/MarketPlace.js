@@ -307,14 +307,7 @@ const MarketPlace = () => {
               >
                 Post
               </button>
-              {/* <button
-                className={`request-type ${
-                  selectedRequestType === "Video" ? "active" : ""
-                }`}
-                onClick={() => setSelectedRequestType("Video")}
-              >
-                Video
-              </button> */}
+
             </div>
             <div className="pricing">
               <p>

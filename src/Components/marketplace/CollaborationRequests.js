@@ -13,7 +13,7 @@ const CollaborationRequests = () => {
 
   // Fetch requests from the backend
   useEffect(() => {
-    const influencerId = localStorage.getItem("userId"); // Get influencerId from localStorage
+    const influencerId = localStorage.getItem("userId");
     if (!influencerId) {
       setError("User not logged in or influencerId missing");
       setLoading(false);

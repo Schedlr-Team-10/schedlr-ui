@@ -215,8 +215,8 @@ const CreatePost = () => {
 
             
 
-            <div className="grid grid-cols-3 gap-3">
-              {["LinkedIn", "PInterest", "Twitter"].map((platform) => (
+            <div className="grid grid-cols-2 gap-2">
+              {["LinkedIn", "PInterest"].map((platform) => (
                 <button
                   key={platform}
                   onClick={() => togglePlatformSelection(platform)}
