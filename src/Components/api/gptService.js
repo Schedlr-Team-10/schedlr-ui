@@ -4,7 +4,7 @@ export async function generateDescription(keywords) {
 
     const description = Array.isArray(keywords) ? encodeURIComponent(keywords.join(' ')) : encodeURIComponent(keywords);
 
-    const response = await fetch(`http://localhost:8095/schedlrai/generate?description=${description}`, {
+    const response = await fetch(`${process.env.REACT_APP_CHATGPT_API_URL}/schedlrai/generate?description=${description}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
