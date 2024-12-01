@@ -10,7 +10,6 @@ import Home from "./Components/Home";
 import Homepage from "./Components/Homepage";
 import Privacy from "./Components/Privacy";
 import PinterestAccessStatus from "./Components/PinterestAccessStatus";
-import StripeCheckout from "./Components/marketplace/StripeCheckout";
 import CollaborationRequests from "./Components/marketplace/CollaborationRequests";
 import "./App.css";
 import ResetPassword from "./Components/ResetPassword";
@@ -54,7 +53,7 @@ function App() {
               <Route path="/myprofile" element={<MyProfile />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/pinterestStatus" element={<PinterestAccessStatus />} />
-              <Route path="/checkout" element={<StripeCheckout />} />
+
               {/* <Route path="/collaborate" element={<CollaborationRequests />} /> */}
               <Route path="/marketplace" element={localStorage.getItem("accountType") === "INFLUENCER" ? (<CollaborationRequests />
     ) : (

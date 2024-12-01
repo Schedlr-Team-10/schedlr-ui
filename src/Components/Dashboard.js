@@ -63,12 +63,7 @@ const Dashboard = () => {
           <h2 className="text-center text-xl font-bold truncate">{profileData.name || 'User Name'}</h2>
           <p className="text-center text-gray-600 truncate">{profileData.email || 'user@example.com'}</p>
           <div className="mt-4">
-            <p className="text-sm text-gray-600">
-              Profile Views: <span className="font-semibold">{profileData.profileViews}</span>
-            </p>
-            <p className="text-sm text-gray-600">
-              Post Impressions: <span className="font-semibold">{profileData.postImpressions}</span>
-            </p>
+            
           </div>
         </div>
 
