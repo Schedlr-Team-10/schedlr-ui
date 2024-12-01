@@ -22,7 +22,7 @@ export default function Homepage({ onLogin }) {
         return;
       }
       try {
-        const response = await axios.post("http://localhost:8082/schedlr/forgot-password", {
+        const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/forgot-password`, {
           email: email,
         });
         if (response.data.message === "OTP sent to your registered email.") {
@@ -40,7 +40,7 @@ export default function Homepage({ onLogin }) {
         return;
       }
       try {
-        const response = await axios.post("http://localhost:8082/schedlr/login", {
+        const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/login`, {
           email: email,
           password: password,
         });
@@ -63,7 +63,7 @@ export default function Homepage({ onLogin }) {
         return;
       }
       try {
-        const response = await axios.post("http://localhost:8082/schedlr/register", {
+        const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/register`, {
           username: username,
           email: email,
           password: password,
@@ -88,7 +88,7 @@ export default function Homepage({ onLogin }) {
 
   const handleVerifyOtp = async () => {
     try {
-      const response = await axios.post("http://localhost:8082/schedlr/verify-otp", {
+      const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/verify-otp`, {
         email: email,
         otp: otp,
       });

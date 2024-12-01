@@ -53,7 +53,7 @@ const MyProfile = () => {
     const params = {
       response_type: "code",
       client_id: "862ar2q201lf2i",
-      redirect_uri: "http://localhost:3000/myprofile",
+      redirect_uri: `${process.env.REACT_APP_UI_URL}/myprofile`,
       state: "DCEeFWf45A53sdfKef424",
       scope: "openid profile email w_member_social",
     };
@@ -68,7 +68,7 @@ const MyProfile = () => {
 
   // Fetch User Information
   const fetchUserInfo = async (id) => {
-    const url = `http://localhost:8081/myProfile/userInfo?userId=${id}`;
+    const url = `${process.env.REACT_APP_API_INTEGRATION_URL}/myProfile/userInfo?userId=${id}`;
     try {
       const response = await axios.get(url);
       const data = response.data;
@@ -119,7 +119,7 @@ const MyProfile = () => {
     try {
       const userId = localStorage.getItem("userId");
       const response = await axios.put(
-        `http://localhost:8082/schedlr/${userId}/updateProfile`,
+        `${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/${userId}/updateProfile`,
         formData,
         {
           headers: {

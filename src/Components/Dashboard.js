@@ -10,7 +10,7 @@ const Dashboard = () => {
     const fetchPostHistory = async () => {
       try {
         const userId = localStorage.getItem('userId');
-        const response = await axios.get(`http://localhost:8081/schedlr/posthistory?userId=${userId}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_INTEGRATION_URL}/schedlr/posthistory?userId=${userId}`);
         const data = response.data;
 
         const formattedPosts = data
@@ -37,7 +37,7 @@ const Dashboard = () => {
     const fetchProfileData = async () => {
       try {
         const userId = localStorage.getItem('userId');
-        const response = await axios.get(`http://localhost:8081/myProfile/userInfo?userId=${userId}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_INTEGRATION_URL}/myProfile/userInfo?userId=${userId}`);
         const { username, email, profileViews, postImpressions } = response.data;
         setProfileData({ name: username, email, profileViews, postImpressions });
       } catch (error) {

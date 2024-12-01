@@ -29,7 +29,7 @@ export default function ResetPassword() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8082/schedlr/reset-password", {
+      const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/reset-password`, {
         email: email,
         newPassword: password,
       });

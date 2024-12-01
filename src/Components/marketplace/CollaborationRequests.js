@@ -23,7 +23,7 @@ const CollaborationRequests = () => {
     const fetchRequests = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8081/influencers/CollaborationReqs?influencerId=${influencerId}`
+          `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/CollaborationReqs?influencerId=${influencerId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch collaboration requests");
@@ -56,7 +56,8 @@ const CollaborationRequests = () => {
     try {
       // Call the endpoint to change the status
       const response = await fetch(
-        `http://localhost:8081/influencers/changeStatus?userId=${userId}&influencerId=${influencerId}&status=${action}`,
+        
+        `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/changeStatus?userId=${userId}&influencerId=${influencerId}&status=${action}`,
         {
           method: "POST", // Assuming this is a POST request
           headers: {

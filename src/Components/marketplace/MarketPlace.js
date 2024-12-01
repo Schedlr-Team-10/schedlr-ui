@@ -19,7 +19,7 @@ const MarketPlace = () => {
     const fetchInfluencers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8081/influencers/findallInfl"
+          `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/findallInfl`
         );
         setInfluencers(response.data);
       } catch (error) {
@@ -57,7 +57,7 @@ const MarketPlace = () => {
   const fetchInfluencerDetails = async (influencerId, influencerName) => {
     try {
       const response = await axios.post(
-        `http://localhost:8081/influencers/${localStorage.getItem("userId")}`,
+        `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/${localStorage.getItem("userId")}`,
         {
           influencerId,
           influencerName,
@@ -90,7 +90,7 @@ const MarketPlace = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/influencers/raiseCollabReq",
+        `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/raiseCollabReq`,
         null,
         {
           params: {
@@ -138,7 +138,7 @@ const MarketPlace = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/influencers/changeStatus",
+        `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/changeStatus`,
         null,
         {
           params: {
