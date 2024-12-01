@@ -5,7 +5,7 @@ import {
   PINTEREST_CLIENT_ID,
   PINTEREST_REDIRECT_URL,
   PINTEREST_SCOPE,
-  PINTEREST_CODE,
+  PINTEREST_CODE,REACT_APP_API_INTEGRATION_URL,REACT_APP_UI_URL,REACT_APP_PROFILE_MANAGEMENT_URL
 } from "./util/Constants";
 import { LinkedAuth } from "./util/Util";
 import PasswordRest from "./PasswordReset";
@@ -53,7 +53,7 @@ const MyProfile = () => {
     const params = {
       response_type: "code",
       client_id: "862ar2q201lf2i",
-      redirect_uri: `${process.env.REACT_APP_UI_URL}/myprofile`,
+      redirect_uri: `${REACT_APP_UI_URL}/myprofile`,
       state: "DCEeFWf45A53sdfKef424",
       scope: "openid profile email w_member_social",
     };
@@ -68,7 +68,7 @@ const MyProfile = () => {
 
   // Fetch User Information
   const fetchUserInfo = async (id) => {
-    const url = `${process.env.REACT_APP_API_INTEGRATION_URL}/myProfile/userInfo?userId=${id}`;
+    const url = `${REACT_APP_API_INTEGRATION_URL}/myProfile/userInfo?userId=${id}`;
     try {
       const response = await axios.get(url);
       const data = response.data;
@@ -119,7 +119,7 @@ const MyProfile = () => {
     try {
       const userId = localStorage.getItem("userId");
       const response = await axios.put(
-        `${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/${userId}/updateProfile`,
+        `${REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/${userId}/updateProfile`,
         formData,
         {
           headers: {

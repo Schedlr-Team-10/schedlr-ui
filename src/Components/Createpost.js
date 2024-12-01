@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { generateDescription } from "../Components/api/gptService";
 import {checkCollaborationCode} from "./util/Util";
+import { REACT_APP_API_INTEGRATION_URL,REACT_APP_POST_MANAGEMENT_URL, REACT_APP_CHATGPT_API_URL, REACT_APP_PROFILE_MANAGEMENT_URL , REACT_APP_UI_URL} from "./util/Constants";
 
 const CreatePost = () => {
   const [uploadImage, setUploadImage] = useState(null);
@@ -95,7 +96,7 @@ const CreatePost = () => {
       formData.append("userId", selectedUserId);
       formData.append("platforms", JSON.stringify(selectedPlatforms));
 
-      const response = await fetch(`${process.env.REACT_APP_API_INTEGRATION_URL}/schedlr/postupload`, {
+      const response = await fetch(`${REACT_APP_API_INTEGRATION_URL}/schedlr/postupload`, {
         method: "POST",
         body: formData,
       });
@@ -124,7 +125,7 @@ const CreatePost = () => {
       formData.append("scheduleTime", scheduleTime);
       formData.append("userId", localStorage.getItem("userId"));
 
-      const response = await fetch(`${process.env.REACT_APP_API_INTEGRATION_URL}/schedlr/schedule`, {
+      const response = await fetch(`${REACT_APP_API_INTEGRATION_URL}/schedlr/schedule`, {
         method: "POST",
         body: formData,
       });

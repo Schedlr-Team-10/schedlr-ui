@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CollaborationRequests.css";
+import { REACT_APP_API_INTEGRATION_URL,REACT_APP_POST_MANAGEMENT_URL, REACT_APP_CHATGPT_API_URL, REACT_APP_PROFILE_MANAGEMENT_URL , REACT_APP_UI_URL} from "./..//util/Constants";
+
 
 const CollaborationRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -23,7 +25,7 @@ const CollaborationRequests = () => {
     const fetchRequests = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/CollaborationReqs?influencerId=${influencerId}`
+          `${REACT_APP_API_INTEGRATION_URL}/influencers/CollaborationReqs?influencerId=${influencerId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch collaboration requests");
@@ -57,7 +59,7 @@ const CollaborationRequests = () => {
       // Call the endpoint to change the status
       const response = await fetch(
         
-        `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/changeStatus?userId=${userId}&influencerId=${influencerId}&status=${action}`,
+        `${REACT_APP_API_INTEGRATION_URL}/influencers/changeStatus?userId=${userId}&influencerId=${influencerId}&status=${action}`,
         {
           method: "POST", // Assuming this is a POST request
           headers: {

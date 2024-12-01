@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { REACT_APP_API_INTEGRATION_URL } from "./Constants";
 
 // API to fetch user info
 export const fetchUserInfo = async (userId) => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_API_INTEGRATION_URL}/myProfile/userInfo?userId=${userId}`);
+    const response = await axios.get(`${REACT_APP_API_INTEGRATION_URL}/myProfile/userInfo?userId=${userId}`);
     return response.data; // Returns the user data
   } catch (error) {
     console.error('Error fetching user data:', error);
@@ -14,7 +15,7 @@ export const fetchUserInfo = async (userId) => {
 // API to fetch post history
 export const fetchPostHistory = async (userId) => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_API_INTEGRATION_URL}/schedlr/posthistory?userId=${userId}`);
+    const response = await axios.get(`${REACT_APP_API_INTEGRATION_URL}/schedlr/posthistory?userId=${userId}`);
     return response.data; // Returns the array of post images
   } catch (error) {
     console.error('Error fetching post history:', error);
@@ -27,7 +28,7 @@ export const changePassword = async (userId, newPassword) => {
   try {
     console.log("checking password auth : "+ userId+" : "+ newPassword);
     const response = await axios.post(
-      `${process.env.REACT_APP_API_INTEGRATION_URL}/myProfile/changePassword`,
+      `${REACT_APP_API_INTEGRATION_URL}/myProfile/changePassword`,
       {
         password: newPassword,
         userId: userId,
@@ -47,7 +48,7 @@ export const LinkedAuth = async(code, state, userid)=> {
     userId: userid
   };
 
-  fetch(`${process.env.REACT_APP_API_INTEGRATION_URL}/linkedin/authCode`, {
+  fetch(`${REACT_APP_API_INTEGRATION_URL}/linkedin/authCode`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ export const LinkedAuth = async(code, state, userid)=> {
 // API to send LinkedIn authorization code to the backend
 export const sendLinkedInCode = async (code, state, userId) => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_INTEGRATION_URL}/linkedin/authCode`, {
+    const response = await axios.post(`${REACT_APP_API_INTEGRATION_URL}/linkedin/authCode`, {
       code,
       state,
       userId,
@@ -80,7 +81,7 @@ export const sendLinkedInCode = async (code, state, userId) => {
 
 
 export const saveOrUpdateInfluencer = async (influencerId, linkedinProfile, pinterestProfile, twitterProfile, pricePerPhoto) => {
-  const url = `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/saveOrUpdate?influencerId=${influencerId}&linkedinProfile=${linkedinProfile}&pinterestProfile=${pinterestProfile}&twitterProfile=${twitterProfile}&pricePerPhoto=${pricePerPhoto}`;
+  const url = `${REACT_APP_API_INTEGRATION_URL}/influencers/saveOrUpdate?influencerId=${influencerId}&linkedinProfile=${linkedinProfile}&pinterestProfile=${pinterestProfile}&twitterProfile=${twitterProfile}&pricePerPhoto=${pricePerPhoto}`;
 
   try {
     const response = await fetch(url, {
@@ -107,7 +108,7 @@ export const saveOrUpdateInfluencer = async (influencerId, linkedinProfile, pint
 
 export const checkCollaborationCode = async (code) => {
   try {
-      const response = await fetch(`${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/checkCollabCode?code=${encodeURIComponent(code)}`, {
+      const response = await fetch(`${REACT_APP_API_INTEGRATION_URL}/influencers/checkCollabCode?code=${encodeURIComponent(code)}`, {
           method: 'GET',
       });
 

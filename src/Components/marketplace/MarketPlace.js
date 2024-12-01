@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import "./MarketPlace.css";
+import { REACT_APP_API_INTEGRATION_URL,REACT_APP_POST_MANAGEMENT_URL, REACT_APP_CHATGPT_API_URL, REACT_APP_PROFILE_MANAGEMENT_URL , REACT_APP_UI_URL} from "./../util/Constants";
+
 
 const MarketPlace = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,7 +21,7 @@ const MarketPlace = () => {
     const fetchInfluencers = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/findallInfl`
+          `${REACT_APP_API_INTEGRATION_URL}/influencers/findallInfl`
         );
         setInfluencers(response.data);
       } catch (error) {
@@ -57,7 +59,7 @@ const MarketPlace = () => {
   const fetchInfluencerDetails = async (influencerId, influencerName) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/${localStorage.getItem("userId")}`,
+        `${REACT_APP_API_INTEGRATION_URL}/influencers/${localStorage.getItem("userId")}`,
         {
           influencerId,
           influencerName,
@@ -90,7 +92,7 @@ const MarketPlace = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/raiseCollabReq`,
+        `${REACT_APP_API_INTEGRATION_URL}/influencers/raiseCollabReq`,
         null,
         {
           params: {
@@ -138,7 +140,7 @@ const MarketPlace = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_INTEGRATION_URL}/influencers/changeStatus`,
+        `${REACT_APP_API_INTEGRATION_URL}/influencers/changeStatus`,
         null,
         {
           params: {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import {REACT_APP_PROFILE_MANAGEMENT_URL } from "./util/Constants";
 export default function Homepage({ onLogin }) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ export default function Homepage({ onLogin }) {
         return;
       }
       try {
-        const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/forgot-password`, {
+        const response = await axios.post(`${REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/forgot-password`, {
           email: email,
         });
         if (response.data.message === "OTP sent to your registered email.") {
@@ -40,7 +40,7 @@ export default function Homepage({ onLogin }) {
         return;
       }
       try {
-        const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/login`, {
+        const response = await axios.post(`${REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/login`, {
           email: email,
           password: password,
         });
@@ -63,7 +63,8 @@ export default function Homepage({ onLogin }) {
         return;
       }
       try {
-        const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/register`, {
+        console.log(""+REACT_APP_PROFILE_MANAGEMENT_URL);
+        const response = await axios.post(`${REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/register`, {
           username: username,
           email: email,
           password: password,
@@ -88,7 +89,7 @@ export default function Homepage({ onLogin }) {
 
   const handleVerifyOtp = async () => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/verify-otp`, {
+      const response = await axios.post(`${REACT_APP_PROFILE_MANAGEMENT_URL}/schedlr/verify-otp`, {
         email: email,
         otp: otp,
       });
