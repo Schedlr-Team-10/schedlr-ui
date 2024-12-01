@@ -1,3 +1,4 @@
+import { REACT_APP_CHATGPT_API_URL } from "../util/Constants";
 export async function generateDescription(keywords) {
   try {
     console.log("Calling backend with keywords:", keywords);
