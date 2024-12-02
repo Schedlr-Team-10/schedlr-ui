@@ -1,5 +1,7 @@
 SCHEDLR - AI-Powered Social Media Scheduling & Collaboration Tool
 
+Live at: http://52.64.225.94:3000/
+
 Implemented Features:
 
 1. User Authentication: Developed a seamless login and registration page with added functionality for password recovery via OTP, ensuring a smooth user experience.
@@ -10,7 +12,7 @@ Implemented Features:
 6. Platform Analytics: Implemented analytics dashboards for LinkedIn and Pinterest, providing users with static data insights to track post performance.
 7. Marketplace for Collaboration: Introduced a marketplace for regular users to collaborate with influencers by sending personalized collaboration requests, including a description of the desired post.
 8. Influencer Marketplace: Designed a marketplace where influencers can review and accept or reject collaboration requests, streamlining the partnership process.
-9. Collaboration Code: Implemented an innovative collaboration code system, where once an influencer approves a collaboration request and the payment is processed, a unique one-time code is generated for the normal user. This code gives the normal user the ability to post on both their own platform and the influencer's platform simultaneously. By applying the code during post creation, the normal user can instantly share content on both accounts, enabling effortless cross-platform collaboration.
+9. Collaboration Code: Implemented an innovative collaboration code system, where once an influencer approves a collaboration request and the payment is processed, a unique code is generated for the normal user. This code gives the normal user the ability to post on both their own platform and the influencer's platform simultaneously. By applying the code during post creation, the normal user can instantly share content on both accounts, enabling effortless cross-platform collaboration.
 
 
 Database Setup:
@@ -37,7 +39,7 @@ Constraints:
 1. We have tried to get the real time analytics from LinkedIn and Pinterest platforms but we didn't got the permission those platforms which resulted in implementing with the static data.
 
 Live App:
-https://main.di6rynwl85744.amplifyapp.com/home
+http://52.64.225.94:3000/
 
 
 # Getting Started with Create React App
